@@ -27,23 +27,25 @@ export default function StaffLogin(){
     const [Error1, setError1] = useState();
 
     const handleLogin=async(e)=>{
-        setError1();
-        e.preventDefault();
-        console.warn("Im clicked");
-        setIsLoading(true);
+        // setError1();
+        // e.preventDefault();
+        // console.warn("Im clicked");
+        // setIsLoading(true);
         
-        const response = await axios.post(serverPath1+"/stafflogin/"+formData['email'], formData)
-        console.warn(response.data);
-        if(response.data.message=="Invalid Credentials" || response.data.message=="Account not found!")
-        {
-            setError1(response.data.message)
-        }
-        else
-        {
-            localStorage.setItem("GuideMailIdToLogin",formData.email);
-            navigate("/staffdashboard")
-        }
-        setIsLoading(false);
+        // const response = await axios.post(serverPath1+"/stafflogin/"+formData['email'], formData)
+        // console.warn(response.data);
+        // if(response.data.message=="Invalid Credentials" || response.data.message=="Account not found!")
+        // {
+
+        //     setError1(response.data.message)
+        // }
+        // else
+        // {
+        //     localStorage.setItem("GuideMailIdToLogin",formData.email);
+        //     navigate("/staffdashboard")
+        // }
+        // setIsLoading(false);
+        navigate("/StudentInfoBar")
     }
 
     useEffect(()=>{

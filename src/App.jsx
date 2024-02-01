@@ -9,6 +9,7 @@ import Success from './Success';
 import StaffDashboard from './StaffDashboard';
 import StudentLogin from './StudentLogin';
 import StudentDashboard from './StudentDashboard';
+import StudentInfoBar from './components/StudentInfoBar';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,7 +33,7 @@ function App() {
           <Route path="/studentlogin" element={<StudentLogin />} ></Route>
           <Route path="/studentdashboard" element={<StudentDashboard />} ></Route>
 
-
+          <Route path="/StudentInfoBar" element={<StudentInfoBar />} ></Route>
         </Routes>
       </Router> 
     </>
