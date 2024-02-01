@@ -36,6 +36,7 @@ export default function StaffLogin(){
         console.warn(response.data);
         if(response.data.message=="Invalid Credentials" || response.data.message=="Account not found!")
         {
+
             setError1(response.data.message)
         }
         else
@@ -44,6 +45,7 @@ export default function StaffLogin(){
             navigate("/staffdashboard")
         }
         setIsLoading(false);
+        // navigate("/StudentInfoBar")
     }
 
     useEffect(()=>{
