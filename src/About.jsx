@@ -5,7 +5,7 @@ import Loginnavbar from "./shared/Loginnavbar";
 import Footer from "./shared/Footer";
 import { useNavigate } from "react-router-dom";
 
-// hello hii
+
 export default function About(){
 
     const navigate = useNavigate()

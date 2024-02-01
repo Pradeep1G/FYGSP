@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-const YourComponent = () => {
+const StudentInfoBar = () => {
   const data = [
     { label: 'Name', value: 'John Doe' },
     { label: 'Age', value: 25 },
@@ -25,4 +25,4 @@ const YourComponent = () => {
   );
 };
 
-export default Stude;
+export default StudentInfoBar;
