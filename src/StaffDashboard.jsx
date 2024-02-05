@@ -115,7 +115,7 @@ const [filteredStudents, setFilteredStudents] = useState([]);
         throw new Error("Invalid shareable link format");
       }
     } catch (error) {
-      console.error("Error processing shareable link:", error.message);
+      // console.error("Error processing shareable link:", error.message);
       return null;
     }
   }
@@ -171,12 +171,12 @@ const [filteredStudents, setFilteredStudents] = useState([]);
         </div>
 
         {/* Header Design */}
-        <div className="mb-4 text-center">
-          <h2 className="text-2xl font-bold">{GuideDetails.NAME}</h2>
+        <div className="mb-4 text-center max-w-sm">
+          <h2 className="text-2xl font-bold break-all">{GuideDetails.NAME}</h2>
         </div>
 
         <div className="mb-4 text-center max-w-xs">
-          <p className="">{GuideDetails.UniversityEMAILID}</p>
+          <p className="break-all">{GuideDetails.UniversityEMAILID}</p>
         </div>
 
         
@@ -224,6 +224,8 @@ const [filteredStudents, setFilteredStudents] = useState([]);
                         regNo={item.regNo}
                         mailId={item.mailId}
                         phoneNo={item.phoneNo}
+                        guideName={GuideDetails.NAME}
+                        guideImage={GuideDetails.IMAGE}
                         // address={item.address}
                         // section={item.section}
                       />

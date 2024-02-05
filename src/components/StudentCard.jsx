@@ -24,13 +24,17 @@ export default function StudentCard (props){
             throw new Error("Invalid shareable link format");
           }
         } catch (error) {
-          console.error("Error processing shareable link:", error.message);
+        //   console.error("Error processing shareable link:", error.message);
           return null;
         }
       }
 
       const handleOpenProfile=()=>{
-        navigate("/staffdashboard/studentprofile")
+        localStorage.setItem("GuideName", props.guideName)
+        localStorage.setItem("GuideImage", props.guideImage)
+        
+
+        navigate(`/staffdashboard/studentprofile/${props.regNo}`)
 
       }
 
