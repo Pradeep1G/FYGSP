@@ -98,7 +98,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         </div>
 
         {/* Header Design */}
-        <div className="mb-10 text-center max-w-sm">
+        <div className="mb-10 text-center max-w-screen-xs">
           <h2 className="text-2xl font-bold break-words" >{StudentData.name}</h2>
         </div>
 
