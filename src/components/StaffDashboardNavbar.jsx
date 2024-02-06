@@ -84,14 +84,17 @@ export default function StaffDashboardNavbar({OpenStaffSidebar, GuideName, handl
             <div className="lg:hidden flex justify-center bg-[#9e1c3f] pb-6">
             <div className="flex-col space-y-4 items-center">
               <div className="flex">
-                <input
-                  className="p-2 outline-none rounded-l-full"
-                  required
-                  name="studentName"
-                //   value=""
-                  placeholder="   Search Mentee"
-                //   onChange={handleOnchange}
-                />
+              <input
+                className="p-2 rounded-l-full outline-none"
+                name="studentName"
+                value={searchTerm}
+                placeholder="Search Mentee"
+                onChange={(e)=>{
+                    setSearchTerm(e.target.value)
+                    console.warn(searchTerm)
+                    handleSearch(e.target.value)
+                }}
+              />
                 <div className="flex-col bg-white pr-4 justify-center items-center rounded-r-full">
                   <FiSearch className=" h-full " />
                 </div>

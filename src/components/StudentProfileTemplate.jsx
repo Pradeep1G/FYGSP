@@ -82,7 +82,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 <>
     <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
     <div className='sm:flex '>
-      <div className="p-4 sm:h-screen border-b-slate-50 border-2 m-2 lg:ml-6 bg-[#e9d8de] lg:max-w-xl rounded-md shadow-md relative" >
+      <div className="p-4 sm:h-screen border-b-slate-50 border-2 m-2 lg:ml-6 bg-[#e9d8de] lg:max-w-md rounded-md shadow-md relative" >
       <div className='w-full rounded-t-md bg-[#811338] h-20 absolute top-0 left-0 right-0'></div>
         {/* Large Box */}
         <div className="flex flex-col ">
