@@ -52,7 +52,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
       guideMail:guideMailId
     }
     const response = await axios.post(serverPath1+"/getStudentProfileData", data)
-    // console.warn(response.data)
+    console.warn(response.data)
     setStudentData(response.data.StudentData)
   }
 
