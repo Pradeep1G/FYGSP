@@ -22,8 +22,8 @@ export default function StudentProfileTemplate()
   
 
 
-const serverPath1 = "http://127.0.0.1:5000"
-// const serverPath1 = "https://fgspserver.onrender.com";
+// const serverPath1 = "http://127.0.0.1:5000"
+const serverPath1 = "https://fgspserver.onrender.com";
 const { studentId } = useParams();
 // console.warn(studentId)
 const GuideName = localStorage.getItem("GuideName");
@@ -52,7 +52,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
       guideMail:guideMailId
     }
     const response = await axios.post(serverPath1+"/getStudentProfileData", data)
-    // console.warn(response.data)
+    console.warn(response.data)
     setStudentData(response.data.StudentData)
   }
 
@@ -98,9 +98,12 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         </div>
 
         {/* Header Design */}
+        <div className="flex justify-center">
         <div className="mb-10 text-center max-w-xs">
           <h2 className="text-2xl font-bold break-words" >{StudentData.name}</h2>
         </div>
+        </div>
+
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col p-0 text-left ">

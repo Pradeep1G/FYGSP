@@ -171,12 +171,16 @@ const [filteredStudents, setFilteredStudents] = useState([]);
         </div>
 
         {/* Header Design */}
+        <div className="flex justify-center">
         <div className="mb-4 text-center max-w-sm">
           <h2 className="text-2xl font-bold break-all">{GuideDetails.NAME}</h2>
         </div>
+        </div>
 
+        <div className="flex justify-center">
         <div className="mb-4 text-center max-w-xs">
           <p className="break-all">{GuideDetails.UniversityEMAILID}</p>
+        </div>
         </div>
 
         
