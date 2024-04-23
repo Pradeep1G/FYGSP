@@ -38,7 +38,7 @@ const Remarks = () => {
             // Check if all necessary data is present before sending the request
             if (data.regNo && data.remarksInfo && data.remarksInfo.length > 0) {
                 try {
-                    const response = await axios.post('http://127.0.0.1:5000/insert_remarks', data);
+                    const response = await axios.post(serverPath1+'/insert_remarks', data);
                     console.warn(response.data);
                     alert('Remarks data inserted successfully!');
                 } catch (error) {

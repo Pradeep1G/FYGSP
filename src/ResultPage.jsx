@@ -113,7 +113,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         "collection":"results",
         "regNo": regNo
     }
-        const response = await axios.post("http://127.0.0.1:5000/resultDetail", data)
+        const response = await axios.post(serverPath1+"/resultDetail", data)
         console.warn(response.data)
         setResults(response.data.results);
     }
