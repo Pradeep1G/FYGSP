@@ -97,6 +97,9 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import axios from 'axios';
+import { useState } from 'react';
 
 
 const pastelColors = [
@@ -107,6 +110,15 @@ const pastelColors = [
 ];
 
 export default function StudentCard (props){
+
+
+
+
+            // const serverPath1 = "http://127.0.0.1:5000"
+  const serverPath1 = "https://fgspserver.onrender.com"
+
+
+
     const randomColorIndex = Math.floor(Math.random() * pastelColors.length);
     const randomColor = pastelColors[randomColorIndex];
     const navigate = useNavigate();
@@ -137,8 +149,58 @@ export default function StudentCard (props){
 
 
 
+
+
+      const [OpenCommentBox , setOpenCommentBox] = useState(false);
+      const [comment, setComment] = useState("");
+      const [Error1, setError1] = useState("");
+      const [isSending, setisSending] = useState(false);
+      const [successMessage, setSuccessMessage] = useState("");
+
+
+      const sendComment = async(e)=>{
+        e.preventDefault();
+
+        const currentDate = new Date();
+        const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
+        console.warn(formattedDate);
+
+        try{
+
+           const data = {
+            "message" : comment,
+            "date" : formattedDate
+           }
+
+        setisSending(true);
+
+        const response = await axios.post(serverPath1+"/sendMessage/"+props.mailId, data)
+        console.warn(response.data);
+        if(response.data.message == "SENT")
+        {
+          setSuccessMessage("Message sent successfully!");
+          setOpenCommentBox(false);
+          setisSending(false);
+          setComment("");
+
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 2000);
+        }
+        else{
+          setError1("Not sent try again.")
+        }
+      }
+      catch(error){
+        setError1("Not sent try agin.")
+      }
+      }
+
+
+
+
     return (
-        <div className="bg-white rounded-md shadow-xl" style={{ maxWidth: '16rem', height:"25rem", position:"relative" }}>
+        <div className="bg-white rounded-md shadow-xl" style={{ maxWidth: '16rem' }}>
             {/* Top child container */}
             <div className={"h-20 flex-col items-center justify-center rounded-t-md b-0"} style={{ backgroundColor: randomColor }}>
                 {/* You can place any content here */}
@@ -177,14 +239,60 @@ export default function StudentCard (props){
                 </div>
             </div>
             {/* Bottom child container */}
-            <div className="absolute bg-white p-4 flex justify-center rounded-md bottom-0 left-0 right-0 ">
-                <button className="bg-red-900 hover:bg-red-700 text-white font-bold py-2 px-2 rounded mr-1.5 text-xs"> {/* Adjusted padding */}
-                    Send Comment
+            <div className="] bg-white p-4 flex justify-center rounded-md  ">
+                <button 
+                className={`bg-red-900 hover:bg-red-700 text-white font-bold py-2 px-2 rounded mr-1.5 text-xs ${isSending ? 'cursor-none':'cursor-pointer'} `}
+                // className={`bg-red-900 flex justify-around text-white px-6 py-2 rounded-md my-2 text-sm ${isSending ? 'cursor-none':'cursor-pointer'} `}
+                onClick={()=>{
+                setOpenCommentBox(true);
+                }}
+                >
+                { isSending ? "Sending..." : "Send Comment"}
+
                 </button>
+
+
                 <button className="bg-red-900 hover:bg-red-700 text-white font-bold py-2 px-2 rounded ml-1.5 text-xs" onClick={handleOpenProfile}> {/* Adjusted padding */}
                     View Profile
                 </button>
             </div>
+
+            
+            {OpenCommentBox && 
+        <div >
+        <div className='flex justify-around'>
+        <textarea
+            className="border-2 h-16 px-4 w-fit flex justify-around bg-gray-200"
+            type="text"
+            rows={2}
+            placeholder="Message"
+            value={comment}
+            required
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </div>
+          <div className="flex justify-around">
+          <button 
+          onClick={sendComment}
+          className="bg-red-900 flex justify-around text-white px-6 py-2 rounded-md my-2 text-sm"
+          >Send</button>
+
+          <button 
+          onClick={()=>{
+            setOpenCommentBox(false);
+            setisSending(false);
+            setComment("")
+          }}
+          className="bg-red-900 flex justify-around text-white px-6 py-2 rounded-md my-2 text-sm"
+          >Cancel</button>
+          </div>
+          </div>
+          }
+
+          {successMessage && <p className="text-green-600 text-center">{successMessage}</p>}
+
+          {Error1 && <p className="text-red-600 text-center">{Error1}</p>}
+
             
 
             

@@ -578,7 +578,7 @@ const [filteredStudents, setFilteredStudents] = useState([]);
     <>
       {true ? (
         <>
-          {/* <LoadingScreen /> */}
+          {isLoading && <LoadingScreen />}
           <StaffDashboardNavbar OpenStaffSidebar={OpenStaffSidebar} GuideName={GuideDetails.NAME} handleSearch={handleSearch}/>
 
 
@@ -708,6 +708,7 @@ const [filteredStudents, setFilteredStudents] = useState([]);
         </>
       ) : (
         <div className="flex flex-col min-h-screen">
+        {isLoading && <LoadingScreen />}
           {/* <div className=""> */}
 
           <nav className="flex items-center justify-between bg-[#9e1c3f] p-10 py-5">
