@@ -94,7 +94,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         setEventsAttended(response.data.eventsattended);
     };
 
-    const regNo = "41111354"; // Set the regNo value here
+    const regNo = studentId; // Set the regNo value here
     const sdata = {
         "collection": "events",
         "regNo": regNo  

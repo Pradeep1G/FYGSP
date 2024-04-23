@@ -108,7 +108,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
   useEffect(()=>{
     const func = async() => {
-      const regNo = "43110021";
+      const regNo = studentId;
       const data = {
         "collection":"results",
         "regNo": regNo
