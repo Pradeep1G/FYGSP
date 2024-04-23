@@ -84,7 +84,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
   useEffect(() => {
     const fetchData = async (sdata) => { // Define data as a parameter
-        const response = await axios.post("http://127.0.0.1:5000/events", sdata);
+        const response = await axios.post(serverPath1+"/events", sdata);
         console.warn(response.data);
         console.warn(response.data.eventsconducted);
         console.warn(response.data.eventsattended);

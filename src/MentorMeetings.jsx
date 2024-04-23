@@ -62,7 +62,7 @@ const MentorMeetings = () => {
             };
     
             try {
-                const response = await axios.post('http://127.0.0.1:5000/insert_meeting', data);
+                const response = await axios.post(serverPath1+'/insert_meeting', data);
                 console.warn(response.data);
                 alert('meeting data inserted successfully!');
                 

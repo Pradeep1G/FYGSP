@@ -55,7 +55,7 @@ export default function Events() {
 
   useEffect(() => {
     const fetchData = async (sdata) => { // Define data as a parameter
-      const response = await axios.post("http://127.0.0.1:5000/additionalCredDetail", sdata);
+      const response = await axios.post(serverPath1+"/additionalCredDetail", sdata);
       console.warn(response.data);
       console.warn(response.data.cocurricular);
       console.warn(response.data.curricular);

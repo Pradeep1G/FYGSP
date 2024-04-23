@@ -148,7 +148,7 @@ export default function PersonalInfo() {
   }
 
   const fetchData = async (sdata) => {
-    const response = await axios.post("http://127.0.0.1:5000/personalDetail", sdata);
+    const response = await axios.post(serverPath1+ "/personalDetail", sdata);
     console.warn(response.data.personaldetails);
     console.warn(response.data.parentdetails);
     console.warn(response.data.address);

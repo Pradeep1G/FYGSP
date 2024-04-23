@@ -85,7 +85,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         "collection":"permissions",
         "regNo": regNo
     }
-        const rsponse = await axios.post("http://127.0.0.1:5000/permissionDetail", data)
+        const rsponse = await axios.post(serverPath1+"/permissionDetail", data)
         console.warn(rsponse.data)
     }
     func();
