@@ -143,6 +143,7 @@ import LoadingScreen from './shared/Loader';
 import Loginnavbar from "./shared/Loginnavbar";
 import Footer from "./shared/Footer";
 import studentLoginGif from '../src/assets/stafflogin.gif';
+import loginprofile from '../src/assets/profile2.jpeg'
 
 
 export default function StaffLogin(){
@@ -222,22 +223,15 @@ export default function StaffLogin(){
                                 {/* <div className='p-4 pl-10 pr-10 flex flex-col justify-around bg-white md:bg-opacity-80 bg-opacity-70 backdrop-filter  rounded-r-lg shadow-lg'> */}
 
                                 <form onSubmit={handleLogin}>
-                                    <div className="flex justify-center items-center mb-8">
-                                        {/* <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-gray-300 transition-transform duration-300 ease-in-out group-hover:scale-105">
-                                            <video
-                                                className="w-full h-full object-cover"
-                                                src={loginprofile} // Assuming loginprofile is a valid video source
-                                                autoPlay
-                                                loop
-                                                muted
+                                <div className="flex justify-center items-center mb-8">
+                                        <div className="relative group">
+                                            <img
+                                                src={loginprofile}
+                                                alt="Avatar"
+                                                className="h-28 w-28 rounded-full border-4 border-gray-500 transition-transform duration-300 ease-in-out group-hover:scale-105"
                                             />
-                                        </div> */}
-                                        <img
-                                            src="https://img.freepik.com/premium-photo/3d-animation-character-cartoon_113255-10780.jpg?size=626&ext=jpg"
-                                            alt="Avatar"
-                                            className="h-28 w-28 rounded-full border-4 border-gray-500 transition-transform duration-300 ease-in-out group-hover:scale-105"
-                                        />
-                                    </div>
+                                        </div>
+                                    </div>
 
                                     <div className=' flex justify-center'>
                                         <h2 className='text-3xl font-bold text-center mb-8'>FACULTY LOGIN</h2>
