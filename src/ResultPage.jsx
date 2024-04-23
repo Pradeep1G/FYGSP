@@ -254,7 +254,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   <div className="flex justify-center items-center mt-4">
     <div className="p-4 border-black border w-7/12 h-3/4">
       <img 
-        src={results[0][selectedSemester]}     
+        src={getDirectLinkFromShareableLink(results[0][selectedSemester])}     
         alt="Semester Results"
         className="rounded-md shadow-lg"
         style={{ width: '100%', height: '100%' }}
