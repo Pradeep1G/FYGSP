@@ -458,7 +458,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/father.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/19_nzVhBjj95qVdVmiRfFarX9wF7wgaCP/view?usp=sharing")} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
@@ -500,7 +500,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/mother.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/1byElUxlg-Zs3kVyio2ZauEsodL-_l482/view?usp=sharing")} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
@@ -543,7 +543,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/guard.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
+                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/1ef-7X7wRAjINraP9FXMB5tUSkqQOgx8W/view?usp=drive_link")} alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
                         </div>
                       </div>
 
