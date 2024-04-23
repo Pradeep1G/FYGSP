@@ -23,7 +23,7 @@ const Loginnavbar = () => {
           </a>
         </div>
         <div className={`lg:flex items-center space-x-10 text-white ${showMenu ? 'hidden' : 'hidden'}`}>
-          <a className="" href="/selectguide">Select Mentor</a>
+          {/* <a className="" href="/selectguide">Select Mentor</a> */}
           <a className="" href="/stafflogin">Faculty Login</a>
           <a className="" href="/studentlogin">Student Login</a>
           <a className="" href="/">About</a>
@@ -39,7 +39,7 @@ const Loginnavbar = () => {
       </nav>
       {showMenu && (
         <div className="lg:hidden flex flex-col items-center bg-[#9e1c3f] text-white">
-          <a className="py-3" href="/selectguide">Select Mentor</a>
+          {/* <a className="py-3" href="/selectguide">Select Mentor</a> */}
           <a className="py-3" href="/stafflogin">Faculty Login</a>
           <a className="py-3" href="/studentlogin">Student Login</a>
           <a className="py-3" href="/">About</a>
