@@ -8,7 +8,7 @@
 
 .loginbg{
     background: url("./assets/loginbg.jpg"); 
-      min-height: 75vh;
+      min-height: 80vh;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -21,7 +21,7 @@
   @media (max-width: 500px){
     .loginbg{
       background: url("./assets/slogin2.jpg"); 
-      min-height: 70vh;
+      min-height: 80vh;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
