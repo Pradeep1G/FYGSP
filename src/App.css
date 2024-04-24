@@ -30,6 +30,28 @@
       align-items: center;
     }
   }
+
+  @media (max-width: 1112px) {
+    .custom-space {
+      --space-x: 20px;
+    }
+  }
+  
+  @media (min-width: 1113px) {
+    .custom-space {
+      --space-x: 160px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .custom-space {
+      --space-x: 0px;
+    }
+  }
+  
+  .custom-space > * + * {
+    margin-left: var(--space-x);
+  }
   
 
 
