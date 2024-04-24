@@ -21,6 +21,7 @@ export default function Permission() {
   
   
   
+  // const serverPath1 = "http://127.0.0.1:5000";
 
 
    const serverPath1 = "https://fgspserver.onrender.com";
@@ -80,7 +81,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
   useEffect(()=>{
     const func = async() => {
-      const regNo = "41111377";
+      const regNo = studentId;
       const data = {
         "collection":"permissions",
         "regNo": regNo
@@ -154,10 +155,10 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
         {/* Largest Table */}
         <div className='flex w-full justify-center items-center my-2 mx-0 overflow-hidden'>
-          <div className="flex-col justify-centre bg-[#edeef2] space-y-3 border-b-slate-50 shadow-md rounded-lg border-2 m-2 ml-4 mr-4 w-full h-full overflow-y-scroll ">
+          <div className="flex-col justify-centre bg-[#edeef2] space-y-3  shadow-md rounded-lg  m-2 ml-4 mr-4 w-full h-full overflow-y-scroll ">
             {/* First Box */}
             <div className='w-full rounded-t-md bg-[#811338] h-fit'>
-          <h1 className="text-3xl text-white font-mono italic font-thin   mb-4 pt-8 pb-8 px-2">Permission</h1>
+          <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Permission</h1>
           </div>
 
           <div className="flex justify-center pt-8">
@@ -171,7 +172,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
           </thead>
           <tbody>
           <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to access the personal info page</td>
+              <td className="border border-black px-4 py-2">Permission to edit the personal info page</td>
               <td className="border border-black px-4 py-2">
                 <label className="flex items-center">
                   <div
@@ -196,7 +197,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
               </td>
             </tr>
             <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to access the results page</td>
+              <td className="border border-black px-4 py-2">Permission to edit the results page</td>
               <td className="border border-black px-4 py-2">
                 <label className="flex items-center">
                   <div
@@ -221,7 +222,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
               </td>
             </tr>
             <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to access the events page</td>
+              <td className="border border-black px-4 py-2">Permission to edit the events page</td>
               <td className="border border-black px-4 py-2">
                 <label className="flex items-center">
                   <div
@@ -246,7 +247,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
               </td>
             </tr>
             <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to access the additional credits page</td>
+              <td className="border border-black px-4 py-2">Permission to edit the additional credits page</td>
               <td className="border border-black px-4 py-2">
                 <label className="flex items-center">
                   <div

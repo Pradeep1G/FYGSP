@@ -22,7 +22,7 @@ const Remarks = () => {
 
     const handleAddData = async () => {
         if (formData.semester && formData.remarks && formData.mentorName) {
-            const regNo = "41111377";
+            const regNo = studentId;
             const data = {
                 "regNo": regNo,
                 "remarksInfo": [

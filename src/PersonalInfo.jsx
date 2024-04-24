@@ -109,7 +109,7 @@ export default function PersonalInfo() {
 
 
 
-  // const serverPath1 = "http://127.0.0.1:5000"
+  //const serverPath1 = "http://127.0.0.1:5000"
   const serverPath1 = "https://fgspserver.onrender.com";
   const { studentId } = useParams();
   // console.warn(studentId)
@@ -148,7 +148,7 @@ export default function PersonalInfo() {
   }
 
   const fetchData = async (sdata) => {
-    const response = await axios.post(serverPath1+ "/personalDetail", sdata);
+    const response = await axios.post(serverPath1+"/personalDetail", sdata);
     console.warn(response.data.personaldetails);
     console.warn(response.data.parentdetails);
     console.warn(response.data.address);
@@ -354,7 +354,7 @@ export default function PersonalInfo() {
             <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
              
             <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
-              <h1 class="text-3xl text-white font-code mb-4 pt-8 md:pt-4 md:pb-4 pb-8 px-2">Personal Information</h1>
+              <h1 class="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Personal Information</h1>
             </div>
 
             <div className='flex bg-[#edeef2]  justify-center items-center'>
@@ -458,7 +458,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/19_nzVhBjj95qVdVmiRfFarX9wF7wgaCP/view?usp=sharing")} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src="/src/images/father.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
@@ -500,14 +500,14 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/1byElUxlg-Zs3kVyio2ZauEsodL-_l482/view?usp=sharing")} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src="/src/images/mother.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
                       {/* Right column for parent details */}
                       <div className="w-full lg:w-1/2 mb-2">
                         {/* First detail */}
-                        <div className="w-full sm:w-3/4 mt-4 mb-4">
+                        <div className="w-full sm:w-3/4 mt-4 mb-2">
                           <label className="block text-sm font-semibold px-10 text-gray-600">Mother's Name</label>
                           <TextareaAutosize name="motherName" readOnly={!editableParent || userType === 'staff'} type="text" className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }} value={parentdetails.length > 0 ? capitalizeEachWord(parentdetails[0].motherName) : ''} onChange={handleInputChange} />
                         </div>
@@ -543,7 +543,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getDirectLinkFromShareableLink("https://drive.google.com/file/d/1ef-7X7wRAjINraP9FXMB5tUSkqQOgx8W/view?usp=drive_link")} alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
+                          <img src="/src/images/guard.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
                         </div>
                       </div>
 
@@ -617,7 +617,7 @@ export default function PersonalInfo() {
                     <div className="flex flex-row items-start justify-start flex-wrap sm:flex-col  sm:justify-start md:flex-row">
                       <div className="w-full sm:w-3/4 mb-4">
                         <label className="block text-sm font-semibold px-10 text-gray-600">Communication Address</label>
-                        <TextareaAutosize name="communicationAdd" readOnly={!editableAddress || userType === 'staff'} type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }} value={address.length > 0 ? address[0].communicationAdd : ''} onChange={handleInputChange} />
+                        <TextareaAutosize name="communicationAdd" readOnly={!editableAddress || userType === 'staff'} type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }} value={address.length > 0 ? capitalizeEachWord(address[0].communicationAdd) : ''} onChange={handleInputChange} />
                       </div>
 
 
@@ -688,7 +688,7 @@ export default function PersonalInfo() {
                     {/* Second column */}
                     <div className="w-full sm:w-1/2 mb-4">
                       <label className="block text-sm font-semibold px-10 text-gray-600">12th Previous Institution Name</label>
-                      <TextareaAutosize name="previousInst" readOnly={!editableAcademic || userType === 'staff'} y type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }} value={academicdetails.length > 0 ? academicdetails[0].previousInst : ''} onChange={handleInputChange} />
+                      <TextareaAutosize name="previousInst" readOnly={!editableAcademic || userType === 'staff'} y type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }} value={academicdetails.length > 0 ? capitalizeEachWord(academicdetails[0].previousInst) : ''} onChange={handleInputChange} />
                     </div>
                     <div className='flex flex-wrap'>
                       {/* Third column */}
@@ -739,5 +739,6 @@ export default function PersonalInfo() {
     </>
   );
 };
+
 
 

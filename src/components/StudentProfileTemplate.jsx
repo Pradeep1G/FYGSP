@@ -231,6 +231,9 @@
 // YourComponent.jsx
 // YourComponent.jsx
 
+ // YourComponent.jsx
+// YourComponent.jsx
+
 import React from 'react';
 import PersonalInfo from '../PersonalInfo';
 // react icons
@@ -250,6 +253,7 @@ import axios from 'axios';
 import StaffNormalNavbar from './StaffNormalNavbar';
 import StudentNormalNavbar from './StudentNormalNavbar';
 import gu from 'date-fns/esm/locale/gu/index.js';
+import { FaRegCalendarPlus } from "react-icons/fa";
 // small bar
 export default function StudentProfileTemplate() {
 
@@ -447,8 +451,10 @@ export default function StudentProfileTemplate() {
         </div>
 
         {/* Largest Table */}
-        <div className='flex w-full justify-center h-screen  items-center  my-2 mr-0'>
-          <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg  m-2 ml-4 mr-4 w-full h-full">
+        <div className=' flex flex-grow w-full '>
+    <div className='flex w-full flex-grow justify-center h-screen items-center  my-2 mr-0'>
+    <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
+
             {/* First Box */}
             <div className='w-full rounded-t-md bg-[#811338] h-20'>
               <h1 className="text-3xl text-white font-mono italic font-thin  mb-4 pt-8 pb-8 px-2"></h1>
@@ -577,6 +583,20 @@ export default function StudentProfileTemplate() {
                           </button>
                         </div>
 
+
+
+                        <div className='flex justify-center bg-[#FFF5E0] rounded-xl shadow-md items-center'>
+                          <div className='bg-white pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <FaRegCalendarPlus  className='text-4xl rounded-l-xl' /> </div>
+                          <button
+                            className="bg-[#FFF5E0] text-black px-5 pl-2 py-3 m-0 rounded-xl h-full w-44 text-lg cursor-pointer"
+                            onMouseEnter={() => handleHover('upEvents')}
+                            onMouseLeave={() => handleMouseLeave('upEvents')}
+                            onClick={() => {
+                              navigate(buttonRoutes.ExtraCredits)
+                            }}                        >
+                            {hoveredButtons['upEvents'] ? 'Add Events' : 'Upcoming Events'}
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -588,7 +608,7 @@ export default function StudentProfileTemplate() {
           </div>
         </div>
       </div>
-
+      </div>
 
 
     </>
