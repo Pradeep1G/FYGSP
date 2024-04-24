@@ -52,6 +52,8 @@ export default function StudentCard() {
 
 
    const serverPath1 = "https://fgspserver.onrender.com";
+   //  const serverPath1 = "http://127.0.0.1:5000"
+
 const { studentId } = useParams();
 // console.warn(studentId)
 const GuideName = localStorage.getItem("GuideName");
@@ -186,7 +188,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
             <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
              
             <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
-              <h1 class="text-3xl text-white font-code mb-4 pt-8 md:pt-4 md:pb-4 pb-8 px-2">Results Page</h1>
+              <h1 class="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Results Page</h1>
             </div>
             
 
@@ -212,27 +214,27 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     <button onClick={() => { setSelectedSemester("Semester 8"); setResultsDrpDwn(false);setShowResults(true); }} value="Semester 8" className='p-0 ml-0 px-0 bg-pink-200 hover:bg-pink-300 mb-0 mt-0 text-left pl-2'>Semester 8</button>
     </div>
     </div>
-    <div style={{ paddingLeft: '5px', paddingRight: '5px',display: 'flex', flexDirection: 'column-reverse'}}>
-
-<button
-  onClick={() => { 
-    setSelectedSemester("semester9"); 
-    setResultsDrpDwn(false); 
-  }}
-  value="semester 9"
-  className='p-0 ml-0 px-0 bg-pink-200 mb-0 mt-0 text-left pl-2  shadow-2xl'
-  disabled
-  style={{
-    width: '190px',
-    height: '10px', 
-    paddingTop: '0px',// Set the height of the button
-    borderBottomLeftRadius: '100px',
-    borderBottomRightRadius: '100px'
-  }}
->    
-
-</button>
+    <div className="relative " style={{ paddingLeft: '5px', paddingRight: '5px',display: 'flex', flexDirection: 'column-reverse' }}>
+  <button
+    onClick={() => { 
+      setSelectedSemester("semester9"); 
+      setResultsDrpDwn(false); 
+    }}
+    value="semester 9"
+    className='p-0 ml-0 px-0 bg-pink-200 mb-0 mt-0 text-left pl-2 shadow-2xl relative' // Add relative positioning
+    disabled
+    style={{
+      width: '190px',
+      height: '10px', 
+      paddingTop: '0px',// Set the height of the button
+      borderBottomLeftRadius: '100px',
+      borderBottomRightRadius: '100px'
+    }}
+  >    
+    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#811338] w-2 h-1 rounded-full" style={{ borderColor: 'white' }}></div>
+  </button>
 </div>
+
 
 
   {/* Select Button */}
@@ -288,3 +290,5 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     </>
   );
 }
+
+   

@@ -124,9 +124,6 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   const navigate = useNavigate();
 
 
-
-
-
   return (
     <>
      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
@@ -188,15 +185,15 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     {/*Right container*/}
     <div className=' flex flex-grow w-full '>
     <div className='flex w-full flex-grow justify-center h-screen items-center  my-2 mr-0'>
-            <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
-             
-            <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-2'>
-              <h1 class="text-3xl text-white font-code mb-3 pt-8 md:pt-4 md:pb-3 px-2">Events</h1>
-            </div>
-            <div className='flex bg-[#edeef2] justify-center items-center'>
-            <div className="flex flex-grow flex-col py-2 px-2 w-full">
-              <div className='w-full mt-4 bg-[#EFBDBD] py-2 px-4 rounded-md shad relative' style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)'  }}>
-                <div className='text-lg font-semibold text-gray-800 flex justify-between ' ><p className='flex justify-start'>Events Coordinated</p> <div className='flex justify-end shadow-md' onClick={OpenEventsConductedCoordinatedSemBtn}> <RiArrowDropDownFill  size={40}/></div></div>
+        <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
+            <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
+              <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Events</h1>
+          </div>
+          <div className='bg-[#edeef2]'>
+          <div className='flex bg-[#edeef2] justify-center items-center'>
+            <div className="flex flex-col py-2 px-2 w-full">
+              <div className='w-full mt-0 bg-[#EFBDBD] py-2 px-4 rounded-md shad relative' style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)' , marginTop: '-2px' }}>
+                <div className='text-lg font-semibold text-gray-800 flex justify-between ' ><p className='flex justify-start mt-1'>Events Coordinated</p> <div className='flex justify-end shadow-md' onClick={OpenEventsConductedCoordinatedSemBtn}> <RiArrowDropDownFill  size={40}/></div></div>
                 </div>
                 {/* {EventsCoordinatedDropdownOpen && ( */}
                     {/* <div className="absolute top-full left-0 flex flex-row items-center w-1/4  rounded-2xl mt-4" > */}
@@ -259,27 +256,32 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   </div>
 )}
       
-              <div className={`${OpenEventsConducted ? "":"hidden"} `}>
+      <div className={`${OpenEventsConducted && selectedSemesterConducted ? "" : "hidden"}`}>
                 
-
-              { eventsconducted[selectedSemesterConducted] && eventsconducted[selectedSemesterConducted].map((event, index) => (
-  <EventCards
-    key={index}
-    eventName={event.eventName}
-    eventType={event.eventType}
-    eventSummary={event.eventSummary}
-    bfileURL={event.fileURL}
-    bfileName={event.fileName}
-    brouchureURL={event.brouchureURL}
-    fileURL={event.fileURL}
-    fileName={event.fileName}
-    certificateURL={event.certificateURL}
-  />
-))}
-
-
-
- </div>
+              {OpenEventsConducted && eventsconducted[selectedSemesterConducted]?.some(event => Object.values(event).some(value => typeof value === "string" && value.trim() !== "")) ? (
+              <div>
+                {eventsconducted[selectedSemesterConducted]?.map((event, index) => (
+                  !Object.values(event).every(value => typeof value === "string" && value.trim() === "") && (
+                    <EventCards
+                      key={index}
+                      eventName={event.eventName}
+                      eventType={event.eventType}
+                      eventSummary={event.eventSummary}
+                      bfileURL={event.fileURL}
+                      bfileName={event.fileName}
+                      brouchureURL={event.brouchureURL}
+                      fileURL={event.fileURL}
+                      fileName={event.fileName}
+                      certificateURL={event.certificateURL}
+                    />
+                  )
+                ))}
+              </div>
+            ) : (
+              <p className="text-black font-bold text-center mt-2">No data available</p>
+            )}
+          </div>
+       
         </div>
            
           
@@ -340,23 +342,32 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   </div>
 )}
 
-<div className={`${OpenEventsAttended ? "" : "hidden"} `}>
-  {eventsattended[selectedSemesterAttended] && eventsattended[selectedSemesterAttended].map((event, index) => (
-    <EventCards
-      key={index}
-      eventName={event.eventName}
-      eventType={event.eventType}
-      eventSummary={event.eventSummary}
-      bfileURL={event.fileURL}
-      bfileName={event.fileName}
-      brouchureURL={event.brouchureURL}
-      fileURL={event.fileURL}
-      fileName={event.fileName}
-      certificateURL={event.certificateURL}
-    />
-  ))}
-</div>
-
+<div className={`${OpenEventsAttended&& selectedSemesterAttended ? "" : "hidden"}`}>
+    
+{OpenEventsAttended && eventsattended[selectedSemesterAttended]?.some(event => Object.values(event).some(value => typeof value === "string" && value.trim() !== "")) ? (
+              <div>
+                {eventsattended[selectedSemesterAttended]?.map((event, index) => (
+                  !Object.values(event).every(value => typeof value === "string" && value.trim() === "") && (
+                    <EventCards
+                      key={index}
+                      eventName={event.eventName}
+                      eventType={event.eventType}
+                      eventSummary={event.eventSummary}
+                      bfileURL={event.fileURL}
+                      bfileName={event.fileName}
+                      brouchureURL={event.brouchureURL}
+                      fileURL={event.fileURL}
+                      fileName={event.fileName}
+                      certificateURL={event.certificateURL}
+                    />
+                  )
+                ))}
+              </div>
+            ) : (
+              <p className="text-black font-bold text-center mt-2">No data available</p>
+            )}
+          </div>
+       
         </div>
            
           
@@ -379,6 +390,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
       
 
       
+    </div>
     </div>
     </div>
     </div>

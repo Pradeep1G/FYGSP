@@ -69,7 +69,7 @@ export default function Events() {
       setEx(response.data.extracredits);
     };
 
-    const regNo = "41111354"; // Set the regNo value here
+    const regNo = studentId; // Set the regNo value here
     const sdata = {
       "collection": "additionalCred",
       "regNo": regNo
