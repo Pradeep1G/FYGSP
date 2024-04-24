@@ -254,6 +254,7 @@ import StaffNormalNavbar from './StaffNormalNavbar';
 import StudentNormalNavbar from './StudentNormalNavbar';
 import gu from 'date-fns/esm/locale/gu/index.js';
 import { FaRegCalendarPlus } from "react-icons/fa";
+import '../App.css'
 // small bar
 export default function StudentProfileTemplate() {
 
@@ -470,7 +471,7 @@ export default function StudentProfileTemplate() {
 
 
                     <div className='flex items-center justify-center'>
-                      <div className='lg:flex lg:w-full lg:justify-around w-fit items-center justify-center  lg:space-x-60 space-y-10 lg:space-y-0'>
+                      <div className='lg:flex lg:w-auto lg:justify-around w-fit items-center justify-center space-y-10 lg:space-y-0 custom-space'>
 
                         <div className='flex justify-center bg-[#fadaf1] rounded-xl shadow-md items-center'>
                           <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <IoPersonSharp className='text-4xl rounded-l-xl' /> </div>
@@ -505,7 +506,7 @@ export default function StudentProfileTemplate() {
                     </div>
 
                     <div className='flex items-center justify-center'>
-                      <div className='lg:flex lg:w-full lg:justify-around w-fit items-center justify-center lg:space-x-60    space-y-10 lg:space-y-0'>
+                      <div className='lg:flex lg:w-full lg:justify-around w-fit items-center justify-center custom-space    space-y-10 lg:space-y-0'>
 
                         <div className='flex justify-center bg-[#f8da80] rounded-xl shadow-md items-center'>
                           <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <GrScorecard className='text-4xl rounded-l-xl' /> </div>
@@ -536,7 +537,7 @@ export default function StudentProfileTemplate() {
                       </div>
                     </div>
                     <div className='flex items-center justify-center'>
-                      <div className='lg:flex lg:w-full lg:justify-around w-fit items-center justify-center lg:space-x-60  space-y-10 lg:space-y-0'>
+                      <div className='lg:flex lg:w-full lg:justify-around w-fit items-center justify-center custom-space  space-y-10 lg:space-y-0'>
 
                         <div className='flex justify-center bg-[#f9afb0] rounded-xl shadow-md items-center'>
                           <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <SiGooglemeet className='text-4xl rounded-l-xl' /> </div>
@@ -568,7 +569,7 @@ export default function StudentProfileTemplate() {
                       </div>
                     </div>
                     <div className='flex items-center justify-center'>
-                      <div className='lg:flex lg:w-full lg:justify-start w-fit items-start justify-start lg:space-x-60  space-y-10 lg:space-y-0'>
+                      <div className='lg:flex lg:w-full lg:justify-start w-fit items-start justify-start custom-space  space-y-10 lg:space-y-0'>
 
                         <div className='flex justify-start bg-[#E0CEFE] rounded-xl shadow-md items-center'>
                           <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <FaUnlockAlt className='text-4xl rounded-l-xl' /> </div>
