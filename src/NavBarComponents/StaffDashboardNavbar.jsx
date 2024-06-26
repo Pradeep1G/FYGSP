@@ -1,6 +1,6 @@
 import sistlogologin from "../assets/sistlogologin.png";
 import { FiMenu, FiSearch } from "react-icons/fi"; // Assuming you want to use the Feather icon pack
-import adeepA from "./adeepA.jpg";
+//import adeepA from "./adeepA.jpg";
 import { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 

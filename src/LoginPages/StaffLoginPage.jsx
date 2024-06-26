@@ -133,20 +133,21 @@
 
 
 import { useEffect, useState } from 'react'
-import './index.css'
+//import './index.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // import { useEffect } from 'react';
 // import { useLocation } from 'react-router-dom';
-import LoadingScreen from './shared/Loader';
+import LoadingScreen from '../shared/Loader';
 
-import Loginnavbar from "./shared/Loginnavbar";
-import Footer from "./shared/Footer";
-import studentLoginGif from '../src/assets/stafflogin.gif';
-import loginprofile from '../src/assets/profile2.jpeg'
+import Loginnavbar from "../shared/Loginnavbar";
+import Footer from "../shared/Footer";
+import studentLoginGif from '../assets/stafflogin.gif';
+import loginprofile from '../assets/profile2.jpeg'
 
 
-export default function StaffLogin(){
+
+export default function StaffLoginPage(){
 
 
     const [formData, setFormData] = useState({ email: '', password: '' });

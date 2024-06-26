@@ -250,8 +250,8 @@ import { FaUnlockAlt } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import StaffNormalNavbar from './StaffNormalNavbar';
-import StudentNormalNavbar from './StudentNormalNavbar';
+import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
+import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import gu from 'date-fns/esm/locale/gu/index.js';
 import { FaRegCalendarPlus } from "react-icons/fa";
 import '../App.css'
@@ -440,7 +440,7 @@ export default function StudentProfileTemplate() {
                   className="bg-[#811338] text-white px-4 py-2 rounded-md ml-2"
                   onClick={() => {
                     localStorage.removeItem("StudentMailId");
-                    navigate("/studentdashboard");
+                  //  navigate("/studentdashboard");
                   }}
                 >
                   Logout

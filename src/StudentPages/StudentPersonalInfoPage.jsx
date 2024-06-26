@@ -6,8 +6,8 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import StaffNormalNavbar from './NavBarComponents/StaffNormalNavbar';
-import StudentNormalNavbar from './NavBarComponents/StudentNormalNavbar';
+import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
+import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import TextareaAutosize from 'react-textarea-autosize';
 
 
