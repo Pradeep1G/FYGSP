@@ -189,10 +189,16 @@ export default function StudentCard (props){
         }
         else{
           setError1("Not sent try again.")
+          setTimeout(() => {
+            setError1("");
+          }, 2000);
         }
       }
       catch(error){
         setError1("Not sent try agin.")
+        setTimeout(() => {
+            setError1("");
+          }, 2000);
       }
       }
 

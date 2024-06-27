@@ -435,17 +435,17 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import "./Navbar.css";
+import "../Navbar.css";
 import { FiMenu, FiSearch } from "react-icons/fi"; // Assuming you want to use the Feather icon pack
 import { useNavigate } from "react-router-dom";
-import sistlogologin from "./assets/sistlogologin.png";
-import LoadingScreen from "./shared/Loader";
-import DisplayStudentDetails from "./DisplayStudentDetails";
-import StaffDashboardNavbar from "./components/StaffDashboardNavbar";
-import Footer from "./shared/Footer";
+import sistlogologin from "../assets/sistlogologin.png";
+import LoadingScreen from "../shared/Loader";
+import DisplayStudentDetails from "../DisplayStudentDetails";
+import StaffDashboardNavbar from "../NavBarComponents/StaffDashboardNavbar";
+import Footer from "../shared/Footer";
 import { format } from "date-fns";
-import adeepA from "./components/adeepA.jpg";
-import StudentCard from "./components/StudentCard";
+//import adeepA from "./components/adeepA.jpg";
+import StudentCard from "../CardComponents/StudentCard";
 
 export default function StaffDashboard() {
   // const serverPath1 = "http://127.0.0.1:5000"

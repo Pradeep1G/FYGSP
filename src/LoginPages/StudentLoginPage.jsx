@@ -1,15 +1,15 @@
 
 
 import { useEffect, useState } from 'react'
-import './index.css'
+//import './index.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // import { useEffect } from 'react';
 // import { useLocation } from 'react-router-dom';
-import LoadingScreen from './shared/Loader';
+import LoadingScreen from '../shared/Loader';
 
-import Loginnavbar from "./shared/Loginnavbar";
-import Footer from "./shared/Footer";
+import Loginnavbar from "../shared/Loginnavbar";
+import Footer from "../shared/Footer";
 
 export default function StudentLogin(){
 
@@ -41,14 +41,14 @@ export default function StudentLogin(){
         else
         {
             localStorage.setItem("StudentMailId",formData.email);
-            navigate("/studentdashboard")
+           // navigate("/studentdashboard")
         }
         setIsLoading(false);
     }
 
     useEffect(()=>{
         if(localStorage.getItem("StudentMailId")){
-            navigate("/studentdashboard")
+           // navigate("/studentdashboard")
         }
     },[])
 
