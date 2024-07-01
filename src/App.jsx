@@ -83,8 +83,8 @@ import StudentRemarksPage from './StudentPages/StudentRemarksPage';
 
 import StaffLoginPage from './LoginPages/StaffLoginPage';
 import StudentLoginPage from './LoginPages/StudentLoginPage';
-
-
+import StudentMessages from './StudentPages/StudentMessagesPage';
+import StaffMessages from './StaffPages/StaffMessagesPage';
 import StaffMenuPage from './StaffPages/StaffMenuPage';
 import StudentMenuPage from './StudentPages/StudentMenuPage';
 
@@ -113,6 +113,8 @@ function App() {
           <Route path="/staffdashboard/studentprofile/:studentId/MentorMeetings" element={<StaffMentorMeetPage />} ></Route>
           <Route path="/staffdashboard/studentprofile/:studentId/ExtraCredits" element={<StaffExtraCreditsPage />} ></Route>
           <Route path="/staffdashboard/studentprofile/:studentId/Permission" element={<StaffPermissionPage />} ></Route>
+          <Route path="/staffdashboard/studentprofile/:studentId/Messages" element={<StaffMessages />} ></Route>
+
 
 
 
@@ -121,14 +123,15 @@ function App() {
 
 
           <Route path="/studentlogin" element={<StudentLoginPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId" element={<StudentMenuPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/PersonalInfo" element={<StudentPersonalInfoPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/Events" element={<StudentEventPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/ResultPage" element={<StudentResultPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/Remarks" element={<StudentRemarksPage/>} ></Route>
-          <Route path="/studentdashboard/studentMailId/MentorMeetings" element={<StudentMentorMeetPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/ExtraCredits" element={<StudentExtraCreditsPage />} ></Route>
-
+          <Route path="/studentdashboard" element={<StudentMenuPage />} ></Route>
+          <Route path="/studentdashboard/PersonalInfo" element={<StudentPersonalInfoPage />} ></Route>
+          <Route path="/studentdashboard/Events" element={<StudentEventPage />} ></Route>
+          <Route path="/studentdashboard/ResultPage" element={<StudentResultPage />} ></Route>
+          <Route path="/studentdashboard/Remarks" element={<StudentRemarksPage/>} ></Route>
+          <Route path="/studentdashboard/MentorMeetings" element={<StudentMentorMeetPage />} ></Route>
+          <Route path="/studentdashboard/ExtraCredits" element={<StudentExtraCreditsPage />} ></Route>
+          <Route path="/studentdashboard/Messages" element={<StudentMessages />} ></Route>
+          
   
           <Route path="/StudentCard" element={<StudentCard />} ></Route>
           <Route path="/EventCard" element={<EventCard />} ></Route>

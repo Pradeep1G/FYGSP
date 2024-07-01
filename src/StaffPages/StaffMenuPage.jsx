@@ -254,6 +254,8 @@ import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
 import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import gu from 'date-fns/esm/locale/gu/index.js';
 import { FaRegCalendarPlus } from "react-icons/fa";
+import { RiMessageLine } from "react-icons/ri";
+
 import '../App.css'
 // small bar
 export default function StudentProfileTemplate() {
@@ -348,7 +350,7 @@ export default function StudentProfileTemplate() {
     Remarks: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Remarks` : `/studentdashboard/studentMailId/Remarks`,
     MentorMeetings: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/MentorMeetings` : `/studentdashboard/studentMailId/MentorMeetings`,
     ExtraCredits: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/ExtraCredits` : `/studentdashboard/studentMailId/ExtraCredits`,
-    Permission: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Permission` : `/studentdashboard/studentMailId/Permission`,
+    StaffMessages: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Messages` : `/studentdashboard/studentMailId/Messages`,
   };
 
   const [hoveredButtons, setHoveredButtons] = useState({});
@@ -587,15 +589,15 @@ export default function StudentProfileTemplate() {
 
 
                         <div className='flex justify-center bg-[#FFF5E0] rounded-xl shadow-md items-center'>
-                          <div className='bg-white pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <FaRegCalendarPlus  className='text-4xl rounded-l-xl' /> </div>
+                          <div className='bg-white pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <RiMessageLine className='text-4xl rounded-l-xl' /> </div>
                           <button
                             className="bg-[#FFF5E0] text-black px-5 pl-2 py-3 m-0 rounded-xl h-full w-44 text-lg cursor-pointer"
-                            onMouseEnter={() => handleHover('upEvents')}
-                            onMouseLeave={() => handleMouseLeave('upEvents')}
+                            onMouseEnter={() => handleHover('StaffMessages')}
+                            onMouseLeave={() => handleMouseLeave('StaffMessages')}
                             onClick={() => {
-                              navigate(buttonRoutes.ExtraCredits)
+                              navigate(buttonRoutes.StaffMessages)
                             }}                        >
-                            {hoveredButtons['upEvents'] ? 'Add Events' : 'Upcoming Events'}
+                            {hoveredButtons['StaffMessages'] ? 'Send Message' : 'Messages'}
                           </button>
                         </div>
                       </div>

@@ -18,7 +18,23 @@ export default function Events() {
   
   const [OpenEventsConducted, setOpenEventsConducted] = useState(false);
   const [OpenEventsAttended, setOpenEventsAttended] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+
+  const [dropdownOpen, setDropdownOpen] = useState({
+    conducted: false,
+    attended: false,
+  });
+  const [newEvent, setNewEvent] = useState({
+    eventName: '',
+    eventType: '',
+    eventSummary: '',
+    brouchure: null,
+    certificate: null,
+    semester: '',
+    conductedOrAttended: 'events_conducted',
+  });
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   
   const handleSelectChange = (event) => {
@@ -42,15 +58,14 @@ export default function Events() {
 
   const handleSelectButtonClick = () => {
     if (selectedSemesterAttended) {
-      EventCards(true);
+      EventCard(true);
     } else {
       alert('Please select a semester');
     }
   };
 
-
-const serverPath1 = "https://fgspserver.onrender.com";
-const { studentId } = useParams();
+  const serverPath1 = "http://127.0.0.1:5000";
+// const serverPath1 = "https://fgspserver.onrender.com";
 // console.warn(studentId)
 const GuideName = localStorage.getItem("GuideName");
 const GuideImage = localStorage.getItem("GuideImage");
@@ -73,18 +88,26 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     aadhar:""  
   });
 
+
+  const studentMailId = localStorage.getItem("StudentMailId")
+  const studentId = localStorage.getItem("regNo")
+
+
   const getStudentData=async()=>{
     const data = {regNo:studentId,
-      guideMail:guideMailId
+      mailId :studentMailId
     }
-    const response = await axios.post(serverPath1+"/getStudentProfileData", data)
+    const response = await axios.post(serverPath1+"/StudentMenuPage/getLeftSideBarData", data)
     console.warn(response.data)
     setStudentData(response.data.StudentData)
   }
 
   useEffect(() => {
-    const fetchData = async (sdata) => { // Define data as a parameter
-        const response = await axios.post(serverPath1+"/events", sdata);
+    const data = {regNo:studentId,
+      mailId :studentMailId
+    }
+    const fetchData = async (data) => { // Define data as a parameter
+        const response = await axios.post(serverPath1+"/eventsData", data);
         console.warn(response.data);
         console.warn(response.data.eventsconducted);
         console.warn(response.data.eventsattended);
@@ -93,17 +116,64 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         setEventsConducted(response.data.eventsconducted);
         setEventsAttended(response.data.eventsattended);
     };
-
-    const regNo = studentId; // Set the regNo value here
-    const sdata = {
-        "collection": "events",
-        "regNo": regNo  
-    };
-    console.log("Request data:", sdata); // Log the data object before sending the request
-
-    fetchData(sdata); // Pass data as an argument to the fetchData function
+    fetchData(data); // Pass data as an argument to the fetchData function
     getStudentData();
 }, []);
+
+
+
+
+const handleAddEvent = async (e) => {
+  e.preventDefault();
+  if(errorMessages.brouchure || errorMessages.certificate )
+    {
+      return;
+    }
+  const endpoint = newEvent.conductedOrAttended === 'conducted' ? 'addConductedEvent' : 'addAttendedEvent';
+  const formData = new FormData();
+  formData.append('eventName', newEvent.eventName);
+  formData.append('eventType', newEvent.eventType);
+  formData.append('eventSummary', newEvent.eventSummary);
+  formData.append('brouchure', newEvent.brouchure);
+  formData.append('certificate', newEvent.certificate);
+  formData.append('semester', newEvent.semester);
+  formData.append('conductedOrAttended', newEvent.conductedOrAttended);
+  formData.append('studentName',StudentData.name)
+
+  try {
+    const regNo = localStorage.getItem("regNo");
+    const response = await axios.post(`${serverPath1}/studentdashboard/${regNo}/AddEvents`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (response.data.success) {
+      // const updatedEvents = { ...eventsConducted };
+      if (newEvent.conductedOrAttended === 'events_conducted') {
+        updatedEvents[newEvent.semester] = [...(updatedEvents[newEvent.semester] || []), newEvent];
+        setEventsConducted(updatedEvents);
+      } else {
+        // const updatedAttendedEvents = { ...eventsAttended };
+        updatedAttendedEvents[newEvent.semester] = [...(updatedAttendedEvents[newEvent.semester] || []), newEvent];
+        setEventsAttended(updatedAttendedEvents);
+      }
+      setNewEvent({
+        eventName: '',
+        eventType: '',
+        eventSummary: '',
+        brouchure: null,
+        certificate: null,
+        semester: '',
+        conductedOrAttended: newEvent.conductedOrAttended,
+      });
+      setIsFormOpen(false);
+    }
+  } catch (error) {
+    console.error("Error adding event:", error);
+  }
+};
+
+
 
   
   function getDirectLinkFromShareableLink(shareableLink) {
@@ -123,6 +193,90 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   
   const navigate = useNavigate();
 
+
+
+
+  const toggleDropdown = (type) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [type]: !prevState[type],
+    }));
+  };
+
+
+    const [CAisOpen, CAsetIsOpen] = useState(false);
+    const [CAselectedOption, CAsetSelectedOption] = useState('');
+    const [showOtherInput, setShowOtherInput] = useState(false);
+  
+    const CAoptions = [
+      { value: 'events_conducted', label: 'Coordinated' },
+      { value: 'events_attended', label: 'Attended' },
+    ];
+  
+    const CAhandleSelect = (option) => {
+      CAsetSelectedOption(option.value);
+      setNewEvent((prev) => ({
+        ...prev,
+        conductedOrAttended: option.value
+      }));
+      CAsetIsOpen(false);
+    };
+
+    
+    const [isOpen, setIsOpen] = useState(false);
+
+  const options = [
+    { value: 'webinar', label: 'Webinar' },
+    { value: 'seminar', label: 'Seminar' },
+    { value: 'hackathons', label: 'Hackathons' },
+    { value: 'tech_talks', label: 'Tech Talks' },
+    { value: 'paper_presentation', label: 'Paper Presentation' },
+    { value: 'conference', label: 'Conference' },
+    { value: 'symposium', label: 'Symposium' },
+    { value: 'workshop', label: 'Workshop' },
+    { value: 'other', label: 'Other' },
+  ];
+
+  
+  const handleSelect = (option) => {
+    if (option.value === 'other') {
+      setNewEvent({ ...newEvent, eventType: option.label });
+      setShowOtherInput(true);
+      setIsOpen(false); // Close the dropdown on selection
+    } else {
+      setNewEvent({ ...newEvent, eventType: option.label });
+      setShowOtherInput(false);
+      setIsOpen(false); // Close the dropdown on selection
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setNewEvent({ ...newEvent, otherDetails: e.target.value });
+  };
+  const handleSemesterSelect = (semester, type) => {
+    setSelectedSemester(semester);
+    toggleDropdown(type);
+  };
+
+
+
+  const [errorMessages, setErrorMessages] = useState({
+    brouchure: '',
+    certificate: ''
+  });
+
+  const handleFileChange = (e, type) => {
+    const file = e.target.files[0];
+    const maxSize = 100 * 1024; // 100 KB
+
+    if (file && file.size > maxSize) {
+      setErrorMessages(prev => ({ ...prev, [type]: 'File size greater than 100KB' }));
+      setNewEvent(prev => ({ ...prev, [type]: null }));
+    } else {
+      setErrorMessages(prev => ({ ...prev, [type]: '' }));
+      setNewEvent(prev => ({ ...prev, [type]: file }));
+    }
+  };
 
   return (
     <>
@@ -189,6 +343,231 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
             <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
               <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Events</h1>
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+          
+              {/* Add Event Section */}
+              <div className="text-center flex flex-col items-center">
+                <button
+                  className="bg-[#811338] text-white font-semibold py-2 px-4 rounded my-2 mx-2 mb-6"
+                  onClick={() => setIsFormOpen(!isFormOpen)}
+                >
+                  Add New Event
+                </button>
+                {isFormOpen && (
+  <form onSubmit={handleAddEvent} className="bg-white shadow-lg rounded-lg px-6 pt-6 pb-10 mb-8 w-full max-w-md mx-auto">
+    <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Event Details</h2>
+    
+    <div className="mb-4">
+      <label className="block text-blue-800 text-md font-semibold mb-1 text-left" htmlFor="eventName">
+        Event Name
+      </label>
+      <input
+        id="eventName"
+        type="text"
+        value={newEvent.eventName}
+        onChange={(e) => setNewEvent({ ...newEvent, eventName: e.target.value })}
+        className="w-full px-3 py-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-500"
+        placeholder="Enter event name"
+      />
+    </div>
+    
+    <div className="mb-4">
+      <label className="block text-blue-800 text-md font-semibold mb-2 text-left" htmlFor="eventType">
+        Event Type
+      </label>
+      <div className="relative">
+        <div
+          className="cursor-pointer appearance-none w-full px-3 py-2 border-b-2 border-gray-400 rounded-lg focus:outline-none focus:border-gray-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-white flex justify-between items-center"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>{newEvent.eventType || 'Select event type'}</span>
+          <svg
+            className={`h-4 w-4 ${isOpen ? 'transform rotate-180' : ''} text-gray-500 transition-transform`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
+        {isOpen && (
+          <div className="absolute mt-3 w-full max-h-40 overflow-y-auto bg-white shadow-lg rounded-lg py-1 text-left border border-gray-300 z-10">
+            {options.map((option) => (
+              <div
+                key={option.value}
+                className="cursor-pointer px-4 py-2 hover:bg-red-50 hover:rounded-md hover:mx-2"
+                onClick={() => handleSelect(option)}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showOtherInput && (
+        <div className="mt-4">
+          <label className="block text-blue-800 text-md font-semibold mb-1 text-left" htmlFor="otherDetails">
+            If others, please specify
+          </label>
+          <input
+            id="otherDetails"
+            type="text"
+            value={newEvent.otherDetails}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-500"
+            placeholder="Specify event type"
+          />
+        </div>
+      )}
+    </div>
+    
+    {/*<div className="mb-4">
+      <label className="block text-blue-800 text-md font-semibold mb-2" htmlFor="eventSummary">
+        Event Summary
+      </label>
+      <textarea
+        id="eventSummary"
+        value={newEvent.eventSummary}
+        onChange={(e) => setNewEvent({ ...newEvent, eventSummary: e.target.value })}
+        className="w-full px-3 py-2 border-2 border-gray-400 rounded-lg shadow-sm focus:outline-none focus:border-gray-500"
+        placeholder="Enter event summary"
+        rows="4"
+      />
+    </div>*/}
+    
+    <div className="mb-4">
+      <label className="block text-blue-800 text-md font-semibold mb-1 text-left" htmlFor="semester">
+        Semester
+      </label>
+      <input
+        id="semester"
+        type="number"
+        value={newEvent.semester}
+        onChange={(e) => setNewEvent({ ...newEvent, semester: e.target.value })}
+        className="w-full px-3 py-2 border-b-2 border-gray-400 focus:outline-none focus:border-gray-500"
+        placeholder="Enter semester"
+      />
+    </div>
+    
+    <div className="mb-4 relative">
+      <label className="block text-blue-800 text-md font-semibold mb-2 text-left" htmlFor="conductedOrAttended">
+        Coordinated or Attended
+      </label>
+      <div className="relative">
+        <div
+          className="cursor-pointer appearance-none w-full px-3 py-2 border-b-2 border-gray-400 rounded-lg focus:outline-none focus:border-gray-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-white flex justify-between items-center"
+          onClick={() => CAsetIsOpen(!CAisOpen)}
+        >
+          <span>{CAselectedOption ? CAoptions.find(opt => opt.value === CAselectedOption)?.label : 'Select an option'}</span>
+          <svg
+            className={`h-4 w-4 ${CAisOpen ? 'transform rotate-180' : ''} text-gray-500 transition-transform`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
+        {CAisOpen && (
+          <div className="absolute mt-1  w-full border border-gray-200 bg-white shadow-lg rounded-lg py-1 text-left ">
+            {CAoptions.map((option) => (
+              <div
+                key={option.value}
+                className="cursor-pointer px-4 py-2 hover:bg-red-50 hover:rounded-md hover:mx-2"
+                onClick={() => CAhandleSelect(option)}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+
+
+
+    <div className="mb-4">
+        <label className="block text-blue-800 text-md font-semibold mb-2 text-left" htmlFor="brouchure">
+          Brochure
+        </label>
+        <div className="flex items-center justify-between border-2 border-gray-400 rounded-lg p-2">
+          <input
+            id="brouchure"
+            type="file"
+            onChange={(e) => handleFileChange(e, 'brouchure')}
+            className="w-full px-3 py-2 border-none focus:outline-none"
+          />
+        </div>
+        {errorMessages.brouchure && <p style={{ color: 'red' }}>{errorMessages.brouchure}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-blue-800 text-md font-semibold mb-2 text-left" htmlFor="certificate">
+          Certificate
+        </label>
+        <div className="flex items-center justify-between border-2 border-gray-400 rounded-lg p-2">
+          <input
+            id="certificate"
+            type="file"
+            onChange={(e) => handleFileChange(e, 'certificate')}
+            className="w-full px-3 py-2 border-none focus:outline-none"
+          />
+        </div>
+        {errorMessages.certificate && <p style={{ color: 'red' }}>{errorMessages.certificate}</p>}
+      </div>
+
+    
+    
+    
+    <div className="flex items-center justify-center">
+      <button
+        type="submit"
+        className="bg-[#6694b4] hover:bg-[#5589ae] text-black font-semibold py-3 px-6 rounded-lg"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+)}
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div className='bg-[#edeef2]'>
           <div className='flex bg-[#edeef2] justify-center items-center'>
             <div className="flex flex-col py-2 px-2 w-full">
@@ -252,7 +631,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     <h2 className="text-lg font-semibold text-gray-800 ">
       Events Conducted in {selectedSemesterConducted} :
     </h2>
-    {/* <EventCards selectedSemesterAttended={selectedSemesterAttended} /> */}
+    {/* <EventCard selectedSemesterAttended={selectedSemesterAttended} /> */}
   </div>
 )}
       
@@ -262,7 +641,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
               <div>
                 {eventsconducted[selectedSemesterConducted]?.map((event, index) => (
                   !Object.values(event).every(value => typeof value === "string" && value.trim() === "") && (
-                    <EventCards
+                    <EventCard
                       key={index}
                       eventName={event.eventName}
                       eventType={event.eventType}
@@ -348,7 +727,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
               <div>
                 {eventsattended[selectedSemesterAttended]?.map((event, index) => (
                   !Object.values(event).every(value => typeof value === "string" && value.trim() === "") && (
-                    <EventCards
+                    <EventCard
                       key={index}
                       eventName={event.eventName}
                       eventType={event.eventType}

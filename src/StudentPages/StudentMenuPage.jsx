@@ -255,13 +255,15 @@ import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import gu from 'date-fns/esm/locale/gu/index.js';
 import { FaRegCalendarPlus } from "react-icons/fa";
 import '../App.css'
+import { RiMessageLine } from "react-icons/ri";
+import LoadingScreen from '../shared/Loader';
 // small bar
 export default function StudentProfileTemplate() {
 
 
 
-  // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com";
+  const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com";
   const { studentId } = useParams();
 
   // console.warn(studentId)
@@ -270,6 +272,7 @@ export default function StudentProfileTemplate() {
   const StudentImage = localStorage.getItem("StudentImage");
   const [userType, setUserType] = useState("");
   const studentMailId = localStorage.getItem("StudentMailId")
+  const [isLoading, setIsLoading] = useState(false);
 
   const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   const [StudentData, setStudentData] = useState({
@@ -294,33 +297,55 @@ export default function StudentProfileTemplate() {
       regNo: studentId,
       guideMail: guideMailId
     }
-    const response = await axios.post(serverPath1 + "/getStudentProfileData", data)
+    try{
+    setIsLoading(true);
+    const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data)
     console.warn(response.data)
     setStudentData(response.data.StudentData)
+    localStorage.setItem("regNo",StudentData["regNo"])
+    }
+    catch(error){
+
+    }
+    finally{
+      setIsLoading(false);
+    }
+
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Check for the presence of GuideMailIdToLogin in local storage to determine user type
-        const guideMailId = localStorage.getItem("GuideMailIdToLogin");
-        if (!guideMailId) {
-          setUserType("student");
+    // const fetchData = async () => {
+    //   try {
+    //     // Check for the presence of GuideMailIdToLogin in local storage to determine user type
+    //     const guideMailId = localStorage.getItem("GuideMailIdToLogin");
+    //     if (!guideMailId) {
+    //       setUserType("student");
 
-          const data = { mailId: studentMailId };
-          const response = await axios.post(serverPath1 + "/getStudentData", data);
-          console.warn(response.data.StudentData);
-          setStudentData(response.data.StudentData);
-        } else {
-          setUserType("staff");
-          getStudentProfileData();
-        }
-      } catch (error) {
-        console.error("Error fetching student data:", error);
+    //       const data = { mailId: studentMailId };
+    //       const response = await axios.post(serverPath1 + "/getStudentData", data);
+    //       console.warn(response.data.StudentData);
+    //       setStudentData(response.data.StudentData);
+    //     } else {
+    //       setUserType("staff");
+    //       getStudentProfileData();
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching student data:", error);
+    //   }
+    // };
+
+    const getStudentProfileData = async () => {
+      const data = {
+        mailId: studentMailId,
+        // guideMail: guideMailId
       }
-    };
+      const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data)
+      console.warn(response.data)
+      setStudentData((prev)=>response.data.StudentData)
+      localStorage.setItem("regNo",response.data.StudentData.regNo)
+    }
 
-    fetchData();
+    getStudentProfileData();
   }, [studentId, studentMailId]);
 
 
@@ -342,13 +367,13 @@ export default function StudentProfileTemplate() {
 
   const navigate = useNavigate();
   const buttonRoutes = {
-    PersonalInfo: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/PersonalInfo` : `/studentdashboard/studentMailId/PersonalInfo`,
-    Events: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Events` : `/studentdashboard/studentMailId/Events`,
-    Results: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/ResultPage` : `/studentdashboard/studentMailId/ResultPage`,
-    Remarks: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Remarks` : `/studentdashboard/studentMailId/Remarks`,
-    MentorMeetings: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/MentorMeetings` : `/studentdashboard/studentMailId/MentorMeetings`,
-    ExtraCredits: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/ExtraCredits` : `/studentdashboard/studentMailId/ExtraCredits`,
-    Permission: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Permission` : `/studentdashboard/studentMailId/Permission`,
+    PersonalInfo:  `/studentdashboard/PersonalInfo`,
+    Events: `/studentdashboard/Events`,
+    Results:   `/studentdashboard/ResultPage`,
+    Remarks:  `/studentdashboard/Remarks`,
+    MentorMeetings:  `/studentdashboard/MentorMeetings`,
+    ExtraCredits:  `/studentdashboard/ExtraCredits`,
+    Messages: `/studentdashboard/Messages`,
   };
 
   const [hoveredButtons, setHoveredButtons] = useState({});
@@ -369,6 +394,7 @@ export default function StudentProfileTemplate() {
 
   return (
     <>
+    {isLoading && <LoadingScreen />}
       {userType === 'staff' ? (
         <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
       ) : (
@@ -425,12 +451,12 @@ export default function StudentProfileTemplate() {
               <button
                 className="bg-[#811338] text-white px-4 py-2 rounded-md ml-0 mr-2"
                 onClick={() => {
-                  if (userType === "staff") {
-                    navigate("/staffdashboard");
-                  }
+                 
+                    localStorage.clear();
+                    navigate("/studentlogin");
                 }}
               >
-                BACK
+                LOGOUT
               </button>
             </div>
 
@@ -572,15 +598,15 @@ export default function StudentProfileTemplate() {
                       <div className='lg:flex lg:w-full lg:justify-start w-fit items-start justify-start custom-space  space-y-10 lg:space-y-0'>
 
                         <div className='flex justify-start bg-[#E0CEFE] rounded-xl shadow-md items-center'>
-                          <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <FaUnlockAlt className='text-4xl rounded-l-xl' /> </div>
+                          <div className='bg-white  pr-5 pl-4 lg:h-full py-6 rounded-l-3xl rounded-r-full flex justify-center items-center'> <RiMessageLine  className='text-4xl rounded-l-xl' /> </div>
                           <button
                             className="bg-[#E0CEFE] text-black px-5 pl-2 py-3 m-0 rounded-xl h-full w-44 text-lg cursor-pointer"
-                            onMouseEnter={() => handleHover('permission')}
-                            onMouseLeave={() => handleMouseLeave('permission')}
+                            onMouseEnter={() => handleHover('Messages')}
+                            onMouseLeave={() => handleMouseLeave('Messages')}
                             onClick={() => {
-                              navigate(buttonRoutes.Permission)
+                              navigate(buttonRoutes.Messages)
                             }}        >
-                            {hoveredButtons['permission'] ? 'View Permissions' : 'Permissions'}
+                            {hoveredButtons['Messages'] ? 'View Messages' : 'Messages'}
                           </button>
                         </div>
 
