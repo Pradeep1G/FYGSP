@@ -109,8 +109,8 @@ export default function PersonalInfo() {
 
 
 
-  //const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com";
+  const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com";
   const { studentId } = useParams();
   // console.warn(studentId)
   const GuideName = localStorage.getItem("GuideName");

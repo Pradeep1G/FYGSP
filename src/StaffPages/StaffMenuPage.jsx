@@ -260,8 +260,8 @@ export default function StudentProfileTemplate() {
 
 
 
-  // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com";
+  const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com";
   const { studentId } = useParams();
 
   // console.warn(studentId)
@@ -272,6 +272,7 @@ export default function StudentProfileTemplate() {
   const studentMailId = localStorage.getItem("StudentMailId")
 
   const guideMailId = localStorage.getItem("GuideMailIdToLogin")
+  const [studentEventsCounts, setStudentEventsCounts] = useState({ attended_count: '', conducted_count: '' });
   const [StudentData, setStudentData] = useState({
     image: "",
     regNo: "",
@@ -297,6 +298,9 @@ export default function StudentProfileTemplate() {
     const response = await axios.post(serverPath1 + "/getStudentProfileData", data)
     console.warn(response.data)
     setStudentData(response.data.StudentData)
+    console.warn('count --',response.data.StudentEventsCounts);
+    setStudentData(response.data.StudentData);
+    setStudentEventsCounts(response.data.StudentEventsCounts);
   }
 
   useEffect(() => {
@@ -308,9 +312,9 @@ export default function StudentProfileTemplate() {
           setUserType("student");
 
           const data = { mailId: studentMailId };
-          const response = await axios.post(serverPath1 + "/getStudentData", data);
-          console.warn(response.data.StudentData);
-          setStudentData(response.data.StudentData);
+          const response = await axios.post(`${serverPath1}/getStudentData`, data);
+        console.warn(response.data.StudentData);
+        
         } else {
           setUserType("staff");
           getStudentProfileData();
@@ -418,6 +422,20 @@ export default function StudentProfileTemplate() {
             </div>
             <div className="flex flex-col p-0 text-left">
               <p className="text-sm text-gray-600">{StudentData.phoneNo}</p>
+            </div>
+            <div className="flex flex-col p-0 text-left">
+              <p className="text-sm font-semibold" style={{ color: 'rgba(0,0,0)' }}>Events attended:</p>
+            </div>
+            <div className="flex flex-col p-0 text-left">
+              <p className="text-sm text-gray-600">{studentEventsCounts.attended_count}</p>
+              {/* <p className="text-sm text-gray-600">{studentEventsCounts.conducted_count}</p> */}
+            </div>
+            <div className="flex flex-col p-0 text-left">
+              <p className="text-sm font-semibold" style={{ color: 'rgba(0,0,0)' }}>Events conducted:</p>
+            </div>
+            <div className="flex flex-col p-0 text-left">
+              {/* <p className="text-sm text-gray-600">{studentEventsCounts.attended_count}</p> */}
+              <p className="text-sm text-gray-600">{studentEventsCounts.conducted_count}</p>
             </div>
           </div>
           <div className="flex justify-center mt-4">

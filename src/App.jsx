@@ -121,10 +121,10 @@ function App() {
 
 
           <Route path="/studentlogin" element={<StudentLoginPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId" element={<StudentMenuPage />} ></Route>
+          <Route path="/studentdashboard" element={<StudentMenuPage />} ></Route>
           <Route path="/studentdashboard/studentMailId/PersonalInfo" element={<StudentPersonalInfoPage />} ></Route>
           <Route path="/studentdashboard/studentMailId/Events" element={<StudentEventPage />} ></Route>
-          <Route path="/studentdashboard/studentMailId/ResultPage" element={<StudentResultPage />} ></Route>
+          <Route path="/studentdashboard/studentId/ResultPage" element={<StudentResultPage />} ></Route>
           <Route path="/studentdashboard/studentMailId/Remarks" element={<StudentRemarksPage/>} ></Route>
           <Route path="/studentdashboard/studentMailId/MentorMeetings" element={<StudentMentorMeetPage />} ></Route>
           <Route path="/studentdashboard/studentMailId/ExtraCredits" element={<StudentExtraCreditsPage />} ></Route>

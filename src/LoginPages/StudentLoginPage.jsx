@@ -16,8 +16,8 @@ export default function StudentLogin(){
 
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-    // const serverPath1 = "http://127.0.0.1:5000"
-      const serverPath1 = "https://fgspserver.onrender.com"
+    const serverPath1 = "http://127.0.0.1:5000"
+    //   const serverPath1 = "https://fgspserver.onrender.com"
     
     const [isLoading, setIsLoading] = useState();
     
@@ -31,7 +31,6 @@ export default function StudentLogin(){
         e.preventDefault();
         console.warn("Im clicked");
         setIsLoading(true);
-        
         const response = await axios.post(serverPath1+"/studentlogin/"+formData['email'], formData)
         console.warn(response.data);
         if(response.data.message=="Invalid Credentials" || response.data.message=="Account not found!")
@@ -40,8 +39,10 @@ export default function StudentLogin(){
         }
         else
         {
+            // mailid = formData.email;
+            // console.log(mailid);
             localStorage.setItem("StudentMailId",formData.email);
-           // navigate("/studentdashboard")
+           navigate(`/studentdashboard}`);
         }
         setIsLoading(false);
     }

@@ -448,14 +448,16 @@ import { format } from "date-fns";
 import StudentCard from "../CardComponents/StudentCard";
 
 export default function StaffDashboard() {
-  // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com";
+  const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com";
 
   const [isLoading, setIsLoading] = useState();
 
   const GuideMailId = localStorage.getItem("GuideMailIdToLogin");
   const [AllStudents, setAllStudents] = useState([]);
 const [filteredStudents, setFilteredStudents] = useState([]);
+const [total_events_attended_count,settotal_events_attended_count]=useState(0);
+const [total_events_conducted_count,settotal_events_conducted_count]=useState(0);
 
   const [GuideDetails, setGuideDetails] = useState(
     {DESIGNATION:"", DOMAIN1:"", DOMAIN2:"",  DOMAIN3:"", EMPID:"", IMAGE:"", NAME:"", UniversityEMAILID:"", VACANCIES:"", id:" ", });
@@ -481,6 +483,7 @@ const [filteredStudents, setFilteredStudents] = useState([]);
     if (!GuideMailId) {
       navigate("/stafflogin");
     }
+    getRegisterNumber();
     getGuideData();
   }, []);
 
@@ -573,6 +576,46 @@ const [filteredStudents, setFilteredStudents] = useState([]);
   const OpenStaffSidebar=()=>{
     setStaffSidebar(!StaffSidebar)
   }
+  const getRegisterNumber = async (e) => {
+    let university_email = 'albert.cse@sathyabama.ac.in'
+    try {
+      const response = await fetch(`${serverPath1}/get_student_register_numbers_by_email?university_email=${university_email}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        settotal_events_conducted_count(data.total_events_conducted_count);
+        settotal_events_attended_count(data.total_events_attended_count);
+        localStorage.setItem('register_number_count_events',data.register_events_counts);
+      
+      } else {
+        console.error('Error fetching data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const handleDownloadEvents = async () => {
+    let university_email = 'albert.cse@sathyabama.ac.in';
+    try {
+        const response = await fetch(`${serverPath1}/downloadEvents?university_email=${university_email}`);
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'student_events_data.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error('Error fetching data');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
 
   return (
     <>
@@ -580,9 +623,6 @@ const [filteredStudents, setFilteredStudents] = useState([]);
         <>
           {isLoading && <LoadingScreen />}
           <StaffDashboardNavbar OpenStaffSidebar={OpenStaffSidebar} GuideName={GuideDetails.NAME} handleSearch={handleSearch}/>
-
-
-
 
     <div className='sm:flex flex-row-reverse'>
 
@@ -617,6 +657,36 @@ const [filteredStudents, setFilteredStudents] = useState([]);
           <p className="break-all">{GuideDetails.UniversityEMAILID}</p>
         </div>
         </div>
+
+        <div className="flex justify-center">
+        <div className="mb-4 text-center max-w-xs">
+          {total_events_conducted_count ? (
+            <p className="break-all">Events Conducted : {total_events_conducted_count}</p>
+          ) : (
+            <div className="flex justify-center">
+              <img src="loading.gif" alt="Loading..." />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <div className="mb-4 text-center max-w-xs">
+          {total_events_attended_count ? (
+            <p className="break-all">Events Attended : {total_events_attended_count}</p>
+          ) : (
+            <div className="flex justify-center">
+              <img src="loading.gif" alt="Loading..."/>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-center mt-4">
+            <button className="bg-[#811338] text-white px-4 py-2 rounded-md" onClick={handleDownloadEvents}>
+                Download
+            </button>
+        </div>
+
 
         
         <div className="flex justify-center mt-4">
@@ -660,8 +730,10 @@ const [filteredStudents, setFilteredStudents] = useState([]);
                         regNo={item.regNo}
                         mailId={item.mailId}
                         phoneNo={item.phoneNo}
+                        event_details = {item.register_events_counts}
                         guideName={GuideDetails.NAME}
                         guideImage={GuideDetails.IMAGE}
+                        
                         // address={item.address}
                         // section={item.section}
                       />
@@ -844,6 +916,7 @@ const [filteredStudents, setFilteredStudents] = useState([]);
                         regNo={item.regNo}
                         mailId={item.mailId}
                         phoneNo={item.phoneNo}
+                        
                         // address={item.address}
                         // section={item.section}
                       />

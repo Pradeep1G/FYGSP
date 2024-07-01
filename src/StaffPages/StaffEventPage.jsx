@@ -15,7 +15,6 @@ export default function Events() {
   const [EventsCoordinateddrpDwn, setdrpDwnEventsCoordinated] = useState(false);
   const [EventsAttendedDropdownOpen, setEventsAttendedDropdownOpen] = useState(false);
   const [EventsAttendeddrpDwn, setdrpDwnEventsAttended] = useState(false);
-  
   const [OpenEventsConducted, setOpenEventsConducted] = useState(false);
   const [OpenEventsAttended, setOpenEventsAttended] = useState(false);
 

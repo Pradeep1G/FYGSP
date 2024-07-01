@@ -23,8 +23,8 @@ export default function DisplayStudentDetails(props){
       }
 
 
-        // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com"
+        const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com"
 
 
 
@@ -113,6 +113,10 @@ export default function DisplayStudentDetails(props){
 
         <div className="font-medium text-sm">
           <p>Phone No : {props.phoneNo}</p>
+        </div>
+
+        <div className="font-medium text-sm">
+          <p>events : {props.event_details}</p>
         </div>
 
         

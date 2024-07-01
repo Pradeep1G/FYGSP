@@ -114,8 +114,8 @@ export default function StudentCard (props){
 
 
 
-            // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com"
+            const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com"
 
 
 
@@ -241,6 +241,9 @@ export default function StudentCard (props){
                     </div>
                     <div className="flex flex-col p-0 text-left">
                         <p className="text-xs" style={{ color: 'rgba(132,38,70)' }}>{props.phoneNo}</p>
+                    </div>
+                    <div className="flex flex-col p-0 text-left">
+                        <p className="text-xs" style={{ color: 'rgba(132,38,70)' }}>{props.event_details}</p>
                     </div>
                 </div>
             </div>
