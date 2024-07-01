@@ -73,7 +73,10 @@ export default function PersonalInfo() {
     lifeGoal: '',
     religion: ''
   });
-  const [parentdetails, setParentDetails] = useState({
+  const [parentdetails, setParentDetails] = useState([{
+    fatherPic:"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ" ,
+    motherPic:"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ" ,
+    guardianPic:"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ" ,
     fatherName: '',
     fatherMail: '',
     fatherNo: '',
@@ -87,7 +90,7 @@ export default function PersonalInfo() {
     guardianNo: '',
     guardianOcc: ''
 
-  });
+  }]);
   const [address, setAddress] = useState({
     permanentAdd: '',
     communicationAdd: '',
@@ -109,8 +112,8 @@ export default function PersonalInfo() {
 
 
 
-  //const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com";
+  const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com";
   const { studentId } = useParams();
   // console.warn(studentId)
   const GuideName = localStorage.getItem("GuideName");
@@ -237,6 +240,23 @@ export default function PersonalInfo() {
       }
     } catch (error) {
       // console.error("Error processing shareable link:", error.message);
+      return null;
+    }
+  }
+
+  const getThumbnailLinkFromShareableLink = (shareableLink) => {
+    try {
+      const startIndex = shareableLink.indexOf("/d/") + 3; // Find index of '/d/' and add 3 to skip past it
+      // const endIndex = shareableLink.indexOf("/", startIndex); // Find next '/' after '/d/' to determine end of file ID
+      if (startIndex !== -1) {
+        const fileId = shareableLink.slice(startIndex);
+        console.warn(`https://drive.google.com/thumbnail?id=${fileId}`)
+        return `https://drive.google.com/thumbnail?id=${fileId}`;
+      } else {
+        throw new Error("Invalid shareable link format");
+      }
+    } catch (error) {
+      console.error("Error processing shareable link:", error.message);
       return null;
     }
   }
@@ -459,7 +479,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/father.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
@@ -501,7 +521,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/mother.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                         </div>
                       </div>
 
@@ -544,7 +564,7 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src="/src/images/guard.jpg" alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
                         </div>
                       </div>
 

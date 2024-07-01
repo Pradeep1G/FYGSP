@@ -51,7 +51,7 @@ const serverPath1 = "http://127.0.0.1:5000";
     
       const getStudentData=async()=>{
         const data = {regNo:studentId,
-          guideMail:guideMailId
+          mailId:studentMailId
         }
         try{
             setIsLoading(true);
@@ -149,7 +149,7 @@ const serverPath1 = "http://127.0.0.1:5000";
         console.log(StudentData.mailId)
         setIsLoading(true);
           const response = await axios.post(`${serverPath1}/getMessages`, dataa);
-          console.log(response.data); // Verify data structure in console
+          console.warn(response.data); // Verify data structure in console
           if (response.data && response.data.messages) {
               setMessages(response.data.messages);
           }
@@ -263,8 +263,7 @@ return new Date(dateString).toLocaleDateString('en-IN', options).replace(/\//g, 
                     <div className="flex justify-center mt-4">
                     <button
                 className="bg-[#811338] text-white px-4 py-2 rounded-md ml-0 mr-2"
-                onClick={() => {
-                 
+                onClick={() => {+
                     navigate("/studentdashboard");
                 }}
               >

@@ -1020,7 +1020,7 @@ const handleImageChange = (event) => {
                         {/* Left column for image */}
                         <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                           <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                            <img src={getThumbnailLinkFromShareableLink( "https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ")} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                            <img src={getThumbnailLinkFromShareableLink( parentdetails[0].fatherImage)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
                           </div>
                         </div>
 

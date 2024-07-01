@@ -585,7 +585,7 @@ export default function StudentProfileTemplate() {
                             onMouseEnter={() => handleHover('credits')}
                             onMouseLeave={() => handleMouseLeave('credits')}
                             onClick={() => {
-                              navigate(buttonRoutes.ExtraCredits)
+                              // navigate(buttonRoutes.ExtraCredits)
                             }}                        >
                             {hoveredButtons['credits'] ? 'View Credits' : 'Additional Credentials'}
                           </button>
@@ -619,7 +619,7 @@ export default function StudentProfileTemplate() {
                             onMouseEnter={() => handleHover('upEvents')}
                             onMouseLeave={() => handleMouseLeave('upEvents')}
                             onClick={() => {
-                              navigate(buttonRoutes.ExtraCredits)
+                              // navigate(buttonRoutes.ExtraCredits)
                             }}                        >
                             {hoveredButtons['upEvents'] ? 'Add Events' : 'Upcoming Events'}
                           </button>

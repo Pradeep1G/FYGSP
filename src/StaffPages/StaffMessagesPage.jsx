@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffDashboardNavbar from '../NavBarComponents/StaffDashboardNavbar';
 import { format } from 'date-fns';
+import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
 
 const StaffMessages = () => {
     const [data, setData] = useState([]);
@@ -185,6 +186,8 @@ const StaffMessages = () => {
 
         return (
             <>
+                 {/* <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} /> */}
+
                 <div className='lg:px-10'>
                     <form onSubmit={sendComment} className="mb-4">
                         <input
@@ -247,7 +250,8 @@ const StaffMessages = () => {
 
     return (
         <>
-            <StaffDashboardNavbar GuideImage={GuideImage} GuideName={GuideName} />
+                 <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
+
             <div className='sm:flex '>
                 <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6 bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
                     <div className='w-full rounded-t-md bg-[#811338] h-20 absolute top-0 left-0 right-0'></div>

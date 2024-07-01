@@ -329,8 +329,7 @@ const handleAddEvent = async (e) => {
       </div>
         <div className="flex justify-center mt-4">
           <button className="bg-[#811338] text-white px-4 py-2 rounded-md" onClick={() => {
-                    navigate(`/staffdashboard/studentprofile/${studentId}`);
-                  }}>
+                  navigate(`/studentdashboard`);                  }}>
             BACK
           </button>               
         </div>
