@@ -44,6 +44,7 @@ const MentorMeetings = () => {
           return;
         }
         try {
+            setIsLoading(true);
             const response = await axios.post(`${serverPath1}/getStudentProfileData`, {
                 regNo: studentId,
                 guideMail: guideMailId,
@@ -59,6 +60,10 @@ const MentorMeetings = () => {
               navigate("/stafflogin");
               return;
             }     
+
+       }
+       finally{
+        setIsLoading(false);
        }
     };
 
@@ -132,6 +137,10 @@ const MentorMeetings = () => {
     
             // Refetch the data to ensure accuracy
             getMeetings();
+
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000); 
         } catch (error) {
             console.error('Failed to add meeting:', error);
             toast.error('Failed to add meeting. Please try again.');

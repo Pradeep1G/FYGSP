@@ -3,7 +3,9 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
-
+import LoadingScreen from '../shared/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Permission() {
   const [personalInfoPermission, setPersonalInfoPermission] = useState(false);
   const [resultsPermission, setResultsPermission] = useState(false);
@@ -12,15 +14,32 @@ export default function Permission() {
   const [parentinfoPermission, setParentinfoPermission] = useState(false);
   const [accademicinfoPermission, setAccademicinfoPermission] = useState(false);
   const [addressPermission, setAddressPermission] = useState(false);
-
+const [isLoading,setIsLoading]=useState();
   
   const updatePermission = async (permissionType, newValue) => {
-    const data = {
-      regNo: studentId,
-      permissionType,
-      newValue
-    };
-    await axios.post(`${serverPath1}/updatePermission`, data);
+    try{
+      const data = {
+        regNo: studentId,
+        permissionType,
+        newValue
+      };
+      setIsLoading(true);
+      const response =await axios.post(`${serverPath1}/updatePermission`, data);
+      if (newValue===false){
+        toast.success("Permissions revoked!");
+      }
+      else{
+        toast.success("Permission granted!");
+      }
+      
+    }
+    catch{
+
+    }
+    finally{
+      setIsLoading(false);
+    }
+   
   };
 
   const togglePermission = (permissionType, permissionSetter) => {
@@ -73,6 +92,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     const data = {regNo:studentId,
       guideMail:guideMailId
     }
+    setIsLoading(true);
     const response = await axios.post(serverPath1+"/getStudentProfileData", data, 
       {headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
@@ -84,6 +104,9 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         navigate("/stafflogin");
         return;
       }
+  }
+  finally{
+    setIsLoading(false);
   }
   }
 
@@ -136,6 +159,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
   return (
 <>  
+{isLoading && <LoadingScreen/>}
     <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
     <div className='sm:flex '>
     <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6  bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
@@ -284,7 +308,18 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         </div>
         {/* Second Box */}
       </div>
-
+      <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
      
     </>
   );

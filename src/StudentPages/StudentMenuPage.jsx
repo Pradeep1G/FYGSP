@@ -344,6 +344,7 @@ export default function StudentProfileTemplate() {
       navigate("/studentlogin");
       return;
     }
+    setIsLoading(true);
       try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
       console.warn(response.data)
       setStudentData((prev)=>response.data.StudentData)
@@ -356,6 +357,9 @@ export default function StudentProfileTemplate() {
         } else {
           console.error("An error occurred:", error);
         }
+      }
+      finally{
+        setIsLoading(false);
       }
     }
 

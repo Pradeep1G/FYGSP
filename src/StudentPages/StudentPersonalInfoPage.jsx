@@ -7,7 +7,9 @@ import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
 import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import TextareaAutosize from 'react-textarea-autosize';
 import { BiImageAdd } from "react-icons/bi";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingScreen from '../shared/Loader';
 function capitalizeFirstLetter(word) {
   if (!word) {
     return '';
@@ -45,7 +47,6 @@ function capitalizeEachWord(string) {
     return capitalizedWords.join(' ');
   }
 }
-
 function capitalizeWord(array) {
   // Check if the input is an array
   if (!Array.isArray(array)) {
@@ -64,6 +65,7 @@ function isValidPhoneNumber(input) {
 }
 
 export default function PersonalInfo() {
+  // const [isLoading,setIsLoading]=useState();
 
   const serverPath1 = "http://127.0.0.1:5000";
   //const serverPath1 = "https://fgspserver.onrender.com";
@@ -226,8 +228,8 @@ export default function PersonalInfo() {
 
   });
 
-  const togglePersonalEdit = (e) => { // when we click on edit it should toogle
-    e.preventDefault();
+  const togglePersonalEdit = (event) => { // when we click on edit it should toogle
+    event.preventDefault();
     if (!isPersonalDetailEditable) {  //initially it is false it will be true , true means they can edit
       setEditedPersonalDetail({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
         section: personaldetails[0]["section"],
@@ -243,7 +245,8 @@ export default function PersonalInfo() {
   }
 
   
-  const toggleParentEdit = () => { // when we click on edit it should toogle
+  const toggleParentEdit = (event) => { // when we click on edit it should toogle
+    event.preventDefault()
     if (!isParentDetailEditable) {  //initially it is false it will be true , true means they can edit
       setEditedParentDetail({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
         fatherName: parentdetails[0]["fatherName"],
@@ -263,7 +266,8 @@ export default function PersonalInfo() {
     }
     setIsParentDetailEditable(!isParentDetailEditable); // the isPersonalDetailEditable will be turned to false again
   }
-  const toggleAddressEdit = () => { // when we click on edit it should toogle
+  const toggleAddressEdit = (event) => { // when we click on edit it should toogle
+    event.preventDefault()
     if (!isAddressEditable) {  //initially it is false it will be true , true means they can edit
       setEditedAddress({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
         permanentAdd: address[0]["permanentAdd"],          // this variable consits of the backend data that is coming to frontend
@@ -280,7 +284,8 @@ export default function PersonalInfo() {
     setIsAddressEditable(!isAddressEditable); // the isPersonalDetailEditable will be turned to false again
   }
 
-  const handleHostellerToggle = () => {
+  const handleHostellerToggle = (event) => {
+    event.preventDefault()
     setEditedAddress({
       ...editedAddress,
       hosteller: !editedAddress.hosteller,
@@ -289,7 +294,8 @@ export default function PersonalInfo() {
     });
   };
 
-  const toggleAcademicDetailEdit = () => { // when we click on edit it should toogle
+  const toggleAcademicDetailEdit = (event) => { // when we click on edit it should toogle
+    event.preventDefault()
     if (!isAcademicDetailEditable) {  //initially it is false it will be true , true means they can edit
       setEditedAcademicDetail({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
         perviousInst: academicdetails[0]["perviousInst"],
@@ -301,32 +307,36 @@ export default function PersonalInfo() {
     setIsAcademicDetailEditable(!isAcademicDetailEditable); // the isPersonalDetailEditable will be turned to false again
   }
 
-  const handlePersonalDetailInputChange = (e) => {  //handles the change in input field for personal
-    const { name, value } = e.target;
+  const handlePersonalDetailInputChange = (event) => {  //handles the change in input field for personal
+    event.preventDefault()
+    const { name, value } = event.target;
     setEditedPersonalDetail((prevDetails) => ({
       ...prevDetails, //previous details
       [name]: value, //updated details
     }));
   }
 
-  const handleParentDetailInputChange = (e) => {  //handles the change in input field for parent
-    const { name, value } = e.target;
+  const handleParentDetailInputChange = (event) => {  //handles the change in input field for parent
+    event.preventDefault()
+    const { name, value } = event.target;
     setEditedParentDetail((prevDetails) => ({
       ...prevDetails, //previous details
       [name]: value, //updated details
     }));
   }
 
-  const handleAddressInputChange = (e) => {  //handles the change in input field for address
-    const { name, value } = e.target;
+  const handleAddressInputChange = (event) => {  //handles the change in input field for address
+    event.preventDefault()
+    const { name, value } = event.target;
     setEditedAddress((prevDetails) => ({
       ...prevDetails, //previous details
       [name]: value, //updated details
     }));
   }
 
-  const handleAcademicDetailInputChange = (e) => {  //handles the change in input field for academic
-    const { name, value } = e.target;
+  const handleAcademicDetailInputChange = (event) => {  //handles the change in input field for academic
+    event.preventDefault()
+    const { name, value } = event.target;
     setEditedAcademicDetail((prevDetails) => ({
       ...prevDetails, //previous details
       [name]: value, //updated details
@@ -352,6 +362,7 @@ const[guardianError,setGuardianError]=useState('');
 
 
 const handleImageChange = (event) => {
+  event.preventDefault()
   const { name, files } = event.target;
   const file = files[0];
 
@@ -389,7 +400,8 @@ const handleImageChange = (event) => {
 
 
 
-  const handleUpdatePersonalDetail = async () => {
+  const handleUpdatePersonalDetail = async (event) => {
+    event.preventDefault()
     try {
       // Check for missing required fields
       if (
@@ -419,32 +431,46 @@ const handleImageChange = (event) => {
           bloodGrp: editedPersonalDetail.bloodGrp
         },
       };
-  
+        setIsLoading(true);
       const res = await axios.post(
         `${serverPath1}/studentDashboard/studentPersonalInfoPage/editPersonalDetails`,
         updatedPersonalDetailData
       );
-  
+
       console.log('Update response:', res.data); // Log response data for verification
-  
       setEditedPersonalDetail({});
       setIsPersonalDetailEditable(false); // Set edit mode to false
       setPersonalDetails([updatedPersonalDetailData]); // Assuming you update state correctly
   
       // Fetch updated permissions
-      await fetchPermissions();
-      window.location.reload();
+      // await fetchPermissions();
+      setPermissions((prev) => ({
+        ...prev,
+        "EditPersonalDetail": !prev["EditPersonalDetail"]
+      }));
+      setIsLoading(false);
+      toast.success("Updated Personal Details Succesfully");
+      
+    //   setTimeout(function() {
+    //     window.location.reload();
+    // }, 2000); 
+
     } catch (error) {
       console.error('Error updating personal detail:', error);
+      setIsLoading(false);
+      toast.error("Error updating personal detail");
     } finally {
       setIsPersonalDetailSubmitting(false);
       console.log('Finished handling update personal detail.');
+      // setIsLoading(false);
+      
     }
   };
   
 
 
-  const handleUpdateParentDetail = async () => {
+  const handleUpdateParentDetail = async (event) => {
+    event.preventDefault();
     try {
       // Check if all fields are filled
       const { fatherImage, motherImage, guardianImage } = selectedImages;
@@ -499,13 +525,15 @@ const handleImageChange = (event) => {
         updatedParentDetailData.append('guardianOcc', editedParentDetail.guardianOcc);
   
         try {
+
+
+
           setIsLoading(true);
           const response = await axios.post(
             `${serverPath1}/studentDashboard/studentPersonalInfoPage/editParentDetails`,
             updatedParentDetailData
           );
-          const fileUrl = response.data.fileUrl; // Assuming the server returns the file URL
-  
+         
           // setUploadedFileUrl(fileUrl);
           // localStorage.setItem('uploadedFileUrl', fileUrl); // Store in local storage
           // setUploadMessage('File uploaded successfully');
@@ -513,26 +541,45 @@ const handleImageChange = (event) => {
           //   setUploadMessage('');
           // }, 2000); 
   
-          setFile(null);
+          // setFile(null);
+          // setSelectedFatherImage
+          setSelectedImages({
+            fatherImage: null,
+            motherImage: null,
+            guardianImage: null,
+          })
           setEditedParentDetail({});
           setIsParentDetailEditable(false);
           setParentDetails([updatedParentDetailData]);
-          
+          setPermissions((prev) => ({
+            ...prev,
+            "EditParentDetail": !prev["EditParentDetail"]
+          }));
+
+
+          setIsLoading(false);
+          // if (response.success==="true"){
+          toast.success("Parent details updated Succesfully");
+          // }
+          // else{
+          //   toast.error("Error uploading Parent details");
+          // }
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000); 
   
         } catch (error) {
           console.error('Error uploading file:', error);
+          setIsLoading(false);
+          toast.error("Error uploading Parent details");
           // setUploadMessage('Error uploading file');
-          // setTimeout(() => {
-          //   setUploadMessage('');
-          // }, 2000); 
+         
         } finally {
           setIsLoading(false);
-          setIsParentDetailSubmitting(false);
+          // setIsParentDetailSubmitting(false);
+
         }
-    
-        await fetchPermissions();
-        // Reload the page after successful update
-        window.location.reload();
+  
 
   
     } catch (error) {
@@ -542,7 +589,8 @@ const handleImageChange = (event) => {
   
 
 
-  const handleUpdateAddress = async () => {
+  const handleUpdateAddress = async (event) => {
+    event.preventDefault();
     try {
       if (
         !editedAddress.permanentAdd ||
@@ -568,7 +616,7 @@ const handleImageChange = (event) => {
           hostelNo: editedAddress.hostelNo
         }
       };
-
+setIsLoading(true);
       const res = await axios.post(
         `${serverPath1}/studentDashboard/studentPersonalInfoPage/editAddress`,
         updatedAddressData
@@ -580,16 +628,20 @@ const handleImageChange = (event) => {
       setIsAddressEditable(false);
       setAddress([updatedAddressData]); // Assuming you update state correctly
 
-      // Fetch updated permissions
-      await fetchPermissions();
+      setPermissions((prev) => ({
+        ...prev,
+        "EditAddress": !prev["EditAddress"]
+      }));
+      setIsLoading(false);
+      toast.success("Address updated Succesfully");
       
-      // Reload the page after successful update
-    
-        window.location.reload();
     
 
     } catch (error) {
       console.error('Error updating address ', error);
+      
+      setIsLoading(false);
+      toast.error("Error updating address");
     } finally {
       setIsAddressSubmitting(false);
       console.log('Finished handling update address.');
@@ -599,7 +651,8 @@ const handleImageChange = (event) => {
 
 
 
-  const handleUpdateAcademicDetail = async () => {
+  const handleUpdateAcademicDetail = async (event) => {
+    event.preventDefault();
     try {
       if (
         !editedAcademicDetail.previousInst ||
@@ -608,7 +661,7 @@ const handleImageChange = (event) => {
       ) {
         
       }
-  
+  // toast.success("Hii");
       setIsAcademicDetailSubmitting(true);
   
       const updatedAcademicDetailData = {
@@ -619,33 +672,44 @@ const handleImageChange = (event) => {
           twelfthper: editedAcademicDetail.twelfthper
         }
       };
-  
+  setIsLoading(true);
       // Make the POST request to update academic details
       const res = await axios.post(
         `${serverPath1}/studentDashboard/studentPersonalInfoPage/editAcademicDetails`,
         updatedAcademicDetailData
       );
-  
       console.warn('Update response:', res.data); // Log response data for verification
   
       setEditedAcademicDetail({});
       setIsAcademicDetailEditable(false);
       setAcademicDetails([updatedAcademicDetailData]); // Assuming you update state correctly
   
-      // Fetch updated permissions
-      await fetchPermissions();
+    
   
       // Reload the page after successful update
-      window.location.reload();
+      
+        // window.location.reload();
+        setPermissions((prev) => ({
+          ...prev,
+          "EditAcademicDetail": !prev["EditAcademicDetail"]
+        }));
+        setIsLoading(false);
+        toast.success("Academic Details updated Succesfully");
+
+        
+    
   
     } catch (error) {
       console.error('Error updating academic detail:', error);
+      setIsLoading(false);
+      toast.error("Error updating academic details");
     } finally {
       setIsAcademicDetailSubmitting(false);
       console.log('Finished handling update academic detail.');
+
+
     }
   };
-
 
   
 
@@ -760,7 +824,7 @@ const handleImageChange = (event) => {
 
   return (
     <>
-
+{isLoading && <LoadingScreen/>}
       <StudentNormalNavbar />
       <div className='sm:flex '>
         <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6  bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
@@ -1600,6 +1664,20 @@ const handleImageChange = (event) => {
           </div>
         </div>
       </div>
+
+      <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
+
 
     </>
   );

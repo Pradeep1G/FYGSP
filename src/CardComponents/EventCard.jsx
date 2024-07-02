@@ -44,7 +44,7 @@ const EventCards = (props) => {
           </label>
         </div>
 
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-4 hidden">
           <label className="block mb-4">
             <div className='font-bold'>Event Summary:</div>
             <div className="mt-1 p-2 border rounded-md w-full">{props.eventSummary}</div>

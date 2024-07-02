@@ -629,6 +629,7 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
   const GuideMailId = localStorage.getItem("GuideMailIdToLogin");
 
     try {
+      setIsLoading(true);
         const response = await fetch(`${serverPath1}/downloadEvents?university_email=${GuideMailId}`);
         if (response.ok) {
             const blob = await response.blob();
@@ -645,6 +646,9 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
         }
     } catch (error) {
         console.error('Error:', error);
+    }
+    finally{
+      setIsLoading(false);
     }
 };
 

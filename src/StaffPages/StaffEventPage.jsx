@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import {RiArrowDropDownFill} from "react-icons/ri";
 
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
+import LoadingScreen from '../shared/Loader';
 export default function Events() {
   const [eventsconducted,setEventsConducted] = useState(0);
   const [eventsattended,setEventsAttended] = useState(0);
@@ -106,6 +107,9 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     } else {
       console.error("An error occurred:", error);
     }  }
+    finally{
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -152,6 +156,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
   return (
     <>
+    {isLoading && <LoadingScreen/>}
      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
     <div className='sm:flex '>
         <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6  bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>

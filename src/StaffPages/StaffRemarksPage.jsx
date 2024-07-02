@@ -75,6 +75,10 @@ const Remarks = () => {
                     remarks: '',
                     mentorName: '',
                 });
+
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000); 
     
                 // alert('Remarks data inserted successfully!');
             } catch (error) {
@@ -131,6 +135,7 @@ const Remarks = () => {
             regNo: studentId,
             guideMail: guideMailId
         }
+        setIsLoading(true);
         const response = await axios.post(serverPath2 + "/getStudentProfileData", data,
         {headers: { Authorization: `Bearer ${token}` }}
         )
@@ -143,6 +148,9 @@ const Remarks = () => {
         navigate("/stafflogin");
         return;
       }
+    }
+    finally{
+        setIsLoading(false);
     }
     }
 

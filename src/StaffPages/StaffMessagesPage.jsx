@@ -66,6 +66,7 @@ const StaffMessages = () => {
             regNo: studentId,
             guideMail: guideMailId
         };
+        setIsLoading(true);
         const response = await axios.post(serverPath1 + "/getStudentProfileData", data,
         { headers: { Authorization: `Bearer ${token}` }}
         );
@@ -78,6 +79,9 @@ const StaffMessages = () => {
             navigate("/stafflogin");
             return;
         }
+        }
+        finally{
+            setIsLoading(false);
         }
     };
 

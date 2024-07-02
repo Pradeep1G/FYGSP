@@ -257,6 +257,7 @@ import { FaRegCalendarPlus } from "react-icons/fa";
 import { RiMessageLine } from "react-icons/ri";
 
 import '../App.css'
+import LoadingScreen from '../shared/Loader';
 // small bar
 export default function StudentProfileTemplate() {
 
@@ -326,6 +327,9 @@ export default function StudentProfileTemplate() {
     } else {
       console.error("An error occurred:", error);
     }  }
+    finally{
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -415,6 +419,7 @@ export default function StudentProfileTemplate() {
 
   return (
     <>
+    {isLoading&& <LoadingScreen/>}
       {userType === 'staff' ? (
         <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
       ) : (
