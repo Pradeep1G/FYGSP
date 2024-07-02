@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Remarks = () => {
     const [data, setData] = useState([]);
     const [dataCount, setDataCount] = useState(0);
+    const [messages,setMessages] = useState();
     const [formData, setFormData] = useState({
         semester: '',
         remarks: '',
@@ -25,6 +26,12 @@ const Remarks = () => {
             setData(response.data.remarksInfo);
             setDataCount(response.data.remarksInfo.length); // Update count
         } catch (error) {
+            if (error.response && error.response.status === 404) {
+                setMessages("No remarks found for this registration number");
+              } else {
+                console.warn(error.response.data.message);
+                setMessages(error.response.data.message);
+              }
             console.error('Failed to fetch remarks:', error);
         }
     };
@@ -218,7 +225,12 @@ const Remarks = () => {
                                     <div className="flex-col space-y-8">
                                         {/* add the code here  */}
                                         <div className={`p-4 w-full max-w-screen-lg mx-auto rounded-md overflow-hidden ${(dataCount < 1) ? 'space-y-28' : ''}`}>
-                                            <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
+                                        {messages? (
+                                        <div className="alert alert-warning shadow-lg rounded px-4 py-2 bg-slate-400">
+                                        <h1 className="text-lg font-bold text-gray-700">{messages}</h1>
+                                        </div>
+                                        ) : (
+                                        <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
                                                 <table className="w-full border-collapse border border-gray-400 whitespace-normal text-center border-opacity-100 border-none">
                                                     <thead>
                                                         <tr className='bg-[#811338]'>
@@ -239,7 +251,7 @@ const Remarks = () => {
                                                         ))}
                                                     </tbody>
                                                 </table>
-                                            </div>
+                                            </div>)}
                                             <div className="mt-4">
                                                 <h2 className="text-lg font-bold mb-2">Add Data </h2>
                                                 <form className="flex flex-wrap m-8">

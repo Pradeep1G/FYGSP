@@ -38,48 +38,6 @@ const Remarks = () => {
         }
     };
 
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    // };
-
-    // const handleAddData = async () => {
-    //     if (formData.semester && formData.remarks && formData.mentorName) {
-    //         const newRemark = {
-    //             sNo: dataCount + 1,
-    //             semester: formData.semester,
-    //             remarks: formData.remarks,
-    //             mentorName: formData.mentorName,
-    //         };
-    
-    //         const data = {
-    //             regNo: studentId,
-    //             remarksInfo: [newRemark],
-    //         };
-    
-    //         try {
-    //             const response = await axios.post(`${serverPath2}/insert_remarks`, data);
-    //             console.log('Success:', response.data);
-    
-    //             // After successfully adding data, fetch the updated remarks
-    //             await fetchRemarksData(); // Fetch updated data
-    
-    //             // Reset the form
-    //             setFormData({
-    //                 semester: '',
-    //                 remarks: '',
-    //                 mentorName: '',
-    //             });
-    
-    //             // alert('Remarks data inserted successfully!');
-    //         } catch (error) {
-    //             console.error('Error:', error);
-    //             alert('Failed to insert remarks data. Please try again.');
-    //         }
-    //     } else {
-    //         console.error("Missing data. Please enter all required information.");
-    //     }
-    // };
     
     useEffect(() => {
         fetchRemarksData(); // Initial fetch
@@ -89,8 +47,6 @@ const Remarks = () => {
 
     // const serverPath = "https://fgspserver.onrender.com";
     // const serverPath2 = 'http://127.0.0.1:5000/'
-    // const { studentId } = useParams();
-    // console.warn(studentId)
     const GuideName = localStorage.getItem("GuideName");
     const GuideImage = localStorage.getItem("GuideImage");
 
