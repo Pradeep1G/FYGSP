@@ -152,8 +152,8 @@ export default function StaffLoginPage(){
 
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-     //const serverPath1 = "http://127.0.0.1:5000"
-      const serverPath1 = "https://fgspserver.onrender.com"
+     const serverPath1 = "http://127.0.0.1:5000"
+    //   const serverPath1 = "https://fgspserver.onrender.com"
     
     const [isLoading, setIsLoading] = useState();
     
@@ -176,16 +176,17 @@ export default function StaffLoginPage(){
             setError1(response.data.message)
         }
         else
-        {
-            localStorage.setItem("GuideMailIdToLogin",formData.email);
-            navigate("/staffdashboard")
+        {    
+            localStorage.setItem("GuideMailIdToLogin", formData.email);
+            localStorage.setItem("jwt_token", response.data.access_token);
+            console.log("token_staff :" , response.data.access_token)  // Store the JWT token
+            navigate("/staffdashboard");
         }
         setIsLoading(false);
         // navigate("/StudentInfoBar")
     }
-
     useEffect(()=>{
-        if(localStorage.getItem("GuideMailIdToLogin")){
+        if(localStorage.getItem("jwt_token")){
             navigate("/staffdashboard")
         }
     },[])

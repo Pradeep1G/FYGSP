@@ -300,6 +300,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 // import StaffNormalNavbar from './components/StaffNormalNavbar';
 import LoadingScreen from '../shared/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // const serverPath1 = "https://fgspserver.onrender.com";
 const serverPath1 = "http://127.0.0.1:5000";
 
@@ -386,6 +388,13 @@ export default function ResultPage() {
 
 
   const getStudentData=async()=>{
+
+    const token = localStorage.getItem("jwt_token_student");
+    if (!token) {
+      navigate("/studentlogin");
+      return;
+    }
+
     const StudentMailId = localStorage.getItem("StudentMailId")
     const studentId = localStorage.getItem("regNo")
     const data = {
@@ -396,16 +405,25 @@ export default function ResultPage() {
 
     try{
       setIsLoading(true);
-      const response = await axios.post(serverPath1+"/StudentMenuPage/getLeftSideBarData", data)
+      const response = await axios.post(serverPath1+"/StudentMenuPage/getLeftSideBarData", data,  { headers: { Authorization: `Bearer ${token}` }})
       setStudentData(response.data.StudentData)
     }
 
     catch{
-
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token_student");
+        navigate("/studentlogin");
+        return;
+      } else {
+        console.error("An error occurred:", error);
+      }
     }
 finally{
   
   setIsLoading(false);
+
+
+
 }
  
     
@@ -455,6 +473,7 @@ finally{
     formData.append('file', file);
     formData.append('semester', selectedSemester);
     formData.append('regNo', studentId);
+    formData.append('name',StudentData.name);
   
     try {
       setIsLoading(true);
@@ -462,24 +481,27 @@ finally{
       const fileUrl = response.data.fileUrl; // Assuming the server returns the file URL
       setUploadedFileUrl(fileUrl);
       localStorage.setItem('uploadedFileUrl', fileUrl); // Store in local storage
-      setUploadMessage('File uploaded successfully');
       // Clear message after 2 seconds
       setFile(null);
       setShowResults(false);
-      window.location.reload();
-      setSelectedSemester(selectedSemester);
+      setSelectedSemester(false);
+      toast.success('File uploaded successfully');
+
+      setTimeout(function() {
+        window.location.reload();
+    }, 2000); 
+      
 
       fetchData(); // Assuming fetchData is defined to refresh data
     } catch (error) {
       console.error('Error uploading file:', error);
-      setUploadMessage('Error uploading file');
+      toast.error('Error uploading file');
        // Clear message after 2 seconds
     } finally {
       
       setIsLoading(false);
-      setTimeout(() => {
-        setUploadMessage('');
-      }, 2000);
+
+      
     }
   };
   
@@ -696,7 +718,6 @@ finally{
 
 
 
-
                             <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-200">
                             {fileName && (
           <p className="text-sm text-gray-500 dark:text-gray-900 mb-2">{fileName}</p>
@@ -706,18 +727,18 @@ finally{
                                 <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5A5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                 </svg>
-                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Only PDF format is Allowed (MAX 1MB)</p>
                               </div>
                               <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} />
                             </label>
                      
                             <button 
-                className={`bg-red-900 hover:bg-red-700 text-white font-bold py-2 px-2 rounded mr-1.5 ${isUploading ? 'cursor-none':'cursor-pointer'} `}
+                className={`bg-red-900 hover:bg-red-700 text-white font-bold py-2 px-2 mt-6 rounded mr-1.5 ${isUploading ? 'cursor-none':'cursor-pointer'} `}
                 // className={`bg-red-900 flex justify-around text-white px-6 py-2 rounded-md my-2 text-sm ${isSending ? 'cursor-none':'cursor-pointer'} `}
                 onClick={handleUploadFile}
                 >
-                { isUploading ? "Uploading..." : "Upload"}
+               Upload
 
                 </button>
                           </div>
@@ -732,7 +753,18 @@ finally{
           {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
       
-      
+        <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
     </>
   );
 }

@@ -463,19 +463,36 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
   const [img, setImg] = useState();
   const navigate = useNavigate();
 
-  const getGuideData = async (e) => {
+  const getGuideData = async () => {
     setIsLoading(true);
-    const response = await axios.post(serverPath1 + "/getGuideData", {
-      GuideMailId: GuideMailId,
-    });
-    console.warn(response.data);
-    setGuideDetails(response.data.GuideDetails);
-    setAllStudents(response.data.AllStudents);
-    setFilteredStudents(response.data.AllStudents);
-    console.warn(filteredStudents)
-    localStorage.setItem("GuideName", GuideDetails.NAME)
-    // setImg(GuideDetails.IMAGE);
-    setIsLoading(false);
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        serverPath1 + "/getGuideData",
+        { GuideMailId: GuideMailId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.warn(response.data);
+      setGuideDetails(response.data.GuideDetails);
+      setAllStudents(response.data.AllStudents);
+      setFilteredStudents(response.data.AllStudents);
+      localStorage.setItem("GuideName", response.data.GuideDetails.NAME);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/stafflogin");
+        return;
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -576,23 +593,36 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
     setStaffSidebar(!StaffSidebar)
   }
 
-  const getRegisterNumber = async (e) => {
-  const GuideMailId = localStorage.getItem("GuideMailIdToLogin");
+  const getRegisterNumber = async () => {
+    const GuideMailId = localStorage.getItem("GuideMailIdToLogin");
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
 
     try {
-      const response = await fetch(`${serverPath1}/get_student_register_numbers_by_email?university_email=${GuideMailId}`);
-      if (response.ok) {
-        const data = await response.json();
+      const response = await axios.get(`${serverPath1}/get_student_register_numbers_by_email`, {
+        params: { university_email: GuideMailId },
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.status === 200) {
+        const data = response.data;
         console.log(data);
         settotal_events_conducted_count(data.total_events_conducted_count);
         settotal_events_attended_count(data.total_events_attended_count);
-        localStorage.setItem('register_number_count_events',data.register_events_counts);
-      
+        localStorage.setItem('register_number_count_events', JSON.stringify(data.register_events_counts));
       } else {
         console.error('Error fetching data');
       }
     } catch (error) {
       console.error('Error:', error);
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/stafflogin");
+        return;
+      }
     }
   };
   const handleDownloadEvents = async () => {

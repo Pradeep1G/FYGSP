@@ -70,6 +70,8 @@ export default function PersonalInfo() {
 
   // console.warn(studentId)
   const [userType, setUserType] = useState("");
+  const [hosteller, setHosteller] = useState();
+
   const GuideName = localStorage.getItem("GuideName");
   const GuideImage = localStorage.getItem("GuideImage");
   const guideMailId = localStorage.getItem("GuideMailIdToLogin")
@@ -120,9 +122,9 @@ export default function PersonalInfo() {
   }])
 
   const [parentdetails, setParentDetails] = useState([{
-    "fatherPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
-    "motherPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
-    "guardianPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
+    "fatherPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
+    "motherPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
+    "guardianPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
     "fatherName": null,     // this variable contains null because it shows null while it is loading
     "fatherMail": null,
     "fatherNo": null,
@@ -142,7 +144,7 @@ export default function PersonalInfo() {
     "communicationAddres": null,
     "phoneNo": null,
     "alterNo": null,
-    "hosteller": null,
+    "hosteller": false,
     "hostelName": null,
     "hostelNo": null
 
@@ -180,10 +182,9 @@ export default function PersonalInfo() {
   const [selectedMotherImage, setSelectedMotherImage] = useState(null);
   const [selectedGuardianImage, setSelectedGuardianImage] = useState(null);
 
-  const [error, setError] = useState('');
 
   const [editedPersonalDetail, setEditedPersonalDetail] = useState({
-    section: personaldetails[0]["sec"],          // this variable consits of the backend data that is coming to frontend
+    section: personaldetails[0]["section"],          // this variable consits of the backend data that is coming to frontend
     religion: personaldetails[0]["religion"],
     community: personaldetails[0]["community"],
     lifeGoal: personaldetails[0]["lifeGoal"],
@@ -219,7 +220,7 @@ export default function PersonalInfo() {
 
 
   const [editedAcademicDetail, setEditedAcademicDetail] = useState({
-    perviousInst: academicdetails[0]["perviousInst"],          // this variable consits of the backend data that is coming to frontend
+    previousInst: academicdetails[0]["perviousInst"],          // this variable consits of the backend data that is coming to frontend
     tenthper: academicdetails[0]["tenthper"],
     twelfthper: academicdetails[0]["twelfthper"],
 
@@ -229,7 +230,7 @@ export default function PersonalInfo() {
     e.preventDefault();
     if (!isPersonalDetailEditable) {  //initially it is false it will be true , true means they can edit
       setEditedPersonalDetail({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
-        section: personaldetails[0]["sec"],
+        section: personaldetails[0]["section"],
         religion: personaldetails[0]["religion"],
         community: personaldetails[0]["community"],
         lifeGoal: personaldetails[0]["lifeGoal"],
@@ -240,6 +241,8 @@ export default function PersonalInfo() {
     }
     setIsPersonalDetailEditable(!isPersonalDetailEditable); // the isPersonalDetailEditable will be turned to false again
   }
+
+  
   const toggleParentEdit = () => { // when we click on edit it should toogle
     if (!isParentDetailEditable) {  //initially it is false it will be true , true means they can edit
       setEditedParentDetail({    //After edited the data will be updated foe updation we use setEditedPersonalDetail
@@ -335,63 +338,16 @@ export default function PersonalInfo() {
 };
 
 
-const handleFatherImageChange = (event) => {
-  const file = event.target.files[0];
-
-  if (file) {
-    if (file.size <= 100000) { // 20KB in bytes
-      setSelectedFatherImage(file);
-      setError('');
-    } else {
-      setSelectedFatherImage(null);
-      setError('Image size must be less than 100KB.');
-    }
-    setTimeout(() => {
-      setError("")
-    }, 2000);
-  }
-};
-
-const handleMotherImageChange = (event) => {
-  const file = event.target.files[0];
-
-  if (file) {
-    if (file.size <= 100000) { // 20KB in bytes
-      setSelectedMotherImage(file);
-      setError('');
-    } else {
-      setSelectedMotherImage(null);
-      setError('Image size must be less than 100KB.');
-    }
-    setTimeout(() => {
-      setError("")
-    }, 2000);
-  }
-};
-
-const handleGuardianImageChange = (event) => {
-  const file = event.target.files[0];
-
-  if (file) {
-    if (file.size <= 100000) { // 20KB in bytes
-      setSelectedGuardianImage(file);
-      setError('');
-    } else {
-      setSelectedGuardianImage(null);
-      setError('Image size must be less than 100KB.');
-    }
-    setTimeout(() => {
-      setError("")
-    }, 2000);
-  }
-};
-
 
 const [selectedImages, setSelectedImages] = useState({
   fatherImage: null,
   motherImage: null,
   guardianImage: null,
 });
+
+const[fatherError,setFatherError]=useState('');
+const[motherError,setMotherError]=useState('');
+const[guardianError,setGuardianError]=useState('');
 
 
 
@@ -405,17 +361,25 @@ const handleImageChange = (event) => {
         ...prevImages,
         [name]: file,
       }));
-      setError('');
     } else {
       setSelectedImages((prevImages) => ({
         ...prevImages,
         [name]: null,
       }));
-      setError('Image size must be less than 100KB.');
+      if(name == "fatherImage" ){
+      setFatherError('Image size must be less than 100KB.');
+    } else if(name == "motherImage"){
+      setMotherError('Image size must be less than 100KB.'); 
+    } else{
+      setGuardianError('Image size must be less than 100KB.'); 
+
     }
     setTimeout(() => {
-      setError('');
+     setFatherError('');
+     setMotherError('');
+     setGuardianError('');
     }, 2000);
+  }
   }
 };
 
@@ -436,8 +400,7 @@ const handleImageChange = (event) => {
         !editedPersonalDetail.community ||
         !editedPersonalDetail.bloodGrp
       ) {
-        console.error('Some required fields are missing');
-        return;
+        
       }
   
       console.log('Handling update personal detail...');
@@ -453,7 +416,7 @@ const handleImageChange = (event) => {
           lifeGoal: editedPersonalDetail.lifeGoal,
           languages: editedPersonalDetail.languages,
           community: editedPersonalDetail.community,
-          bloodGrp: editedPersonalDetail.bloodGrp,
+          bloodGrp: editedPersonalDetail.bloodGrp
         },
       };
   
@@ -507,7 +470,7 @@ const handleImageChange = (event) => {
         // setAlertMessage("Please fill all fields");
         // setAlertType("fail");
         // alertDelay();
-        return;
+        // return;
       }
   
       setIsParentDetailSubmitting(true); // Indicate submission in progress
@@ -570,6 +533,7 @@ const handleImageChange = (event) => {
         await fetchPermissions();
         // Reload the page after successful update
         window.location.reload();
+
   
     } catch (error) {
       console.error('Error updating parent details:', error);
@@ -587,8 +551,7 @@ const handleImageChange = (event) => {
         !editedAddress.alterNo ||
         (editedAddress.hosteller && (!editedAddress.hostelName || !editedAddress.hostelNo))
       ) {
-        console.error('Some required fields are missing');
-        return;
+       
       }
 
       setIsAddressSubmitting(true);
@@ -621,7 +584,9 @@ const handleImageChange = (event) => {
       await fetchPermissions();
       
       // Reload the page after successful update
-      window.location.reload();
+    
+        window.location.reload();
+    
 
     } catch (error) {
       console.error('Error updating address ', error);
@@ -641,9 +606,7 @@ const handleImageChange = (event) => {
         !editedAcademicDetail.tenthper ||
         !editedAcademicDetail.twelfthper
       ) {
-        // Handle case where required fields are missing
-        console.error('Some required fields are missing');
-        return;
+        
       }
   
       setIsAcademicDetailSubmitting(true);
@@ -702,12 +665,27 @@ const handleImageChange = (event) => {
 
   const getLeftSideBarData = async () => {
     const data = {
-      mailId: studentMailId
-
+      mailId: studentMailId,
+      // guideMail: guideMailId
     }
-    const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data)
+    const token = localStorage.getItem("jwt_token_student");
+  if (!token) {
+    navigate("/studentlogin");
+    return;
+  }
+    try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
-    setStudentData(response.data.StudentData)
+    setStudentData((prev)=>response.data.StudentData)
+    localStorage.setItem("regNo",response.data.StudentData.regNo)}
+    catch(error){
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/studentlogin");
+        return;
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
   }
 
   const fetchPermissions = async () => {
@@ -854,7 +832,7 @@ const handleImageChange = (event) => {
                   <div className='h-full rounded-xl  lg:px-7 px-2 '>
                     <h1 className="text-lg rounded-md font-bold shadow-md h-12 justify-items-center mb-4 mt-4 bg-[#EFBDBD] px-2 py-2" style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)' }}>Personal Details</h1></div>
 
-                  <form>
+                  <form onSubmit={handleUpdatePersonalDetail}>
 
 
                     {/* Flex layout with 4 rows, 2 columns */}
@@ -871,7 +849,7 @@ const handleImageChange = (event) => {
                           className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                           style={{ resize: 'none', overflow: 'hidden' }}
                           value={personaldetails.length > 0 ? capitalizeEachWord(personaldetails[0].name) : ''}
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required />
                       </div>
 
                       {/* Second column */}
@@ -883,7 +861,7 @@ const handleImageChange = (event) => {
                           type="text"
                           className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                           value={personaldetails.length > 0 ? capitalizeString(personaldetails[0].dep) : ''}
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
 
                       {/* Third column */}
@@ -897,7 +875,7 @@ const handleImageChange = (event) => {
 
                             (isPersonalDetailEditable ? editedPersonalDetail.section : personaldetails[0]['section'])
                           }
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required />
                       </div>
 
                       {/* Fourth column */}
@@ -907,9 +885,9 @@ const handleImageChange = (event) => {
                           name="regNo"
                           readOnly
                           type="text"
-                          className="lg:w-2/4 w-4/5 mx-6  border rounded-md px-3 py-2"
+                          className="lg:w-2/4 w-4/5 mx-7  border rounded-md px-3 py-2"
                           value={personaldetails.length > 0 ? personaldetails[0].regNo : ''}
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
 
                       {/* Fifth column */}
@@ -924,7 +902,7 @@ const handleImageChange = (event) => {
 
                             (isPersonalDetailEditable ? editedPersonalDetail.religion : personaldetails[0]['religion'])
                           }  // if is editable true the editedPersonalDetail
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
 
                       {/* Sixth column */}
@@ -934,11 +912,11 @@ const handleImageChange = (event) => {
                           name="community"
                           readOnly={!isPersonalDetailEditable}
                           type="text"
-                          className="lg:w-2/4 w-4/5  border rounded-md  mx-6 px-3 py-2"
+                          className="lg:w-2/4 w-4/5  border rounded-md  mx-7 px-3 py-2"
                           value={
                             (isPersonalDetailEditable ? editedPersonalDetail.community : personaldetails[0]['community'])
                           }
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
 
                       {/* Seventh column */}
@@ -952,7 +930,7 @@ const handleImageChange = (event) => {
                           value={
                             (isPersonalDetailEditable ? editedPersonalDetail.lifeGoal : personaldetails[0]['lifeGoal'])
                           }
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
 
                       {/* Eighth column */}
@@ -962,11 +940,11 @@ const handleImageChange = (event) => {
                           name="bloodGrp"
                           readOnly={!isPersonalDetailEditable}
                           type="text"
-                          className="lg:w-2/4 mx-6 w-4/5 border rounded-md px-3 py-2"
+                          className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                           value={
                             (isPersonalDetailEditable ? editedPersonalDetail.bloodGrp : personaldetails[0]['bloodGrp'])
                           }
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
                       <div className="w-full sm:w-1/2 mb-4">
                         <label className="block text-sm font-semibold  text-gray-600 px-7">Languages Known</label>
@@ -978,14 +956,14 @@ const handleImageChange = (event) => {
                           value={
                             (isPersonalDetailEditable ? editedPersonalDetail.languages : personaldetails[0]['languages'])
                           }
-                          onChange={handlePersonalDetailInputChange} />
+                          onChange={handlePersonalDetailInputChange} required/>
                       </div>
                     </div>
                     <div className="flex">
   {permissions && permissions.EditPersonalDetail && (
     <button
       type="button"
-      className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+      className="w-24 h-10 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
       onClick={isPersonalDetailEditable ? handleCancel : togglePersonalEdit}
     >
       {isPersonalDetailEditable ? 'Cancel' : 'Edit'}
@@ -993,9 +971,9 @@ const handleImageChange = (event) => {
   )}
   {isPersonalDetailEditable && !isPersonalDetailSubmitting && (
     <button
-      type="button"
+      type="submit"
       className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
-      onClick={handleUpdatePersonalDetail}
+      // onClick={handleUpdatePersonalDetail}
     >
       Submit
     </button>
@@ -1007,7 +985,7 @@ const handleImageChange = (event) => {
 
                   </form>
 
-                  <form className='w-full'>
+                  <form  onSubmit = {handleUpdateParentDetail} className='w-full'>
                     <div className="flex-col space-y-2 flex-grow">
                       <div className='h-full rounded-xl  lg:px-7 px-2 '>
                         <h1 className="text-lg rounded-md font-bold shadow-2xl h-12 justify-items-center mb-4 mt-4 bg-[#EFBDBD] px-2 py-2" style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)' }}>Parent Details</h1></div>
@@ -1016,291 +994,380 @@ const handleImageChange = (event) => {
 
                     {/* Rounded rectangle around image and details */}
                     <div className="rounded-xl lg:w-3/4 md:w-full px-4 bg-gray-100 p-4 mx-auto mb-5">
-                      <div className="flex flex-col lg:flex-row">
-                        {/* Left column for image */}
-                        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
-                          <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                            <img src={getThumbnailLinkFromShareableLink( parentdetails[0].fatherImage)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
-                          </div>
-                        </div>
+      <div className="flex flex-col lg:flex-row">
+        {/* Left column for image */}
+        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
+          <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
+            <img
+              src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic)}
+              alt="Parent Image"
+              className="w-40 h-40 rounded-full object-cover"
+            
+            />
+          </div>
+        </div>
 
-                        {/* Right column for parent details */}
-                        <div className="w-full lg:w-1/2 mb-4">
-                          {/* First detail */}
-                          <div className="w-full sm:w-3/4 mt-4 mb-2">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Father's Name</label>
-                            <TextareaAutosize
-                              name="fatherName"
-                              readOnly={!isParentDetailEditable}
-                              type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              style={{ resize: 'none', overflow: 'hidden' }}
-                              value={(isParentDetailEditable ? editedParentDetail.fatherName : parentdetails[0]['fatherName'])
-                              }
-                              onChange={handleParentDetailInputChange} />
-                          </div>
+        {/* Right column for parent details */}
+        <div className="w-full lg:w-1/2 flex flex-col">
+          {/* Details */}
+          <div className="w-full sm:w-3/4 mt-4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Father's Name</label>
+            <TextareaAutosize
+              name="fatherName"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              style={{ resize: 'none', overflow: 'hidden' }}
+              value={isParentDetailEditable ? editedParentDetail.fatherName : parentdetails[0]['fatherName']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
 
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Father's EmailId</label>
-                            <input name="fatherMail"
-                              readOnly={!isParentDetailEditable}type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.fatherMail : parentdetails[0]['fatherMail'])
-                              }
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-
-                          {/* Second detail */}
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
-                            <input
-                              name="fatherNo"
-                              readOnly={!isParentDetailEditable} type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.fatherNo : parentdetails[0]['fatherNo'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-
-                          {/* Third detail */}
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
-                            <input name="fatherOcc"
-                             readOnly={!isParentDetailEditable}
-                              type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.fatherOcc : parentdetails[0]['fatherOcc'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-                        </div>
-                        <div className="custom-file-upload flex justify-center lg:block lg:pl-12 py-4">
-        
-            {!selectedImages.fatherImage && isParentDetailEditable && <div>
-              <label htmlFor="father-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Upload Father Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Father's EmailId</label>
             <input
-            name="fatherImage"
-            id="father-photo-upload"
-          
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-            </div>}
-            {error && <p style={{ color: 'red' }} className="lg:pl-4">{error}</p>}
-            {selectedImages.fatherImage&&isParentDetailEditable && (
-                <div
-                className="">
+              name="fatherMail"
+              readOnly={!isParentDetailEditable}
+              type="email"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.fatherMail : parentdetails[0]['fatherMail']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
+            <input
+              name="fatherNo"
+              readOnly={!isParentDetailEditable}
+              type="number"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.fatherNo : parentdetails[0]['fatherNo']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
+            <input
+              name="fatherOcc"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.fatherOcc : parentdetails[0]['fatherOcc']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
+
+          {/* Upload section */}
+          <div className="custom-file-upload flex justify-center py-4">
+            {!selectedImages.fatherImage && isParentDetailEditable && (
+              <div>
+                <label htmlFor="father-photo-upload" className="custom-button">
+                  <div className="flex space-x-1">
+                    <span>Upload Father Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+                {parentdetails[0].fatherPic &&  <input
+                  name="fatherImage"
+                  id="father-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"  
+                />}
+                {!parentdetails[0].fatherPic && <div className='flex flex-row'> <input
+                  name="fatherImage"
+                  id="father-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"  
+                  required
+                />
+                <label className='text-red-700'>* REQUIRED</label></div>}
+              </div>
+            )}
+            {fatherError && <p style={{ color: 'red' }} className="lg:pl-4">{fatherError}</p>}
+            {selectedImages.fatherImage && isParentDetailEditable && (
+              <div>
                 <p>{selectedImages.fatherImage.name}</p>
                 <p className="text-green-500 pb-2">Image Uploaded Successfully</p>
-                {/* <p>Selected Image:</p>
-                <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
-                <button  disabled={uploading}>
-                    {uploading ? 'Uploading...' : 'Upload Image'}
-                </button> */}
-
                 <label htmlFor="father-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Change Father Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
-            <input
-             name="fatherImage"
-            id="father-photo-upload"
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-                </div>
+                  <div className="flex space-x-1">
+                    <span>Change Father Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+                <input
+                  name="fatherImage"
+                  id="father-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
+              </div>
             )}
-            </div>
-                      </div>
-                    </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                    <div className="rounded-xl lg:w-3/4 md:w-full px-4 bg-gray-100 p-4 mx-auto mb-5">
-                      <div className="flex flex-col lg:flex-row">
-                        {/* Left column for image */}
-                        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
-                          <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                            <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
-                          </div>
-                        </div>
+    <div className="rounded-xl lg:w-3/4 md:w-full px-4 bg-gray-100 p-4 mx-auto mb-5">
+      <div className="flex flex-col lg:flex-row">
+        {/* Left column for image */}
+        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
+          <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
+            <img
+              src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)}
+              alt="Parent Image"
+              className="w-40 h-40 rounded-full object-cover"
+            />
+          </div>
+        </div>
 
-                        {/* Right column for parent details */}
-                        <div className="w-full lg:w-1/2 mb-2">
-                          {/* First detail */}
-                          <div className="w-full sm:w-3/4 mt-4 mb-2">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Mother's Name</label>
-                            <TextareaAutosize name="motherName"
-                              readOnly={!isParentDetailEditable}
-                              type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              style={{ resize: 'none', overflow: 'hidden' }}
-                              value={(isParentDetailEditable ? editedParentDetail.motherName : parentdetails[0]['motherName'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
+        {/* Right column for parent details */}
+        <div className="w-full lg:w-1/2 flex flex-col">
+          {/* Details */}
+          <div className="w-full sm:w-3/4 mt-4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Mother's Name</label>
+            <TextareaAutosize
+              name="motherName"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              style={{ resize: 'none', overflow: 'hidden' }}
+              value={isParentDetailEditable ? editedParentDetail.motherName : parentdetails[0]['motherName']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
 
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Mother's EmailId</label>
-                            <input name="motherMail"
-                              readOnly={!isParentDetailEditable} type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.motherMail : parentdetails[0]['motherMail'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-
-                          {/* Second detail */}
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
-                            <input
-                              name="motherNo"
-                              readOnly={!isParentDetailEditable} type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.motherNo : parentdetails[0]['motherNo'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-
-                          {/* Third detail */}
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
-                            <input name="motherOcc"
-                              readOnly={!isParentDetailEditable}
-                              type="text"
-                              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.motherOcc : parentdetails[0]['motherOcc'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-                        </div>
-
-                        <div className="custom-file-upload flex justify-center lg:block lg:pl-12 py-4">
-        
-            {!selectedImages.motherImage&& isParentDetailEditable && <div>
-              <label htmlFor="mother-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Upload Mother Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Mother's EmailId</label>
             <input
-            name="motherImage"
-            id="mother-photo-upload"
+              name="motherMail"
+              readOnly={!isParentDetailEditable}
+              type="email"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.motherMail : parentdetails[0]['motherMail']}
+              onChange={handleParentDetailInputChange}
+            
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
+            <input
+              name="motherNo"
+              readOnly={!isParentDetailEditable}
+              type="number"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.motherNo : parentdetails[0]['motherNo']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
+            <input
+              name="motherOcc"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.motherOcc : parentdetails[0]['motherOcc']}
+              onChange={handleParentDetailInputChange}
+              required
+            />
+          </div>
           
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-            </div>}
-            {error && <p style={{ color: 'red' }} className="lg:pl-4">{error}</p>}
-            {selectedImages.motherImage&&isParentDetailEditable && (
-                <div
-                className="">
+
+          {/* Upload section */}
+          <div className="custom-file-upload flex justify-center py-4">
+            {!selectedImages.motherImage && isParentDetailEditable && (
+              <div>
+                <label htmlFor="mother-photo-upload" className="custom-button">
+                  <div className="flex space-x-1">
+                    <span>Upload Mother Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+               {parentdetails[0].motherPic &&  <input
+                  name="motherImage"
+                  id="mother-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"  
+                />}
+                {!parentdetails[0].motherPic &&  <div><input
+                  name="motherImage"
+                  id="mother-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"  
+                  required
+                /> <label className='text-red-700'>* REQUIRED</label></div>}
+
+              </div>
+            )}
+            {motherError && <p style={{ color: 'red' }} className="lg:pl-4">{motherError}</p>}
+            {selectedImages.motherImage && isParentDetailEditable && (
+              <div>
                 <p>{selectedImages.motherImage.name}</p>
                 <p className="text-green-500 pb-2">Image Uploaded Successfully</p>
-                {/* <p>Selected Image:</p>
-                <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
-                <button  disabled={uploading}>
-                    {uploading ? 'Uploading...' : 'Upload Image'}
-                </button> */}
-
                 <label htmlFor="mother-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Change Mother Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
-            <input
-            name="motherImage"
-            id="mother-photo-upload"
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-                </div>
+                  <div className="flex space-x-1">
+                    <span>Change Mother Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+                <input
+                  name="motherImage"
+                  id="mother-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
+              </div>
             )}
-            </div>
-                      </div>
-                    </div>
+          </div>
+        </div>
+      </div>
+    </div>
+                   
 
-                    <div className="rounded-xl lg:w-3/4 md:w-full px-4 bg-gray-100 p-4 mx-auto mb-5">
-                      <div className="flex flex-col lg:flex-row">
-                        {/* Left column for image */}
-                        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
-                          <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                            <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
-                          </div>
-                        </div>
+                   {/* Rounded rectangle around image and details */}
+                   <div className="rounded-xl lg:w-3/4 md:w-full px-4 bg-gray-100 p-4 mx-auto mb-5">
+      <div className="flex flex-col lg:flex-row">
+        {/* Left column for image */}
+        <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
+          <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
+            <img
+              src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)}
+              alt="Parent Image"
+              className="w-40 h-40 rounded-full object-cover"
+            />
+          </div>
+        </div>
 
-                        {/* Right column for parent details */}
-                        <div className="w-full lg:w-1/2 mb-2">
-                          {/* First detail */}
-                          <div className="w-full sm:w-3/4 mt-4 mb-4">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Guardian's Name</label>
-                            <TextareaAutosize name="guardianName" readOnly={!isParentDetailEditable} type="text" className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }}
-                              value={(isParentDetailEditable ? editedParentDetail.guardianName : parentdetails[0]['guardianName'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
+        {/* Right column for parent details */}
+        <div className="w-full lg:w-1/2 flex flex-col">
+          {/* Details */}
+          <div className="w-full sm:w-3/4 mt-4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Guardian's Name</label>
+            <TextareaAutosize
+              name="guardianName"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              style={{ resize: 'none', overflow: 'hidden' }}
+              value={isParentDetailEditable ? editedParentDetail.guardianName : parentdetails[0]['guardianName']}
+              onChange={handleParentDetailInputChange}
+              
+            />
+          </div>
 
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm font-semibold px-10 text-gray-600">Guardian's EmailId</label>
-                            <input name="guardianMail" readOnly={!isParentDetailEditable} type="text" className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.guardianMail : parentdetails[0]['guardianMail'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-
-                          {/* Second detail */}
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
-                            <input name="guardianNo"readOnly={!isParentDetailEditable} type="text" className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.guardianNo : parentdetails[0]['guardianNo'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-                          <div className="w-full sm:w-3/4 mb-2">
-                            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
-                            <input name="guardianOcc" readOnly={!isParentDetailEditable} type="text" className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
-                              value={(isParentDetailEditable ? editedParentDetail.guardianOcc : parentdetails[0]['guardianOcc'])}
-                              onChange={handleParentDetailInputChange} />
-                          </div>
-                        </div>
-
-                        <div className="custom-file-upload flex justify-center lg:block lg:pl-12 py-4">
-        
-            {!selectedImages.guardianImage&& isParentDetailEditable && <div>
-              <label htmlFor="guardian-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Upload Guardian Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm font-semibold px-10 text-gray-600">Guardian's EmailId</label>
             <input
-            name="guardianImage"
-            id="guardian-photo-upload"
-          
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-            </div>}
-            {error && <p style={{ color: 'red' }} className="lg:pl-4">{error}</p>}
-            {selectedImages.guardianImage&&isParentDetailEditable && (
-                <div
-                className="">
+              name="guardianMail"
+              readOnly={!isParentDetailEditable}
+              type="email"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.guardianMail : parentdetails[0]['guardianMail']}
+              onChange={handleParentDetailInputChange}
+              
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Phone Number</label>
+            <input
+              name="guardianNo"
+              readOnly={!isParentDetailEditable}
+              type="number"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.guardianNo : parentdetails[0]['guardianNo']}
+              onChange={handleParentDetailInputChange}
+              
+            />
+          </div>
+
+          <div className="w-full sm:w-3/4 mb-2">
+            <label className="block text-sm px-10 font-semibold text-gray-600">Occupation</label>
+            <input
+              name="guardianOcc"
+              readOnly={!isParentDetailEditable}
+              type="text"
+              className="lg:w-full mx-7 w-4/5 border rounded-md px-3 py-2"
+              value={isParentDetailEditable ? editedParentDetail.guardianOcc : parentdetails[0]['guardianOcc']}
+              onChange={handleParentDetailInputChange}
+              
+            />
+          </div>
+
+          {/* Upload section */}
+          <div className="custom-file-upload flex justify-center py-4">
+            {!selectedImages.guardianImage && isParentDetailEditable && (
+              <div>
+                <label htmlFor="guardian-photo-upload" className="custom-button">
+                  <div className="flex space-x-1">
+                    <span>Upload Guardian Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+                <input
+                  name="guardianImage"
+                  id="guardian-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
+              </div>
+            )}
+            {guardianError && <p style={{ color: 'red' }} className="lg:pl-4">{guardianError}</p>}
+            {selectedImages.guardianImage && isParentDetailEditable && (
+              <div>
                 <p>{selectedImages.guardianImage.name}</p>
                 <p className="text-green-500 pb-2">Image Uploaded Successfully</p>
-                {/* <p>Selected Image:</p>
-                <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
-                <button  disabled={uploading}>
-                    {uploading ? 'Uploading...' : 'Upload Image'}
-                </button> */}
-
                 <label htmlFor="guardian-photo-upload" className="custom-button">
-              <div className="flex space-x-1"><span>Change Guardian Photo</span><BiImageAdd  className="text-2xl flex justify-center items-center"/></div>
-            </label>
-            <input
-             name="guardianImage"
-            id="guardian-photo-upload"
-            className="border-0 h-12  px-4 w-fit max-w-min"
-            type="file" 
-            onChange={handleImageChange} 
-            accept="image/*" />
-                </div>
+                  <div className="flex space-x-1">
+                    <span>Change Guardian Photo</span>
+                    <BiImageAdd className="text-2xl flex justify-center items-center" />
+                  </div>
+                </label>
+                <input
+                  name="guardianImage"
+                  id="guardian-photo-upload"
+                  className="border-0 h-12 px-4 w-fit max-w-min"
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
+              </div>
             )}
-            </div>
-                      </div>
-                    </div>
+          </div>
+        </div>
+      </div>
+    </div>
+                      
+                  
                     <div className="flex">
   {permissions && permissions.EditParentDetail && (
     <button
       type="button"
-      className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+      className="w-24 h-10 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
       onClick={isParentDetailEditable ? handleCancel : toggleParentEdit}
     >
       {isParentDetailEditable ? 'Cancel' : 'Edit'}
@@ -1308,9 +1375,9 @@ const handleImageChange = (event) => {
   )}
   {isParentDetailEditable && !isParentDetailSubmitting && (
     <button
-      type="button"
+      type="submit"
       className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
-      onClick={handleUpdateParentDetail}
+      // onClick={handleUpdateParentDetail}
     >
       Submit
     </button>
@@ -1319,7 +1386,7 @@ const handleImageChange = (event) => {
                   </form>
 
 
-                  <form>
+                  <form onSubmit={handleUpdateAddress} >
                     <div className='h-full rounded-xl lg:px-7 px-2'>
                       <h1 className="text-lg rounded-md font-bold shadow-md h-12 justify-items-center mb-4 mt-4 bg-[#EFBDBD] px-2 py-2" style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)' }}>Address</h1>
                     </div>
@@ -1327,36 +1394,68 @@ const handleImageChange = (event) => {
                     <div className="flex flex-col">
                       {/* First column */}
                       <div className="w-full sm:w-3/4 mb-4">
-                        <label className="block text-sm font-semibold px-10 text-gray-600">Permanent Address</label>
+                        <label className="block text-sm font-semibold px-8 text-gray-600">Permanent Address</label>
                         <TextareaAutosize name="permanentAdd"  readOnly={!isAddressEditable}
                           type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }}
                           value={(isAddressEditable ? editedAddress.permanentAdd : address[0]['permanentAdd'])}
-                          onChange={handleAddressInputChange} />
+                          onChange={handleAddressInputChange} required/>
                       </div>
 
                       {/* Second column */}
                       <div className="flex flex-row items-start justify-start flex-wrap sm:flex-col  sm:justify-start md:flex-row">
                         <div className="w-full sm:w-3/4 mb-4">
-                          <label className="block text-sm font-semibold px-10 text-gray-600">Communication Address</label>
+                          <label className="block text-sm font-semibold px-8 text-gray-600">Communication Address</label>
                           <TextareaAutosize name="communicationAdd" readOnly={!isAddressEditable}
                             type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2" style={{ resize: 'none', overflow: 'hidden' }}
                             value={(isAddressEditable ? editedAddress.communicationAdd : address[0]['communicationAdd'])}
-                            onChange={handleAddressInputChange} />
+                            onChange={handleAddressInputChange} required />
+                                              { !isAddressEditable && address[0]?.hostelName && address[0]?.hostelNo && < label className="block text-sm  pt-3 px-8 font-bold">Hostel Details</label>         }
 
-<button
+                                              <div className="mt-4">
+  {address[0]?.hostelName && (
+    <div className="mb-2">
+      <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Name</label>
+      <input
+        name="hostelName"
+        readOnly
+        type="text"
+        className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+        value={address[0].hostelName}
+      />
+    </div>
+  )}
+  {address[0]?.hostelNo && (
+    <div className="mb-2">
+      <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Number</label>
+      <input
+        name="hostelNo"
+        readOnly
+        type="number"
+        className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+        value={address[0].hostelNo}
+      />
+    </div>
+  )}
+</div>
+
+
+{isAddressEditable && (
+  <button
     type="button"
-    className="w-24 h-10 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+    className="w-26 h-12 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
     onClick={handleHostellerToggle}
     disabled={!isAddressEditable}
   >
     {editedAddress.hosteller ? 'Cancel Hosteller' : 'Hosteller'}
   </button>
+)}
+
 
   {/* Hostel Name and Hostel Number fields */}
-  {editedAddress.hosteller && (
+  {isAddressEditable && editedAddress.hosteller &&  (
     <div className="mt-4">
       <div className="mb-2">
-        <label className="block text-sm font-semibold px-10 text-gray-600">Hostel Name</label>
+        <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Name</label>
         <input
           name="hostelName"
           readOnly={!isAddressEditable}
@@ -1364,17 +1463,19 @@ const handleImageChange = (event) => {
           className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
           value={editedAddress.hostelName}
           onChange={(e) => setEditedAddress({ ...editedAddress, hostelName: e.target.value })}
+          required
         />
       </div>
       <div className="mb-2">
-        <label className="block text-sm font-semibold px-10 text-gray-600">Hostel Number</label>
+        <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Number</label>
         <input
           name="hostelNo"
           readOnly={!isAddressEditable}
-          type="text"
+          type="number"
           className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
           value={editedAddress.hostelNo}
           onChange={(e) => setEditedAddress({ ...editedAddress, hostelNo: e.target.value })}
+          required
         />
       </div>
     </div>
@@ -1387,16 +1488,16 @@ const handleImageChange = (event) => {
                       <div className="flex flex-row items-start justify-start flex-wrap sm:flex-col sm:justify-start md:flex-row">
 
                         <div className="w-full sm:w-1/2 mb-4">
-                          <label className="block text-sm font-semibold px-10 text-gray-600">Number</label>
+                          <label className="block text-sm font-semibold px-8 text-gray-600" required>Number</label>
                           <input name="phoneNo" readOnly={!isAddressEditable}
-                            type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+                            type="number" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                             value={(isAddressEditable ? editedAddress.phoneNo : address[0]['phoneNo'])}
                             onChange={handleAddressInputChange} />
                         </div>
 
                         <div className="w-full sm:w-1/2 mb-4">
-                          <label className="block text-sm font-semibold px-10 text-gray-600">Alternative Number</label>
-                          <input name="alterNo" readOnly={!isAddressEditable} type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+                          <label className="block text-sm font-semibold px-8 text-gray-600">Alternative Number</label>
+                          <input name="alterNo" readOnly={!isAddressEditable} type="number" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                             value={(isAddressEditable ? editedAddress.alterNo : address[0]['alterNo'])}
                             onChange={handleAddressInputChange} />
                         </div>
@@ -1407,7 +1508,7 @@ const handleImageChange = (event) => {
   {permissions && permissions.EditAddress && (
     <button
       type="button"
-      className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+      className="w-24 h-10 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
       onClick={isAddressEditable ? handleCancel : toggleAddressEdit}
     >
       {isAddressEditable ? 'Cancel' : 'Edit'}
@@ -1415,9 +1516,9 @@ const handleImageChange = (event) => {
   )}
   {isAddressEditable && !isAddressSubmitting && (
     <button
-      type="button"
+      type="submit"
       className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
-      onClick={handleUpdateAddress}
+      // onClick={handleUpdateAddress}
     >
       Submit
     </button>
@@ -1427,7 +1528,7 @@ const handleImageChange = (event) => {
 
 
 
-                  <form>
+                  <form onSubmit={handleUpdateAcademicDetail}>
                     <div className='h-full rounded-xl lg:px-7 px-2'>
                       <h1 className="text-lg rounded-md font-bold shadow-md h-12 justify-items-center mb-4 mt-4 bg-[#EFBDBD] px-2 py-2" style={{ boxShadow: 'inset 0px 6px 6px -6px rgba(0, 0, 0, 0.5)', borderTop: '2px solid rgba(0, 0, 0, 0.2)' }}>Academic Details</h1>
                     </div>
@@ -1437,32 +1538,32 @@ const handleImageChange = (event) => {
                       {/* First column */}
                       {/* Second column */}
                       <div className="w-full sm:w-1/2 mb-4">
-                        <label className="block text-sm font-semibold px-10 text-gray-600">12th Previous Institution Name</label>
+                        <label className="block text-sm font-semibold px-8 text-gray-600" required>12th Previous Institution Name</label>
                         <TextareaAutosize name="previousInst"
                           readOnly={!isAcademicDetailEditable} type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                           style={{ resize: 'none', overflow: 'hidden' }}
                           value={(isAcademicDetailEditable ? editedAcademicDetail.previousInst : academicdetails[0]['previousInst'])}
-                          onChange={handleAcademicDetailInputChange} />
+                          onChange={handleAcademicDetailInputChange} required/>
                       </div>
                       <div className='flex flex-wrap'>
                         {/* Third column */}
                         <div className="w-full sm:w-1/2 mb-4">
-                          <label className="block text-sm font-semibold px-10 text-gray-600">10th Percentage</label>
+                          <label className="block text-sm font-semibold px-8 text-gray-600" required>10th Percentage</label>
                           <input name="tenthper"
                             readOnly={!isAcademicDetailEditable}
-                            type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+                            type="number" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                             value={(isAcademicDetailEditable ? editedAcademicDetail.tenthper : academicdetails[0]['tenthper'])}
-                            onChange={handleAcademicDetailInputChange} />
+                            onChange={handleAcademicDetailInputChange} required/>
                         </div>
 
                         {/* Fourth column */}
                         <div className="w-full sm:w-1/2 mb-4">
-                          <label className="block text-sm font-semibold px-10 text-gray-600">12th Percentage</label>
+                          <label className="block text-sm font-semibold px-8 text-gray-600" required>12th Percentage</label>
                           <input name="twelfthper"
                             readOnly={!isAcademicDetailEditable}
-                            type="text" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
+                            type="number" className="lg:w-2/4 mx-7 w-4/5 border rounded-md px-3 py-2"
                             value={(isAcademicDetailEditable ? editedAcademicDetail.twelfthper : academicdetails[0]['twelfthper'])}
-                            onChange={handleAcademicDetailInputChange} />
+                            onChange={handleAcademicDetailInputChange} required/>
                         </div>
                       </div>
                     </div>
@@ -1470,7 +1571,7 @@ const handleImageChange = (event) => {
   {permissions && permissions.EditAcademicDetail && (
     <button
       type="button"
-      className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+      className="w-24 h-10 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
       onClick={isAcademicDetailEditable ? handleCancel : toggleAcademicDetailEdit}
     >
       {isAcademicDetailEditable ? 'Cancel' : 'Edit'}
@@ -1478,9 +1579,9 @@ const handleImageChange = (event) => {
   )}
   {isAcademicDetailEditable && !isAcademicDetailSubmitting && (
     <button
-      type="button"
+      type="submit"
       className="w-24 h-10 border my-0 mx-2 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
-      onClick={handleUpdateAcademicDetail}
+      // onClick={handleUpdateAcademicDetail}
     >
       Submit
     </button>

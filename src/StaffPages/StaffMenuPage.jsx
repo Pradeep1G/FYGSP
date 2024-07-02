@@ -292,29 +292,60 @@ export default function StudentProfileTemplate() {
     aadhar: ""
   });
 
+  const [isLoading, setIsLoading] = useState();
+
+
   const getStudentProfileData = async () => {
     const data = {
       regNo: studentId,
       guideMail: guideMailId
     }
-    const response = await axios.post(serverPath1 + "/getStudentProfileData", data)
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
+    try{
+      setIsLoading(true);
+    const response = await axios.post(serverPath1 + "/getStudentProfileData", data, 
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
     console.warn(response.data)
     setStudentData(response.data.StudentData)
     console.warn('count --',response.data.StudentEventsCounts);
     setStudentData(response.data.StudentData);
     setStudentEventsCounts(response.data.StudentEventsCounts);
   }
+  catch{
+    
+    setIsLoading(false);
+    if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+      localStorage.removeItem("jwt_token");
+      navigate("/stafflogin");
+      return;
+    } else {
+      console.error("An error occurred:", error);
+    }  }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
       try {
+
         // Check for the presence of GuideMailIdToLogin in local storage to determine user type
         const guideMailId = localStorage.getItem("GuideMailIdToLogin");
         if (!guideMailId) {
           setUserType("student");
 
           const data = { mailId: studentMailId };
-          const response = await axios.post(serverPath1 + "/getStudentData", data);
+          const response = await axios.post(serverPath1 + "/getStudentData", data,
+        { headers: { Authorization: `Bearer ${token}` } }
+          );
           console.warn(response.data.StudentData);
           setStudentData(response.data.StudentData);
         } else {
@@ -323,6 +354,14 @@ export default function StudentProfileTemplate() {
         }
       } catch (error) {
         console.error("Error fetching student data:", error);
+        setIsLoading(false);
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/stafflogin");
+        return;
+      } else {
+        console.error("An error occurred:", error);
+      }
       }
     };
 
@@ -355,6 +394,7 @@ export default function StudentProfileTemplate() {
     MentorMeetings: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/MentorMeetings` : `/studentdashboard/studentMailId/MentorMeetings`,
     ExtraCredits: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/ExtraCredits` : `/studentdashboard/studentMailId/ExtraCredits`,
     StaffMessages: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Messages` : `/studentdashboard/studentMailId/Messages`,
+    Permission: userType === 'staff' ? `/staffdashboard/studentprofile/${studentId}/Permission` : `/studentdashboard/studentMailId/Permission`,
   };
 
   const [hoveredButtons, setHoveredButtons] = useState({});
@@ -596,7 +636,7 @@ export default function StudentProfileTemplate() {
                             onMouseEnter={() => handleHover('credits')}
                             onMouseLeave={() => handleMouseLeave('credits')}
                             onClick={() => {
-                              navigate(buttonRoutes.ExtraCredits)
+                              // navigate(buttonRoutes.ExtraCredits)
                             }}                        >
                             {hoveredButtons['credits'] ? 'View Credits' : 'Additional Credentials'}
                           </button>

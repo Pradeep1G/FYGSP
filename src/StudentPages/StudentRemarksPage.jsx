@@ -20,7 +20,8 @@ const Remarks = () => {
     });
 
     const { studentId } = localStorage.getItem("regNo")
-    const serverPath2 = 'http://127.0.0.1:5000/'; // Adjust to your server address
+    const serverPath = 'http://127.0.0.1:5000/'; // Adjust to your server address
+    // const serverPath = 'http://127.0.0.1:5000/'; 
 
     // Function to fetch remarks data
     const fetchRemarksData = async () => {
@@ -28,7 +29,7 @@ const Remarks = () => {
                 
             const  studentId = localStorage.getItem("regNo")
             setIsLoading(true);
-            const response = await axios.get(`${serverPath2}/get_remarks/${studentId}`);
+            const response = await axios.get(`${serverPath}/get_remarks/${studentId}`);
             setData(response.data.remarksInfo);
             setDataCount(response.data.remarksInfo.length); // Update count
             
@@ -101,6 +102,7 @@ const Remarks = () => {
     // console.warn(studentId)
     const GuideName = localStorage.getItem("GuideName");
     const GuideImage = localStorage.getItem("GuideImage");
+    const studentMailId = localStorage.getItem("StudentMailId")
 
     const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     const [StudentData, setStudentData] = useState({
@@ -134,10 +136,27 @@ const Remarks = () => {
                 mailId:studentMailId,
                 guideMail: guideMailId
             }
-            const response = await axios.post(serverPath2 + "/StudentMenuPage/getLeftSideBarData", data)
+            const token = localStorage.getItem("jwt_token_student");
+          if (!token) {
+            navigate("/studentlogin");
+            return;
+          }
+            try{const response = await axios.post(serverPath + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
             console.warn(response.data)
-            setStudentData(response.data.StudentData)
-        }
+            setStudentData((prev)=>response.data.StudentData)
+            localStorage.setItem("regNo",response.data.StudentData.regNo)}
+            catch(error){
+              if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+                localStorage.removeItem("jwt_token");
+                navigate("/studentlogin");
+                return;
+              } else {
+                console.error("An error occurred:", error);
+              }
+            }
+          }
+
+        
 
 
         getStudentData();

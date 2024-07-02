@@ -4,7 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import EventCard from '../CardComponents/EventCard';
 import { useEffect } from 'react';
 import {RiArrowDropDownFill} from "react-icons/ri";
-
+import LoadingScreen from '../shared/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
 export default function Events() {
   const [eventsconducted,setEventsConducted] = useState(0);
@@ -93,13 +95,29 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   const studentId = localStorage.getItem("regNo")
 
 
-  const getStudentData=async()=>{
-    const data = {regNo:studentId,
-      mailId :studentMailId
+  const getStudentData = async () => {
+    const data = {
+      mailId: studentMailId,
+      // guideMail: guideMailId
     }
-    const response = await axios.post(serverPath1+"/StudentMenuPage/getLeftSideBarData", data)
+    const token = localStorage.getItem("jwt_token_student");
+  if (!token) {
+    navigate("/studentlogin");
+    return;
+  }
+    try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
-    setStudentData(response.data.StudentData)
+    setStudentData((prev)=>response.data.StudentData)
+    localStorage.setItem("regNo",response.data.StudentData.regNo)}
+    catch(error){
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token_student");
+        navigate("/studentlogin");
+        return;
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
   }
 
   useEffect(() => {
@@ -142,6 +160,7 @@ const handleAddEvent = async (e) => {
 
   try {
     const regNo = localStorage.getItem("regNo");
+    setIsLoading(true);
     const response = await axios.post(`${serverPath1}/studentdashboard/${regNo}/AddEvents`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -149,27 +168,41 @@ const handleAddEvent = async (e) => {
     });
     if (response.data.success) {
       // const updatedEvents = { ...eventsConducted };
-      if (newEvent.conductedOrAttended === 'events_conducted') {
-        updatedEvents[newEvent.semester] = [...(updatedEvents[newEvent.semester] || []), newEvent];
-        setEventsConducted(updatedEvents);
-      } else {
-        // const updatedAttendedEvents = { ...eventsAttended };
-        updatedAttendedEvents[newEvent.semester] = [...(updatedAttendedEvents[newEvent.semester] || []), newEvent];
-        setEventsAttended(updatedAttendedEvents);
-      }
-      setNewEvent({
-        eventName: '',
-        eventType: '',
-        eventSummary: '',
-        brouchure: null,
-        certificate: null,
-        semester: '',
-        conductedOrAttended: newEvent.conductedOrAttended,
-      });
+      toast.success("Events data added successfully!");
       setIsFormOpen(false);
+      // if (newEvent.conductedOrAttended === 'events_conducted') {
+      //   // updatedEvents[newEvent.semester] = [...(updatedEvents[newEvent.semester] || []), newEvent];
+      //   setEventsConducted(updatedEvents);
+      // } else {
+      //   // const updatedAttendedEvents = { ...eventsAttended };
+      //   // updatedAttendedEvents[newEvent.semester] = [...(updatedAttendedEvents[newEvent.semester] || []), newEvent];
+      //   setEventsAttended(updatedAttendedEvents);
+      // }
+      // setNewEvent({
+      //   eventName: '',
+      //   eventType: '',
+      //   eventSummary: '',
+      //   brouchure: null,
+      //   certificate: null,
+      //   semester: '',
+      //   conductedOrAttended: newEvent.conductedOrAttended,
+      // });
+      
     }
-  } catch (error) {
+    
+  } 
+ 
+  
+  
+  catch (error) {
     console.error("Error adding event:", error);
+    toast.error("Error adding Event");
+
+   
+
+  }
+  finally{
+    setIsLoading(false);
   }
 };
 
@@ -280,6 +313,7 @@ const handleAddEvent = async (e) => {
 
   return (
     <>
+    {isLoading && <LoadingScreen/>}
      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
     <div className='sm:flex '>
         <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6  bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
@@ -772,6 +806,18 @@ const handleAddEvent = async (e) => {
     </div>
     </div>
     </div>
+    <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
     </>
   );
 }

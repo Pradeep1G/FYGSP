@@ -4,10 +4,14 @@ import axios from 'axios';
 import StaffDashboardNavbar from '../NavBarComponents/StaffDashboardNavbar';
 import { format } from 'date-fns';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
+import LoadingScreen from '../shared/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StaffMessages = () => {
     const [data, setData] = useState([]);
     const [dataCount, setDataCount] = useState(0);
+    const [IsLoading,setIsLoading]=useState();
     const [formData, setFormData] = useState({
         serialNumber: '',
         semester: '',
@@ -51,13 +55,30 @@ const StaffMessages = () => {
     });
 
     const getStudentData = async () => {
+        
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+        navigate("/stafflogin");
+        return;
+        }
+        try{
         const data = {
             regNo: studentId,
             guideMail: guideMailId
         };
-        const response = await axios.post(serverPath1 + "/getStudentProfileData", data);
+        const response = await axios.post(serverPath1 + "/getStudentProfileData", data,
+        { headers: { Authorization: `Bearer ${token}` }}
+        );
         console.warn(response.data);
         setStudentData(response.data.StudentData);
+        }catch(error){
+            console.error('Error:', error);
+        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+            localStorage.removeItem("jwt_token");
+            navigate("/stafflogin");
+            return;
+        }
+        }
     };
 
     useEffect(() => {
@@ -147,11 +168,11 @@ const StaffMessages = () => {
             const url = showStudentMessages
                 ? `${serverPath1}/sendMessage/${StudentData.mailId}`
                 : `${serverPath1}/sendParentMessage/${StudentData.mailId}`;
-
+            setIsLoading(true);
             const response = await axios.post(url, data);
             console.log(response.data);
             if (response.data.message === "SENT") {
-                setSuccessMessage("Message sent successfully!");
+                toast.success("Message sent successfully!");
                 setisSending(false);
                 setComment("");
             
@@ -162,17 +183,18 @@ const StaffMessages = () => {
                     // Fetch updated student messages
                     fetchMessages();
                 }
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 2000);
+                
             } else {
-                setError1("Message not sent, please try again.");
+                toast.error("Message not sent, please try again.");
                 setisSending(false);
             }
         } catch (error) {
             console.error('Error sending message:', error);
             setError1("Message not sent, please try again.");
             setisSending(false);
+        }
+        finally{
+            setIsLoading(false);
         }
     };
 
@@ -250,6 +272,7 @@ const StaffMessages = () => {
 
     return (
         <>
+        {IsLoading && <LoadingScreen/>}
                  <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
 
             <div className='sm:flex '>
@@ -319,6 +342,18 @@ const StaffMessages = () => {
                     </div>
                 </div>
             </div>
+            <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
         </>
     );
 };

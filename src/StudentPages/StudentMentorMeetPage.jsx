@@ -35,18 +35,31 @@ const MentorMeetings = () => {
         phoneNo: "",
         name: "",
     });
+    const studentMailId = localStorage.getItem("StudentMailId")
 
-    const getStudentData=async()=>{
-        const StudentMailId = localStorage.getItem("StudentMailId")
-        const studentId = localStorage.getItem("regNo")
+    const getStudentData = async () => {
         const data = {
-          regNo:studentId,
-          guideMail:guideMailId,
-          mailId: StudentMailId
+          mailId: studentMailId,
+          // guideMail: guideMailId
         }
-        const response = await axios.post(serverPath1+"/StudentMenuPage/getLeftSideBarData", data)
+        const token = localStorage.getItem("jwt_token_student");
+      if (!token) {
+        navigate("/studentlogin");
+        return;
+      }
+        try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
         console.warn(response.data)
-        setStudentData(response.data.StudentData)
+        setStudentData((prev)=>response.data.StudentData)
+        localStorage.setItem("regNo",response.data.StudentData.regNo)}
+        catch(error){
+          if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+            localStorage.removeItem("jwt_token");
+            navigate("/studentlogin");
+            return;
+          } else {
+            console.error("An error occurred:", error);
+          }
+        }
       }
 
     const getMeetings = async () => {

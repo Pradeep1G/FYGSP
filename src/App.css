@@ -80,6 +80,18 @@
   #photo-upload {
     display: none;
   }
+
+  #father-photo-upload {
+    display: none;
+  }
+
+  #mother-photo-upload {
+    display: none;
+  }
+
+  #guardian-photo-upload {
+    display: none;
+  }
   
   /* Optional: Style the selected file name if needed */
   .custom-file-upload input[type="file"]:focus + label {

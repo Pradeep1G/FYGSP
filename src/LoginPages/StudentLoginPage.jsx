@@ -41,13 +41,14 @@ export default function StudentLogin(){
         else
         {
             localStorage.setItem("StudentMailId",formData.email);
+            localStorage.setItem("jwt_token_student", response.data.access_token_student);
            navigate("/studentdashboard")
         }
         setIsLoading(false);
     }
 
     useEffect(()=>{
-        if(localStorage.getItem("StudentMailId")){
+        if(localStorage.getItem("access_token_student")){
            navigate("/studentdashboard")
         }
     },[])

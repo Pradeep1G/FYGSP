@@ -9,22 +9,37 @@ export default function Permission() {
   const [resultsPermission, setResultsPermission] = useState(false);
   const [eventsPermission, setEventsPermission] = useState(false);
   const [creditsPermission, setCreditsPermission] = useState(false);
-
-  const togglePermission = (permissionSetter) => {
-    permissionSetter((prevState) => !prevState);
-  };
+  const [parentinfoPermission, setParentinfoPermission] = useState(false);
+  const [accademicinfoPermission, setAccademicinfoPermission] = useState(false);
+  const [addressPermission, setAddressPermission] = useState(false);
 
   
+  const updatePermission = async (permissionType, newValue) => {
+    const data = {
+      regNo: studentId,
+      permissionType,
+      newValue
+    };
+    await axios.post(`${serverPath1}/updatePermission`, data);
+  };
+
+  const togglePermission = (permissionType, permissionSetter) => {
+    permissionSetter(prevState => {
+      const newValue = !prevState;
+      updatePermission(permissionType, newValue);
+      return newValue;
+    });
+  };
 
     
 
   
   
   
-  // const serverPath1 = "http://127.0.0.1:5000";
+  const serverPath1 = "http://127.0.0.1:5000";
 
 
-   const serverPath1 = "https://fgspserver.onrender.com";
+  //  const serverPath1 = "https://fgspserver.onrender.com";
 const { studentId } = useParams();
 // console.warn(studentId)
 const GuideName = localStorage.getItem("GuideName");
@@ -49,12 +64,27 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   });
 
   const getStudentData=async()=>{
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
+    try{
     const data = {regNo:studentId,
       guideMail:guideMailId
     }
-    const response = await axios.post(serverPath1+"/getStudentProfileData", data)
+    const response = await axios.post(serverPath1+"/getStudentProfileData", data, 
+      {headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
     setStudentData(response.data.StudentData)
+  }catch(error){
+    console.error('Error:', error);
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/stafflogin");
+        return;
+      }
+  }
   }
 
   useEffect(()=>{
@@ -86,8 +116,17 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
         "collection":"permissions",
         "regNo": regNo
     }
-        const rsponse = await axios.post(serverPath1+"/permissionDetail", data)
-        console.warn(rsponse.data)
+        const response = await axios.post(serverPath1+"/permissionDetail", data)
+        console.warn(response.data)
+        setPersonalInfoPermission(response.data.permission[0]["personalinfo"])
+        setParentinfoPermission(response.data.permission[0]["parentinfo"])
+        setAccademicinfoPermission(response.data.permission[0]["accademicinfo"])
+        setAddressPermission(response.data.permission[0]["addressinfo"])
+
+        // setResultsPermission(response.data.permission[0]["additionalinfo"])
+        // setEventsPermission(response.data.permission[0]["eventsinfo"])
+        // setCreditsPermission(response.data.permission[0]["resultsinfo"])
+
     }
     func();
   },[])
@@ -155,127 +194,92 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
 
         {/* Largest Table */}
         <div className='flex w-full justify-center items-center my-2 mx-0 overflow-hidden'>
-          <div className="flex-col justify-centre bg-[#edeef2] space-y-3  shadow-md rounded-lg  m-2 ml-4 mr-4 w-full h-full overflow-y-scroll ">
-            {/* First Box */}
+          <div className="flex-col justify-centre bg-[#edeef2] space-y-3 shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
             <div className='w-full rounded-t-md bg-[#811338] h-fit'>
-          <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Permission</h1>
-          </div>
-
-          <div className="flex justify-center pt-8">
-      <div className="w-2/3">
-        <table className="table-auto border border-black">
-          <thead>
-          <tr className=" bg-[#811338]">
-              <th className="px-4 py-2 w-full border border-black text-start text-white">Permission</th>
-              <th className="px-4 py-2 border border-black"></th>
-            </tr>
-          </thead>
-          <tbody>
-          <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to edit the personal info page</td>
-              <td className="border border-black px-4 py-2">
-                <label className="flex items-center">
-                  <div
-                    className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${
-                      personalInfoPermission ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                    onClick={() => togglePermission(setPersonalInfoPermission)}
-                  >
-                    <div
-                      className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${
-                        personalInfoPermission ? 'left-5' : 'left-0'
-                      }`}
-                    >
-                      <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${
-                          personalInfoPermission ? 'text-green-500' : 'text-red-500'
-                        }`}>
-                        {personalInfoPermission ? 'On' : 'Off'}
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              </td>
-            </tr>
-            <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to edit the results page</td>
-              <td className="border border-black px-4 py-2">
-                <label className="flex items-center">
-                  <div
-                    className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${
-                      resultsPermission ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                    onClick={() => togglePermission(setResultsPermission)}
-                  >
-                    <div
-                      className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${
-                        resultsPermission ? 'left-5' : 'left-0'
-                      }`}
-                    >
-                      <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${
-                          resultsPermission ? 'text-green-500' : 'text-red-500'
-                        }`}>
-                        {resultsPermission ? 'On' : 'Off'}
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              </td>
-            </tr>
-            <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to edit the events page</td>
-              <td className="border border-black px-4 py-2">
-                <label className="flex items-center">
-                  <div
-                    className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${
-                      eventsPermission ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                    onClick={() => togglePermission(setEventsPermission)}
-                  >
-                    <div
-                      className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${
-                        eventsPermission ? 'left-5' : 'left-0'
-                      }`}
-                    >
-                      <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${
-                          eventsPermission ? 'text-green-500' : 'text-red-500'
-                        }`}>
-                        {eventsPermission ? 'On' : 'Off'}
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              </td>
-            </tr>
-            <tr className="bg-white">
-              <td className="border border-black px-4 py-2">Permission to edit the additional credits page</td>
-              <td className="border border-black px-4 py-2">
-                <label className="flex items-center">
-                  <div
-                    className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${
-                      creditsPermission ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                    onClick={() => togglePermission(setCreditsPermission)}
-                  >
-                    <div
-                      className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${
-                        creditsPermission ? 'left-5' : 'left-0'
-                      }`}
-                    >
-                      <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${
-                          creditsPermission ? 'text-green-500' : 'text-red-500'
-                        }`}>
-                        {creditsPermission ? 'On' : 'Off'}
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-          
+              <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Permission</h1>
+            </div>
+            <div className="flex justify-center pt-8">
+              <div className="w-2/3">
+                <table className="table-auto border border-black">
+                  <thead>
+                    <tr className="bg-[#811338]">
+                      <th className="px-4 py-2 w-full border border-black text-start text-white">Permission</th>
+                      <th className="px-4 py-2 border border-black"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="bg-white">
+                      <td className="border border-black px-4 py-2">Permission to edit the personal info page</td>
+                      <td className="border border-black px-4 py-2">
+                        <label className="flex items-center">
+                          <div
+                            className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${personalInfoPermission ? 'bg-green-500' : 'bg-red-500'}`}
+                            onClick={() => togglePermission('personalinfo', setPersonalInfoPermission)}
+                          >
+                            <div className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${personalInfoPermission ? 'left-5' : 'left-0'}`}>
+                              <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${personalInfoPermission ? 'text-green-500' : 'text-red-500'}`}>
+                                {personalInfoPermission ? 'On' : 'Off'}
+                              </span>
+                            </div>
+                          </div>
+                        </label>
+                      </td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="border border-black px-4 py-2">Permission to edit the parent details</td>
+                      <td className="border border-black px-4 py-2">
+                        <label className="flex items-center">
+                          <div
+                            className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${parentinfoPermission ? 'bg-green-500' : 'bg-red-500'}`}
+                            onClick={() => togglePermission('parentinfo', setParentinfoPermission)}
+                          >
+                            <div className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${parentinfoPermission ? 'left-5' : 'left-0'}`}>
+                              <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${parentinfoPermission ? 'text-green-500' : 'text-red-500'}`}>
+                                {parentinfoPermission ? 'On' : 'Off'}
+                              </span>
+                            </div>
+                          </div>
+                        </label>
+                      </td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="border border-black px-4 py-2">Permission to edit the academic details</td>
+                      <td className="border border-black px-4 py-2">
+                        <label className="flex items-center">
+                          <div
+                            className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${accademicinfoPermission ? 'bg-green-500' : 'bg-red-500'}`}
+                            onClick={() => togglePermission('accademicinfo', setAccademicinfoPermission)}
+                          >
+                            <div className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${accademicinfoPermission ? 'left-5' : 'left-0'}`}>
+                              <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${accademicinfoPermission ? 'text-green-500' : 'text-red-500'}`}>
+                                {accademicinfoPermission ? 'On' : 'Off'}
+                              </span>
+                            </div>
+                          </div>
+                        </label>
+                      </td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="border border-black px-4 py-2">Permission to edit the address details</td>
+                      <td className="border border-black px-4 py-2">
+                        <label className="flex items-center">
+                          <div
+                            className={`h-5 w-10 rounded-full shadow-inner cursor-pointer relative ${addressPermission ? 'bg-green-500' : 'bg-red-500'}`}
+                            onClick={() => togglePermission('addressinfo', setAddressPermission)}
+                          >
+                            <div className={`h-5 w-5 bg-white rounded-full shadow-md absolute ${addressPermission ? 'left-5' : 'left-0'}`}>
+                              <span className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold ${addressPermission ? 'text-green-500' : 'text-red-500'}`}>
+                                {addressPermission ? 'On' : 'Off'}
+                              </span>
+                            </div>
+                          </div>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
         {/* Second Box */}

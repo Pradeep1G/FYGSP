@@ -55,6 +55,7 @@ const { studentId } = useParams();
 // console.warn(studentId)
 const GuideName = localStorage.getItem("GuideName");
 const GuideImage = localStorage.getItem("GuideImage");
+const [isLoading, setIsLoading] = useState();
 
 const guideMailId = localStorage.getItem("GuideMailIdToLogin")
   const [StudentData, setStudentData] = useState({
@@ -74,13 +75,37 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     aadhar:""  
   });
 
-  const getStudentData=async()=>{
-    const data = {regNo:studentId,
-      guideMail:guideMailId
+  const getStudentData = async () => {
+    const data = {
+      regNo: studentId,
+      guideMail: guideMailId
     }
-    const response = await axios.post(serverPath1+"/getStudentProfileData", data)
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate("/stafflogin");
+      return;
+    }
+    try{
+      setIsLoading(true);
+    const response = await axios.post(serverPath1 + "/getStudentProfileData", data, 
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
     console.warn(response.data)
     setStudentData(response.data.StudentData)
+    // console.warn('count --',response.data.StudentEventsCounts);
+    // setStudentData(response.data.StudentData);
+    // setStudentEventsCounts(response.data.StudentEventsCounts);
+  }
+  catch(error){
+    
+    setIsLoading(false);
+    if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+      localStorage.removeItem("jwt_token");
+      navigate("/stafflogin");
+      return;
+    } else {
+      console.error("An error occurred:", error);
+    }  }
   }
 
   useEffect(() => {

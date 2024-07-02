@@ -5,12 +5,15 @@ import axios from 'axios';
 import StaffDashboardNavbar from '../NavBarComponents/StaffDashboardNavbar';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
 import { useNavigate } from 'react-router-dom';
-
-
+import { GiToaster } from 'react-icons/gi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingScreen from '../shared/Loader';
 const Remarks = () => {
     const [data, setData] = useState([]);
     const [dataCount, setDataCount] = useState(0);
     const [messages,setMessages] = useState();
+    const [IsLoading,setIsLoading]=useState();
     const [formData, setFormData] = useState({
         semester: '',
         remarks: '',
@@ -58,8 +61,10 @@ const Remarks = () => {
             };
     
             try {
+                setIsLoading(true);
                 const response = await axios.post(`${serverPath2}/insert_remarks`, data);
-                console.log('Success:', response.data);
+                console.log('Success:', response.data)
+                toast.success("Remarks inserted successfully")
     
                 // After successfully adding data, fetch the updated remarks
                 await fetchRemarksData(); // Fetch updated data
@@ -74,7 +79,10 @@ const Remarks = () => {
                 // alert('Remarks data inserted successfully!');
             } catch (error) {
                 console.error('Error:', error);
-                alert('Failed to insert remarks data. Please try again.');
+                toast.error('Failed to insert remarks data. Please try again.');
+            }
+            finally{
+                setIsLoading(false);
             }
         } else {
             console.error("Missing data. Please enter all required information.");
@@ -113,13 +121,29 @@ const Remarks = () => {
     });
 
     const getStudentData = async () => {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+        navigate("/stafflogin");
+        return;
+        }
+        try{
         const data = {
             regNo: studentId,
             guideMail: guideMailId
         }
-        const response = await axios.post(serverPath2 + "/getStudentProfileData", data)
+        const response = await axios.post(serverPath2 + "/getStudentProfileData", data,
+        {headers: { Authorization: `Bearer ${token}` }}
+        )
         console.warn(response.data)
         setStudentData(response.data.StudentData)
+    }catch(error){
+        console.error('Error:', error);
+      if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+        localStorage.removeItem("jwt_token");
+        navigate("/stafflogin");
+        return;
+      }
+    }
     }
 
 
@@ -159,6 +183,7 @@ const Remarks = () => {
     return (
         <>
             {/* <StaffDashboardNavbar GuideImage={GuideImage} GuideName={GuideName} /> */}
+            {IsLoading && <LoadingScreen/>}
      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
 
             <div className='sm:flex '>
@@ -298,7 +323,7 @@ const Remarks = () => {
                                                     <button
                                                         type="button"
                                                         onClick={handleAddData}
-                                                        className="bg-blue-500 text-white px-4 py-2 rounded-md ml-auto "
+                                                        className="bg-[#811338] text-white px-4 py-2 mt-6 rounded-md ml-auto "
                                                     >
                                                         Add
                                                     </button>
@@ -313,6 +338,18 @@ const Remarks = () => {
                     </div>
                 </div>
             </div>
+            <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
         </>
     );
 };

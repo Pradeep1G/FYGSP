@@ -95,15 +95,29 @@ const serverPath1 = "http://127.0.0.1:5000";
         // };
     
         const getStudentProfileData = async () => {
-          const data = {
-            mailId: studentMailId,
-            // guideMail: guideMailId
+            const data = {
+              mailId: studentMailId,
+              // guideMail: guideMailId
+            }
+            const token = localStorage.getItem("jwt_token_student");
+          if (!token) {
+            navigate("/studentlogin");
+            return;
           }
-          const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data)
-          console.warn(response.data)
-          setStudentData((prev)=>response.data.StudentData)
-          localStorage.setItem("regNo",response.data.StudentData.regNo)
-        }
+            try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
+            console.warn(response.data)
+            setStudentData((prev)=>response.data.StudentData)
+            localStorage.setItem("regNo",response.data.StudentData.regNo)}
+            catch(error){
+              if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+                localStorage.removeItem("jwt_token");
+                navigate("/studentlogin");
+                return;
+              } else {
+                console.error("An error occurred:", error);
+              }
+            }
+          }
     
         getStudentProfileData();
       }, [studentId, studentMailId]);

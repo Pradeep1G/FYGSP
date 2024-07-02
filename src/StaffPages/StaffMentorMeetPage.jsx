@@ -3,12 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StaffDashboardNavbar from '../NavBarComponents/StaffDashboardNavbar';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingScreen from '../shared/Loader';
 const MentorMeetings = () => {
     const { studentId } = useParams();
     const navigate = useNavigate();
     const [messages,setMessages] = useState();
     const [meetings, setMeetings] = useState([]);
+    const [isLoading,setIsLoading] =useState();
     const [formData, setFormData] = useState({
         semester: '',
         remarks: '',
@@ -35,15 +38,28 @@ const MentorMeetings = () => {
     });
 
     const getStudentData = async () => {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+          navigate("/stafflogin");
+          return;
+        }
         try {
             const response = await axios.post(`${serverPath1}/getStudentProfileData`, {
                 regNo: studentId,
                 guideMail: guideMailId,
-            });
+            },
+        {headers: { Authorization: `Bearer ${token}` }}
+
+        );
             setStudentData(response.data.StudentData);
         } catch (error) {
-            console.error('Failed to fetch student data:', error);
-        }
+            console.error('Error:', error);
+            if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+              localStorage.removeItem("jwt_token");
+              navigate("/stafflogin");
+              return;
+            }     
+       }
     };
 
     const getMeetings = async () => {
@@ -96,9 +112,10 @@ const MentorMeetings = () => {
                     remarks: formData.remarkOnMentee,
                 },
             };
-    
+            setIsLoading(true);
             const response = await axios.post(`${serverPath1}/insert_meeting`, newMeeting);
             console.log(response.data);
+            toast.success("Meeting data inserted successfully");
     
             setMeetings([...meetings, newMeeting.Meeting]); // Update the state to reflect the added data
             setFormData({
@@ -117,7 +134,10 @@ const MentorMeetings = () => {
             getMeetings();
         } catch (error) {
             console.error('Failed to add meeting:', error);
-            alert('Failed to add meeting. Please try again.');
+            toast.error('Failed to add meeting. Please try again.');
+        }
+        finally{
+            setIsLoading(false);
         }
     };
     
@@ -143,6 +163,7 @@ const MentorMeetings = () => {
 
     return (
         <>
+        {isLoading && <LoadingScreen/>}
      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
 
             {/* <StaffDashboardNavbar GuideImage={GuideImage} GuideName={GuideName} /> */}
@@ -359,7 +380,7 @@ const MentorMeetings = () => {
                                                     <button
                                                         type="button"
                                                         onClick={handleAddData}
-                                                        className="bg-[#811338] w-1/4 text-white px-5 py-2 rounded-md ml-auto"
+                                                        className="bg-[#811338] w-1/4 text-white px-5 py-2 mt-6 rounded-md ml-auto"
                                                     >
                                                         Add
                                                     </button>
@@ -374,6 +395,18 @@ const MentorMeetings = () => {
                     </div>
                 </div>
             </div>
+            <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
         </>
     );
 };
