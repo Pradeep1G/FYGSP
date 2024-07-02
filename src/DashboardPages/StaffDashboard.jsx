@@ -739,8 +739,9 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
         <div className="flex justify-center mt-4">
           <button className="bg-[#811338] text-white px-4 py-2 rounded-md"
           onClick={() => {
-                    localStorage.removeItem("GuideMailIdToLogin");
-                    localStorage.removeItem("GuideImage");
+                    
+                    localStorage.removeItem("jwt_token");
+                    //localStorage.removeItem("GuideImage");
                     navigate("/");
                   }}
                 >
