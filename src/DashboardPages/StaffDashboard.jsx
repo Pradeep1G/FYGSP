@@ -450,8 +450,8 @@ import loading_icon from "../assets/loading_icon.gif"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function StaffDashboard() {
-  const serverPath1 = "http://127.0.0.1:5000"
-  // const serverPath1 = "https://fgspserver.onrender.com";
+  //const serverPath1 = "http://127.0.0.1:5000"
+   const serverPath1 = "https://fgspserver.onrender.com";
 
   const [isLoading, setIsLoading] = useState();
 

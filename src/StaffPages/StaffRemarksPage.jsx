@@ -21,8 +21,8 @@ const Remarks = () => {
     });
 
     const { studentId } = useParams();
-    const serverPath2 = 'http://127.0.0.1:5000/'; // Adjust to your server address
-        // const serverPath2 = "https://fgspserver.onrender.com";
+    //const serverPath2 = 'http://127.0.0.1:5000/'; // Adjust to your server address
+     const serverPath2 = "https://fgspserver.onrender.com";
 
     // Function to fetch remarks data
     const fetchRemarksData = async () => {

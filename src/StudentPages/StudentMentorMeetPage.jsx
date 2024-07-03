@@ -27,7 +27,7 @@ const MentorMeetings = () => {
     const GuideImage = localStorage.getItem("GuideImage");
     const guideMailId = localStorage.getItem("GuideMailIdToLogin");
     const serverPath = "https://fgspserver.onrender.com";
-    const serverPath1 = "http://127.0.0.1:5000/"
+    //const serverPath1 = "http://127.0.0.1:5000/"
     const [studentData, setStudentData] = useState({
         image: "",
         regNo: "",

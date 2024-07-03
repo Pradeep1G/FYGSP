@@ -68,8 +68,8 @@ function isValidPhoneNumber(input) {
 export default function PersonalInfo() {
   // const [isLoading,setIsLoading]=useState();
 
-  const serverPath1 = "http://127.0.0.1:5000";
-  //const serverPath1 = "https://fgspserver.onrender.com";
+  //const serverPath1 = "http://127.0.0.1:5000";
+  const serverPath1 = "https://fgspserver.onrender.com";
 
   // console.warn(studentId)
   const [userType, setUserType] = useState("");
