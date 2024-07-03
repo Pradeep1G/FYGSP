@@ -450,7 +450,7 @@ import loading_icon from "../assets/loading_icon.gif"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function StaffDashboard() {
-  //const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "http://127.0.0.1:5000"
    const serverPath1 = "https://fgspserver.onrender.com";
 
   const [isLoading, setIsLoading] = useState();
@@ -723,22 +723,27 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
       </div>
 
       <div className="flex justify-center">
-        <div className="mb-4 text-center max-w-xs">
-          {total_events_attended_count ? (
-            <p className="break-all">Events Attended : {total_events_attended_count}</p>
-          ) : (
+    <div className="mb-4 text-center max-w-xs">
+        {total_events_attended_count ? (
+            <>
+                <p className="break-all">Events Attended : {total_events_attended_count}</p>
+                <div className="flex justify-center mt-10">
+                    <button className="bg-[#811338] text-white px-4 py-2 rounded-md" onClick={handleDownloadEvents}>
+                        Download Events Data
+                    </button>
+                </div>
+            </>
+        ) : (
             <div className="flex justify-center">
-              <img src={loading_icon} className="h-2" alt="Loading..."/>
+                <img src={loading_icon} className="h-2" alt="Loading..." />
             </div>
-          )}
-        </div>
-      </div>
-      <div className="flex justify-center mt-4">
-            <button className="bg-[#811338] text-white px-4 py-2 rounded-md" onClick={handleDownloadEvents}>
-                Download Events Data
-            </button>
-        </div>
-        <div className=" flex justify-center items-center mt-4">
+        )}
+    </div>
+</div>
+
+      
+     
+        <div className=" flex justify-center items-center mt-1">
   <button
     className="bg-[#811338] text-white px-4 py-2 rounded-md"
     onClick={() => setOpenCommentBox(true)}

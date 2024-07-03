@@ -49,7 +49,7 @@ export default function Events() {
     }
   };
 
- // const serverPath1 = "http://127.0.0.1:5000";
+//  const serverPath1 = "http://127.0.0.1:5000";
 
 const serverPath1 = "https://fgspserver.onrender.com";
 const { studentId } = useParams();
@@ -116,7 +116,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     const fetchData = async (sdata) => { // Define data as a parameter
         const response = await axios.post(serverPath1+"/eventsData", sdata);
         console.warn(response.data);
-        console.warn(response.data.eventsconducted);
+        console.warn("hello",response.data.eventsconducted);
         console.warn(response.data.eventsattended);
         
         // setEvents(response.data.events);

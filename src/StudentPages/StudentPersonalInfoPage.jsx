@@ -1499,7 +1499,7 @@ setIsLoading(true);
                                               { !isAddressEditable && address[0]?.hostelName && address[0]?.hostelNo && < label className="block text-sm  pt-3 px-8 font-bold">Hostel Details</label>         }
 
                                               <div className="mt-4">
-  {address[0]?.hostelName && (
+  {address[0]?.hostelName && !editedAddress.hosteller && (
     <div className="mb-2">
       <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Name</label>
       <input
@@ -1511,7 +1511,7 @@ setIsLoading(true);
       />
     </div>
   )}
-  {address[0]?.hostelNo && (
+  {address[0]?.hostelNo && !editedAddress.hosteller && (
     <div className="mb-2">
       <label className="block text-sm font-semibold px-8 text-gray-600">Hostel Number</label>
       <input
@@ -1526,16 +1526,6 @@ setIsLoading(true);
 </div>
 
 
-{isAddressEditable && (
-  <button
-    type="button"
-    className="w-1/4 h-12 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
-    onClick={handleHostellerToggle}
-    disabled={!isAddressEditable}
-  >
-    {editedAddress.hosteller ? 'Cancel' : 'Click If Hosteller'}
-  </button>
-)}
 
 
   {/* Hostel Name and Hostel Number fields */}
@@ -1567,6 +1557,22 @@ setIsLoading(true);
       </div>
     </div>
   )}
+
+
+
+  {isAddressEditable && (
+  <button
+    type="button"
+    className="w-1/4 h-12 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+    onClick={handleHostellerToggle}
+    disabled={!isAddressEditable}
+  >
+    {editedAddress.hosteller ? 'Cancel' : 'Click If Hosteller'}
+  </button>
+)}
+
+
+
 </div>
 
                       </div>

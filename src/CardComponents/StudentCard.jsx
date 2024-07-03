@@ -162,7 +162,7 @@ export default function StudentCard (props){
         e.preventDefault();
 
         const currentDate = new Date();
-        const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
+        const formattedDate = format(currentDate, 'yyyy-MM-dd');
         console.warn(formattedDate);
 
         try{
