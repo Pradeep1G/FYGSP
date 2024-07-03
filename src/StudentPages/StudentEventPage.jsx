@@ -8,6 +8,7 @@ import LoadingScreen from '../shared/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StaffNormalNavbar from '../NavBarComponents/StaffNormalNavbar';
+import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 export default function Events() {
   const [eventsconducted,setEventsConducted] = useState(0);
   const [eventsattended,setEventsAttended] = useState(0);
@@ -105,6 +106,7 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
     navigate("/studentlogin");
     return;
   }
+  setIsLoading(true);
     try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
     setStudentData((prev)=>response.data.StudentData)
@@ -117,6 +119,9 @@ const guideMailId = localStorage.getItem("GuideMailIdToLogin")
       } else {
         console.error("An error occurred:", error);
       }
+    }
+    finally{
+      setIsLoading(false);
     }
   }
 
@@ -158,14 +163,22 @@ const handleAddEvent = async (e) => {
   formData.append('conductedOrAttended', newEvent.conductedOrAttended);
   formData.append('studentName',StudentData.name)
 
+  const token = localStorage.getItem("jwt_token_student");
+  if (!token) {
+    navigate("/studentlogin");
+    return;
+  }
+
   try {
     const regNo = localStorage.getItem("regNo");
     setIsLoading(true);
     const response = await axios.post(`${serverPath1}/studentdashboard/${regNo}/AddEvents`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        "Authorization": `Bearer ${token}` 
       },
-    });
+      
+  });
     if (response.data.success) {
       // const updatedEvents = { ...eventsConducted };
       toast.success("Events data added successfully!");
@@ -314,7 +327,7 @@ const handleAddEvent = async (e) => {
   return (
     <>
     {isLoading && <LoadingScreen/>}
-     <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
+     <StudentNormalNavbar />
     <div className='sm:flex '>
         <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6  bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
       <div className='w-full rounded-t-md bg-[#811338] h-20 absolute top-0 left-0 right-0'></div>

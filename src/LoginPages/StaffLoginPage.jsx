@@ -132,6 +132,8 @@
 
 
 
+
+
 import { useEffect, useState } from 'react'
 //import './index.css'
 import axios from 'axios';
@@ -144,7 +146,8 @@ import Loginnavbar from "../shared/Loginnavbar";
 import Footer from "../shared/Footer";
 import studentLoginGif from '../assets/stafflogin.gif';
 import loginprofile from '../assets/profile2.jpeg'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function StaffLoginPage(){
@@ -173,7 +176,7 @@ export default function StaffLoginPage(){
         if(response.data.message=="Invalid Credentials" || response.data.message=="Account not found!")
         {
 
-            setError1(response.data.message)
+            toast.error(response.data.message)
         }
         else
         {    
@@ -292,7 +295,7 @@ export default function StaffLoginPage(){
 
                                     </div>
                                     <p className='text-center text-red-500'>{Error1}</p>
-                                    <p className='text-right text-blue-500 cursor-pointer' onClick={() => navigate("/forgotpassword")}>Forgot Password?</p>
+                                    {/* <p className='text-right text-blue-500 cursor-pointer' onClick={() => navigate("/forgotpassword")}>Forgot Password?</p> */}
                                 </form>
                             </div>
                         </div>
@@ -301,6 +304,19 @@ export default function StaffLoginPage(){
                 </div>
                 <Footer />
                 </div>
+                <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
+
         </>
     );
 }

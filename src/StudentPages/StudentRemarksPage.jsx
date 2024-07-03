@@ -254,12 +254,11 @@ const Remarks = () => {
 
 
                 {/* Largest Table */}
-                <div className='flex w-full justify-center h-screen overflow-y-scrol items-center my-2 mx-0'>
-                    <div className="flex-col bg-[#edeef2] space-y-10 border-b-slate-50 shadow-md rounded-lg border-2 m-2 ml-4 mr-4 w-full h-full">
-                        {/* First Box */}
-                        <div className='w-full rounded-t-md bg-[#811338] h-20'>
-                            <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Remarks</h1>
-                        </div>
+                <div className='flex w-full justify-center h-screen overflow-y-scroll items-center my-2 mx-0'>
+                <div className="flex-col bg-[#edeef2] space-y-4 shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
+              <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
+                <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Remarks</h1>
+              </div>
 
                         <div className='flex bg-[#edeef2]  justify-center items-center'>
 

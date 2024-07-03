@@ -222,12 +222,14 @@ const MentorMeetings = () => {
                     </div>
                 </div>
 
-                <div className='flex w-full justify-center h-screen overflow-y-scroll items-center my-2 mr-0'>
-                    <div className="flex-col bg-[#edeef2] space-y-4 border-b-slate-50 shadow-md rounded-lg border-2 m-2 ml-4 mr-4 w-full h-full">
-                        <div className='w-full rounded-t-md bg-[#811338] h-20'>
-                            <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Mentor Meetings</h1>
-                        </div>
 
+
+
+                 <div className='flex w-full justify-center h-screen overflow-y-scroll items-center my-2 mx-0'>
+                <div className="flex-col bg-[#edeef2] space-y-4 shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
+              <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
+                <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Mentor Meetings</h1>
+              </div>
                         <div className='flex bg-[#edeef2] justify-center items-center'>
                             <div className='sm:max-h-full overflow-auto max-h-[calc(100vh-8rem)]'>
                                 <div className="p-4 rounded-md w-full">
@@ -240,14 +242,14 @@ const MentorMeetings = () => {
                                         <div className={`p-4 w-full max-w-screen-lg mx-auto rounded-md overflow-hidden flex-col ${meetings.length <= 1 ? 'space-y-28' : ''}`}>
                                             <div>
                                                 <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse border border-gray-400 whitespace-normal text-center">
+                                                    <table className="w-full border-collapse whitespace-normal text-center">
                                                         <thead>
                                                             <tr className='bg-[#811338]'>
-                                                                <th className="p-2 text-white">S.no</th>
+                                                                <th className="p-2 rounded-tl-xl text-white">S.no</th>
                                                                 <th className="p-2 text-white">Mentee Name</th>
                                                                 <th className="p-2 text-white">Semester</th>
                                                                 <th className="p-2 text-white">Date</th>
-                                                                <th className="p-2 text-white">Venue</th>
+                                                                <th className="p-2 rounded-tr-xl text-white">Venue</th>
                                                             </tr>
                                                         </thead>
 
@@ -266,7 +268,7 @@ const MentorMeetings = () => {
                                                 </div>
 
                                                 <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse border border-gray-400 whitespace-normal text-center mt-8">
+                                                    <table className="w-full border-collapse  whitespace-normal text-center mt-8">
                                                         <thead>
                                                             <tr className='bg-[#811338]'>
                                                                 <th className='p-2 rounded-tl-xl text-white'>Nature of Counselling Given</th>

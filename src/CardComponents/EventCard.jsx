@@ -90,7 +90,7 @@ const EventCards = (props) => {
             </button> */}
 
             <button
-              className="bg-[#F94C10] text-white p-2 rounded-md "
+              className="bg-[#F08080] text-white p-2 rounded-md "
               onClick={handleViewBrouchure}
             >
               View Brochure
@@ -100,7 +100,7 @@ const EventCards = (props) => {
 
             {props.certificateURL && (
               <button
-                className="bg-[#FF869E] text-white p-2 rounded-md hover:bg-yellow-700 ml-2"
+                className="bg-[#DE5D83] text-white p-2 rounded-md ml-2 "
                 onClick={() => handleViewCertificate()}
               >
                 View Certificate

@@ -298,7 +298,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { RiArrowDropDownFill } from 'react-icons/ri';
-// import StaffNormalNavbar from './components/StaffNormalNavbar';
+import StudentNormalNavbar from '../NavBarComponents/StudentNormalNavbar';
 import LoadingScreen from '../shared/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -524,7 +524,7 @@ finally{
   return (
     <>
     {isLoading && <LoadingScreen/>}
-      <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} />
+      <StudentNormalNavbar />
       <div className='sm:flex '>
         <div className="p-4 sm:h-screen ml-2 mr-2 m-2 lg:ml-6 bg-[#e9d8de] mx-auto lg:w-96 rounded-md shadow-md relative" style={{ maxWidth: '600px' }}>
           {/* Student Information */}

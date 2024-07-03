@@ -447,6 +447,8 @@ import { format } from "date-fns";
 //import adeepA from "./components/adeepA.jpg";
 import StudentCard from "../CardComponents/StudentCard";
 import loading_icon from "../assets/loading_icon.gif"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function StaffDashboard() {
   const serverPath1 = "http://127.0.0.1:5000"
   // const serverPath1 = "https://fgspserver.onrender.com";
@@ -520,7 +522,7 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
   const [isSending, setisSending] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const sendComment = async (e) => {
+  const sendCommentToAll = async (e) => {
     e.preventDefault();
 
     const currentDate = new Date();
@@ -530,32 +532,36 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
     try {
       const data = {
         message: comment,
-        mailIds: AllStudents,
+       
         date: formattedDate,
+        GuideMailId:GuideMailId
       };
 
       setisSending(true);
-
+      setIsLoading(true);
       const response = await axios.post(
         serverPath1 + "/sendMessageToAll",
         data
       );
       console.warn(response.data);
       if (response.data.message == "SENT") {
-        setSuccessMessage("Message sent successfully!");
+        toast.success("Message sent successfully!");
         setOpenCommentBox(false);
         setisSending(false);
         setComment("");
 
-        setTimeout(() => {
-          setSuccessMessage("");
-          setError1("");
-        }, 2000);
+        // setTimeout(() => {
+        //   setSuccessMessage("");
+        //   setError1("");
+        // }, 2000);
       } else {
-        setError1("Not sent try again.");
+        toast.error("Not sent try again.");
       }
     } catch (error) {
       setError1("Not sent try agin.");
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
@@ -732,6 +738,56 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
                 Download Events Data
             </button>
         </div>
+        <div className=" flex justify-center items-center mt-4">
+  <button
+    className="bg-[#811338] text-white px-4 py-2 rounded-md"
+    onClick={() => setOpenCommentBox(true)}
+  >
+    Send Message to All Students
+  </button>
+</div>
+<div>
+  {OpenCommentBox && (
+    <div className="mt-4"> {/* Adjust the margin top as needed */}
+      <textarea
+        className="border-2 h-16 px-4 w-full bg-gray-200 mb-4"
+        type="text"
+        rows={2}
+        placeholder="Message"
+        value={comment}
+        required
+        onChange={(e) => setComment(e.target.value)}
+      />
+      <div className="flex justify-around">
+        <button
+          onClick={sendCommentToAll}
+          className={`bg-[#811338] text-white px-6 py-2 rounded-md my-2 text-sm ${
+            isSending ? "cursor-not-allowed" : ""
+          }`}
+          disabled={isSending}
+        >
+          {isSending ? "Sending..." : "Send"}
+        </button>
+
+        <button
+          onClick={() => {
+            setOpenCommentBox(false);
+            setIsSending(false);
+            setComment("");
+          }}
+          className="bg-[#811338] text-white px-6 py-2 rounded-md my-2 text-sm"
+        >
+          Cancel
+        </button>
+      </div>
+
+      {successMessage && (
+        <p className="text-green-600">{successMessage}</p>
+      )}
+      {Error1 && <p className="text-red-600">{Error1}</p>}
+    </div>
+  )}
+</div>
 
 
 
@@ -899,7 +955,7 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
                     />
                     <div className="flex justify-around">
                       <button
-                        onClick={sendComment}
+                        onClick={sendCommentToAll}
                         className={`bg-red-900 flex justify-around text-white px-6 py-2 rounded-md my-2 text-sm ${
                           isSending ? "cursor-not-allowed" : ""
                         }`}
@@ -975,6 +1031,18 @@ const [total_events_conducted_count,settotal_events_conducted_count]=useState(0)
           {/* <Footer /> */}
         </div>
       )}
+       <div className="sm:w-3/4 sm:mx-4">  <ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  
+/></div>
     </>
   );
   // }

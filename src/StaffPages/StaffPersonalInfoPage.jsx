@@ -844,9 +844,9 @@ export default function PersonalInfo() {
   }])
 
   const [parentdetails, setParentDetails] = useState([{
-    "fatherPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
-    "motherPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
-    "guardianPic":"https://drive.google.com/file/d/179DLKgs8SsFFAQNYkubmoWq-gfFclbMJ",
+    "fatherPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
+    "motherPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
+    "guardianPic":"https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l",
     "fatherName": null,     // this variable contains null because it shows null while it is loading
     "fatherMail": null,
     "fatherNo": null,
@@ -1174,7 +1174,15 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic)} alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        {parentdetails[0].fatherPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)}  
+                          {/* <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" /> */}
                         </div>
                       </div>
 
@@ -1212,7 +1220,14 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)}  alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+                        {parentdetails[0].motherPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)} 
+                          {/* <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)}  alt="Parent Image" className="w-40 h-40 rounded-full object-cover" /> */}
                         </div>
                       </div>
 
@@ -1249,7 +1264,14 @@ export default function PersonalInfo() {
                       {/* Left column for image */}
                       <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
                         <div className="w-3/4 h-3/4  overflow-hidden flex justify-center items-center">
-                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)}  alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" />
+                        {parentdetails[0].guardianPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)} 
+                          {/* <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)}  alt="Parent Image" className="w-40 h-40 rounded-full object-fit:cover" /> */}
                         </div>
                       </div>
 

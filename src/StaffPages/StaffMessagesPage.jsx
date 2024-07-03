@@ -215,13 +215,13 @@ const StaffMessages = () => {
                  {/* <StaffNormalNavbar GuideName={GuideName} GuideImage={GuideImage} /> */}
 
                 <div className='lg:px-10'>
-                    <form onSubmit={sendComment} className="mb-4">
+                    <form onSubmit={sendComment} className="mb-4 mt-4">
                         <input
                             type="text"
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder="Type your message..."
-                            className="px-3 py-2 border border-gray-300 rounded-md mr-2"
+                            className="px-3 py-2 border  border-gray-300 rounded-md mr-2"
                             required
                         />
                         <button
@@ -325,17 +325,17 @@ const StaffMessages = () => {
                     </div>
                 </div>
                 <div className='flex w-full justify-center overflow-y-scroll items-center my-2 mx-0 h-auto'>
-                    <div className="flex-col bg-[#edeef2] space-y-10 border-b-slate-50 shadow-md rounded-lg border-2 m-2 ml-4 mr-4 w-full h-full">
+                    <div className="flex-col bg-[#edeef2] space-y-10shadow-md rounded-lg  m-2 ml-4 mr-4 w-full h-full">
                         <div className='w-full rounded-t-md bg-[#811338] h-20 flex items-center justify-between px-4'>
-                            <h1 className="text-3xl text-white font-mono italic font-thin mb-4 pt-8 pb-8">Messages</h1>
+                        <h1 className="text-3xl text-white font-code mb-4 pt-8 md:pt-5 md:pb-4 pb-8 px-2">Messages</h1>
                             <button 
     className="bg-white text-[#811338] px-4 py-2 rounded-md"
     onClick={handleToggle}
 >
     {showStudentMessages ? (
-        <span className="hidden sm:inline">Send Message to Parent</span>
+        <span className="hidden sm:inline font-bold ">Send Message to Parent</span>
     ) : (
-        <span className="hidden sm:inline">Send Message to Student</span>
+        <span className="hidden sm:inline font-bold">Send Message to Student</span>
     )}
     <span className="sm:hidden">
         {showStudentMessages ? 'Parent' : 'Student'}

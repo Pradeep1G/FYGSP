@@ -10,6 +10,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingScreen from '../shared/Loader';
+import { GiProgression } from 'react-icons/gi';
 function capitalizeFirstLetter(word) {
   if (!word) {
     return '';
@@ -1062,12 +1063,20 @@ setIsLoading(true);
         {/* Left column for image */}
         <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
           <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
-            <img
+
+          {parentdetails[0].fatherPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)} 
+            {/* <img
               src={getThumbnailLinkFromShareableLink(parentdetails[0].fatherPic)}
               alt="Parent Image"
               className="w-40 h-40 rounded-full object-cover"
             
-            />
+            /> */}
           </div>
         </div>
 
@@ -1188,11 +1197,18 @@ setIsLoading(true);
         {/* Left column for image */}
         <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
           <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
-            <img
+          {parentdetails[0].motherPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)} 
+            {/* <img
               src={getThumbnailLinkFromShareableLink(parentdetails[0].motherPic)}
               alt="Parent Image"
               className="w-40 h-40 rounded-full object-cover"
-            />
+            /> */}
           </div>
         </div>
 
@@ -1316,11 +1332,18 @@ setIsLoading(true);
         {/* Left column for image */}
         <div className="w-full lg:w-1/2 mb-2 flex justify-center items-center">
           <div className="w-3/4 h-3/4 overflow-hidden flex justify-center items-center">
-            <img
+          {parentdetails[0].guardianPic ? (<>
+                          <img src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic) } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>):(<>
+                          <img src={getThumbnailLinkFromShareableLink("https://drive.google.com/file/d/1mPHC_7jlyWOKhhf095W5EugggRuVd6_l") } alt="Parent Image" className="w-40 h-40 rounded-full object-cover" />
+
+                        </>)} 
+            {/* <img
               src={getThumbnailLinkFromShareableLink(parentdetails[0].guardianPic)}
               alt="Parent Image"
               className="w-40 h-40 rounded-full object-cover"
-            />
+            /> */}
           </div>
         </div>
 
@@ -1506,11 +1529,11 @@ setIsLoading(true);
 {isAddressEditable && (
   <button
     type="button"
-    className="w-26 h-12 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
+    className="w-1/4 h-12 border my-0 mx-7 bg-[#811338] text-white flex items-center justify-center rounded-md px-3 py-2"
     onClick={handleHostellerToggle}
     disabled={!isAddressEditable}
   >
-    {editedAddress.hosteller ? 'Cancel Hosteller' : 'Hosteller'}
+    {editedAddress.hosteller ? 'Cancel' : 'Click If Hosteller'}
   </button>
 )}
 
