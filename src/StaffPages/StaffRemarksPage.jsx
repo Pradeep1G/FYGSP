@@ -246,7 +246,7 @@ const Remarks = () => {
 
 
                 {/* Largest Table */}
-                <div className='flex w-full justify-center h-screen overflow-y-scroll items-center my-2 mx-0'>
+                <div className='flex w-full justify-center h-screen items-center my-2 mx-0'>
                 <div className="flex-col bg-[#edeef2] space-y-4  shadow-md rounded-lg m-2 ml-4 mr-4 w-full h-full overflow-y-scroll">
              
              <div className='w-full rounded-t-md bg-[#811338] h-auto lg:h-20 md:h-20'>
