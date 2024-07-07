@@ -157,7 +157,7 @@ const StaffMessages = () => {
     const sendComment = async (e) => {
         e.preventDefault();
         const currentDate = new Date();
-        const formattedDate = format(currentDate, 'yyyy-MM-dd');
+        const formattedDate = format(currentDate, "yyyy-MM-dd HH:mm:ss");
 
         try {
             const data = {

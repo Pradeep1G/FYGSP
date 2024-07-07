@@ -90,6 +90,14 @@ const MentorMeetings = () => {
             console.error('Failed to fetch meetings:', error);
         }
     };
+    const reverseDateString = (dateString) => {
+        if (!dateString) return ''; // Handle empty or undefined case
+        
+        const parts = dateString.split('-');
+        if (parts.length !== 3) return dateString; // Return original if format is incorrect
+        
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
     
 
     useEffect(() => {
@@ -103,9 +111,20 @@ const MentorMeetings = () => {
     };
 
     const handleAddData = async () => {
+        for (const key in formData) {
+            if (!formData[key]) {
+                toast.error('Please fill all fields.');
+                return; // Exit function if any field is empty
+            }
+        }
+       
+        setIsLoading(false);
         try {
+          
             const newMeeting = {
                 regNo: studentId,
+                mailId: studentData.mailId,
+                selectedGuide: GuideName,
                 Meeting: {
                     sno: meetings.length + 1, // increment sno based on length of existing data
                     semester: formData.semester,
@@ -246,60 +265,47 @@ const MentorMeetings = () => {
                                      <h1 className="text-lg font-bold text-gray-700">{messages}</h1>
                                     </div>
                                     ) : (<div>
-                                           
-                                                <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse whitespace-normal text-center">
-                                                        <thead>
-                                                            <tr className='bg-[#811338]'>
-                                                                <th className="p-2 rounded-tl-xl text-white">S.no</th>
-                                                                <th className="p-2 text-white">Mentee Name</th>
-                                                                <th className="p-2 text-white">Semester</th>
-                                                                <th className="p-2 text-white">Date</th>
-                                                                <th className="p-2 rounded-tr-xl text-white">Venue</th>
-                                                            </tr>
-                                                        </thead>
+                            <div className='overflow-x-auto max-w-full'>
+    <div className='min-w-max'>
+        <table className="w-full border-collapse whitespace-normal text-center">
+            <thead>
+                <tr className='bg-[#811338]'>
+                    <th className="p-2 rounded-tl-xl text-white">S.no</th>
+                    <th className="p-2 text-white">Mentee Name</th>
+                    <th className="p-2 text-white">Semester</th>
+                    <th className="p-2 text-white">Date</th>
+                    <th className="p-2 text-white">Venue</th>
+                    <th className='p-2 text-white'>Nature of Counselling Given</th>
+                    <th className='p-2 text-white'>Issues</th>
+                    <th className='p-2 text-white'>Points Discussed</th>
+                    <th className='p-2 rounded-tr-xl text-white'>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {meetings.map((item, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
+                        <td><p className="p-4 lg:break-all">{index + 1}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.menteeName}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.semester}</p></td>
+                        {/* <td><p className="p-4 lg:break-all">{item.date}</p></td> */}
+                        <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{reverseDateString(item.date)}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.venue}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.natureOfCounseling}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.issuesDiscussed}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.pointsDiscussed}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.remarks}</p></td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                                                        <tbody>
-                                                            {meetings.map((item, index) => (
-                                                                <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
-                                                                    <td><p className="p-4 lg:break-all">{index + 1}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.menteeName}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.semester}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.date}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.venue}</p></td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse whitespace-normal text-center mt-8">
-                                                        <thead>
-                                                            <tr className='bg-[#811338]'>
-                                                                <th className='p-2 rounded-tl-xl text-white'>Nature of Counselling Given</th>
-                                                                <th className='p-2 text-white'>Issues</th>
-                                                                <th className='px-0 text-white'>Points Discussed</th>
-                                                                <th className='p-2 rounded-tr-xl text-white'>Remarks</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {meetings.map((item, index) => (
-                                                                <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
-                                                                    <td><p className="p-4 lg:break-all">{item.natureOfCounseling}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.issuesDiscussed}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.pointsDiscussed}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.remarks}</p></td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
                                             </div>)}
 
                                             <div className="mt-4">
                                                 <h2 className="text-xl pt-4 font-bold mb-2">Add New Meeting Information</h2>
-                                                <form className="flex flex-wrap m-6">
+                                                <form  className="flex flex-wrap m-6">
                                                     <div className="w-full sm:w-1/2 mb-2 sm:mb-0">
                                                         <input
                                                             type="text"
@@ -308,6 +314,7 @@ const MentorMeetings = () => {
                                                             value={formData.semester}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -319,6 +326,7 @@ const MentorMeetings = () => {
                                                             value={formData.remarkOnMentee}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -330,6 +338,7 @@ const MentorMeetings = () => {
                                                             value={formData.menteeName}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -341,6 +350,7 @@ const MentorMeetings = () => {
                                                             value={formData.venue}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -352,6 +362,7 @@ const MentorMeetings = () => {
                                                             value={formData.natureOfCon}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -363,6 +374,7 @@ const MentorMeetings = () => {
                                                             value={formData.issues}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -374,6 +386,7 @@ const MentorMeetings = () => {
                                                             value={formData.pointsDiss}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 
@@ -385,6 +398,7 @@ const MentorMeetings = () => {
                                                             value={formData.date}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
+                                                            required
                                                         />
                                                     </div>
 

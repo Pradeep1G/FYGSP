@@ -17,11 +17,11 @@ const Remarks = () => {
     const [formData, setFormData] = useState({
         semester: '',
         remarks: '',
-        mentorName: '',
+        date: '',
     });
 
     const { studentId } = useParams();
-    //const serverPath2 = 'http://127.0.0.1:5000/'; // Adjust to your server address
+    // const serverPath2 = 'http://127.0.0.1:5000/'; // Adjust to your server address
      const serverPath2 = "https://fgspserver.onrender.com";
 
     // Function to fetch remarks data
@@ -47,12 +47,20 @@ const Remarks = () => {
     };
 
     const handleAddData = async () => {
-        if (formData.semester && formData.remarks && formData.mentorName) {
+
+
+        for (const key in formData) {
+            if (!formData[key]) {
+                toast.error('Please fill all fields.');
+                return; // Exit function if any field is empty
+            }
+        }
+        if (formData.semester && formData.remarks && formData.date) {
             const newRemark = {
                 sNo: dataCount + 1,
                 semester: formData.semester,
                 remarks: formData.remarks,
-                mentorName: formData.mentorName,
+                date: formData.date,
             };
     
             const data = {
@@ -73,7 +81,7 @@ const Remarks = () => {
                 setFormData({
                     semester: '',
                     remarks: '',
-                    mentorName: '',
+                    date: '',
                 });
 
                 setTimeout(function() {
@@ -123,7 +131,15 @@ const Remarks = () => {
         community: "",
         aadhar: ""
     });
-
+    const reverseDateString = (dateString) => {
+        if (!dateString) return ''; // Handle empty or undefined case
+        
+        const parts = dateString.split('-');
+        if (parts.length !== 3) return dateString; // Return original if format is incorrect
+        
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
+    
     const getStudentData = async () => {
         const token = localStorage.getItem("jwt_token");
         if (!token) {
@@ -274,7 +290,7 @@ const Remarks = () => {
                                                             <th className="p-1 rounded-tl-2xl text-white">S.no</th>
                                                             <th className="p-2 text-white">Semester</th>
                                                             <th className="p-2 text-white">Remarks</th>
-                                                            <th className="p-2  text-white rounded-tr-xl">Mentor Name</th>
+                                                            <th className="p-2  text-white rounded-tr-xl">Date</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -283,7 +299,8 @@ const Remarks = () => {
                                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{index + 1}</p></td>
                                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.semester}</p></td>
                                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.remarks}</p></td>
-                                                                <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.mentorName}</p></td>
+                                                                {/* <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.date}</p></td> */}
+                                                                <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{reverseDateString(item.date)}</p></td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -319,10 +336,10 @@ const Remarks = () => {
                                                     <div className="w-full sm:w-1/3 mb-2 sm:mb-0">
                                                         {/* <label className="block text-sm font-semibold text-gray-600 mb-1">Mentor Name</label> */}
                                                         <input
-                                                            type="text"
-                                                            name="mentorName"
-                                                            placeholder='Mentor Name'
-                                                            value={formData.mentorName}
+                                                            type="date"
+                                                            name="date"
+                                                            placeholder='Date'
+                                                            value={formData.date}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
                                                         />

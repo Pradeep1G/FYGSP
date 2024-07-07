@@ -114,8 +114,8 @@ export default function StudentCard (props){
 
 
 
-            // const serverPath1 = "http://127.0.0.1:5000"
-  const serverPath1 = "https://fgspserver.onrender.com"
+            const serverPath1 = "http://127.0.0.1:5000"
+  // const serverPath1 = "https://fgspserver.onrender.com"
 
 
 
@@ -162,7 +162,7 @@ export default function StudentCard (props){
         e.preventDefault();
 
         const currentDate = new Date();
-        const formattedDate = format(currentDate, 'yyyy-MM-dd');
+        const formattedDate = format(currentDate, "yyyy-MM-dd HH:mm:ss");
         console.warn(formattedDate);
 
         try{

@@ -16,11 +16,11 @@ const Remarks = () => {
     const [formData, setFormData] = useState({
         semester: '',
         remarks: '',
-        mentorName: '',
+        date: '',
     });
 
     const { studentId } = localStorage.getItem("regNo")
-    //const serverPath = 'http://127.0.0.1:5000/'; // Adjust to your server address
+    // const serverPath = 'http://127.0.0.1:5000/'; // Adjust to your server address
     const serverPath = "https://fgspserver.onrender.com";
 
     // Function to fetch remarks data
@@ -53,12 +53,12 @@ const Remarks = () => {
     // };
 
     // const handleAddData = async () => {
-    //     if (formData.semester && formData.remarks && formData.mentorName) {
+    //     if (formData.semester && formData.remarks && formData.date) {
     //         const newRemark = {
     //             sNo: dataCount + 1,
     //             semester: formData.semester,
     //             remarks: formData.remarks,
-    //             mentorName: formData.mentorName,
+    //             date: formData.date,
     //         };
     
     //         const data = {
@@ -77,7 +77,7 @@ const Remarks = () => {
     //             setFormData({
     //                 semester: '',
     //                 remarks: '',
-    //                 mentorName: '',
+    //                 date: '',
     //             });
     
     //             // alert('Remarks data inserted successfully!');
@@ -123,7 +123,15 @@ const Remarks = () => {
     });
 
 
-
+    const reverseDateString = (dateString) => {
+        if (!dateString) return ''; // Handle empty or undefined case
+        
+        const parts = dateString.split('-');
+        if (parts.length !== 3) return dateString; // Return original if format is incorrect
+        
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
+    
 
     useEffect(() => {
 
@@ -281,7 +289,7 @@ const Remarks = () => {
                                                 <th className="p-1 rounded-tl-2xl text-white">S.no</th>
                                                 <th className="p-2 text-white">Semester</th>
                                                 <th className="p-2 text-white">Remarks</th>
-                                                <th className="p-2  text-white rounded-tr-xl">Mentor Name</th>
+                                                <th className="p-2  text-white rounded-tr-xl">Date</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -290,7 +298,8 @@ const Remarks = () => {
                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{index + 1}</p></td>
                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.semester}</p></td>
                                                 <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.remarks}</p></td>
-                                                <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.mentorName}</p></td>
+                                                {/* <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{item.date}</p></td> */}
+                                                <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{reverseDateString(item.date)}</p></td>
                                                 </tr>
                                             ))}
                                             </tbody>

@@ -27,7 +27,7 @@ const MentorMeetings = () => {
     const GuideImage = localStorage.getItem("GuideImage");
     const guideMailId = localStorage.getItem("GuideMailIdToLogin");
     const serverPath1 = "https://fgspserver.onrender.com";
-    //const serverPath1 = "http://127.0.0.1:5000/"
+    // const serverPath1 = "http://127.0.0.1:5000/"
     const [studentData, setStudentData] = useState({
         image: "",
         regNo: "",
@@ -36,7 +36,15 @@ const MentorMeetings = () => {
         name: "",
     });
     const studentMailId = localStorage.getItem("StudentMailId")
-
+    const reverseDateString = (dateString) => {
+        if (!dateString) return ''; // Handle empty or undefined case
+        
+        const parts = dateString.split('-');
+        if (parts.length !== 3) return dateString; // Return original if format is incorrect
+        
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
+    
     const getStudentData = async () => {
         const data = {
           mailId: studentMailId,
@@ -241,54 +249,44 @@ const MentorMeetings = () => {
                                     <div className="flex-col space-y-8">
                                         <div className={`p-4 w-full max-w-screen-lg mx-auto rounded-md overflow-hidden flex-col ${meetings.length <= 1 ? 'space-y-28' : ''}`}>
                                             <div>
-                                                <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse whitespace-normal text-center">
-                                                        <thead>
-                                                            <tr className='bg-[#811338]'>
-                                                                <th className="p-2 rounded-tl-xl text-white">S.no</th>
-                                                                <th className="p-2 text-white">Mentee Name</th>
-                                                                <th className="p-2 text-white">Semester</th>
-                                                                <th className="p-2 text-white">Date</th>
-                                                                <th className="p-2 rounded-tr-xl text-white">Venue</th>
-                                                            </tr>
-                                                        </thead>
+                                            <div className='overflow-x-auto max-w-full'>
+    <div className='min-w-max'>
+        <table className="w-full border-collapse whitespace-normal text-center">
+            <thead>
+                <tr className='bg-[#811338]'>
+                    <th className="p-2 rounded-tl-xl text-white">S.no</th>
+                    <th className="p-2 text-white">Mentee Name</th>
+                    <th className="p-2 text-white">Semester</th>
+                    <th className="p-2 text-white">Date</th>
+                    <th className="p-2 text-white">Venue</th>
+                    <th className='p-2 text-white'>Nature of Counselling Given</th>
+                    <th className='p-2 text-white'>Issues</th>
+                    <th className='p-2 text-white'>Points Discussed</th>
+                    <th className='p-2 rounded-tr-xl text-white'>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {meetings.map((item, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
+                        <td><p className="p-4 lg:break-all">{index + 1}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.menteeName}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.semester}</p></td>
+                        {/* <td><p className="p-4 lg:break-all">{item.date}</p></td> */}
+                        <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{reverseDateString(item.date)}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.venue}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.natureOfCounseling}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.issuesDiscussed}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.pointsDiscussed}</p></td>
+                        <td><p className="p-4 lg:break-all">{item.remarks}</p></td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                                                        <tbody>
-                                                            {meetings.map((item, index) => (
-                                                                <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
-                                                                    <td><p className="p-4 lg:break-all">{index + 1}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.menteeName}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.semester}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.date}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.venue}</p></td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
 
-                                                <div className='overflow-auto max-h-[calc(100vh-8rem)] sm:max-h-full'>
-                                                    <table className="w-full border-collapse  whitespace-normal text-center mt-8">
-                                                        <thead>
-                                                            <tr className='bg-[#811338]'>
-                                                                <th className='p-2 rounded-tl-xl text-white'>Nature of Counselling Given</th>
-                                                                <th className='p-2 text-white'>Issues</th>
-                                                                <th className='px-0 text-white'>Points Discussed</th>
-                                                                <th className='p-2 rounded-tr-xl text-white'>Remarks</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {meetings.map((item, index) => (
-                                                                <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
-                                                                    <td><p className="p-4 lg:break-all">{item.natureOfCounseling}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.issuesDiscussed}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.pointsDiscussed}</p></td>
-                                                                    <td><p className="p-4 lg:break-all">{item.remarks}</p></td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                               
                                                 
                                             </div>
 
