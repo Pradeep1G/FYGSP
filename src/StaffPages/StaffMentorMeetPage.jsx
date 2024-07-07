@@ -15,7 +15,7 @@ const MentorMeetings = () => {
     const [isLoading,setIsLoading] =useState();
     const [formData, setFormData] = useState({
         semester: '',
-        remarks: '',
+        // remarks: '',
         menteeName: '',
         date: '',
         venue: '',
@@ -118,7 +118,7 @@ const MentorMeetings = () => {
             }
         }
        
-        setIsLoading(false);
+        
         try {
           
             const newMeeting = {
@@ -145,7 +145,7 @@ const MentorMeetings = () => {
             setMeetings([...meetings, newMeeting.Meeting]); // Update the state to reflect the added data
             setFormData({
                 semester: '',
-                remarks: '',
+                // remarks: '',
                 menteeName: '',
                 date: '',
                 venue: '',
@@ -314,7 +314,7 @@ const MentorMeetings = () => {
                                                             value={formData.semester}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                        
                                                         />
                                                     </div>
 
@@ -326,7 +326,7 @@ const MentorMeetings = () => {
                                                             value={formData.remarkOnMentee}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                
                                                         />
                                                     </div>
 
@@ -338,7 +338,7 @@ const MentorMeetings = () => {
                                                             value={formData.menteeName}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                    
                                                         />
                                                     </div>
 
@@ -350,7 +350,7 @@ const MentorMeetings = () => {
                                                             value={formData.venue}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                    
                                                         />
                                                     </div>
 
@@ -362,7 +362,7 @@ const MentorMeetings = () => {
                                                             value={formData.natureOfCon}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                
                                                         />
                                                     </div>
 
@@ -374,7 +374,7 @@ const MentorMeetings = () => {
                                                             value={formData.issues}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                            
                                                         />
                                                     </div>
 
@@ -386,7 +386,7 @@ const MentorMeetings = () => {
                                                             value={formData.pointsDiss}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                        
                                                         />
                                                     </div>
 
@@ -398,14 +398,14 @@ const MentorMeetings = () => {
                                                             value={formData.date}
                                                             onChange={handleInputChange}
                                                             className="w-full border rounded-md px-3 py-2"
-                                                            required
+                                                           
                                                         />
                                                     </div>
 
                                                     <button
                                                         type="button"
                                                         onClick={handleAddData}
-                                                        className="bg-[#811338] w-1/4 text-white px-5 py-2 mt-6 rounded-md ml-auto"
+                                                        className="bg-[#811338] lg:w-1/4 sm:w-2/4 text-white px-5 py-2 mt-6 rounded-md ml-auto"
                                                     >
                                                         Add
                                                     </button>
