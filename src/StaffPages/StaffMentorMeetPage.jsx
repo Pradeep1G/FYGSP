@@ -271,7 +271,7 @@ const MentorMeetings = () => {
             <thead>
                 <tr className='bg-[#811338]'>
                     <th className="p-2 rounded-tl-xl text-white">S.no</th>
-                    <th className="p-2 text-white">Mentee Name</th>
+                    {/* <th className="p-2 text-white">Mentee Name</th> */}
                     <th className="p-2 text-white">Semester</th>
                     <th className="p-2 text-white">Date</th>
                     <th className="p-2 text-white">Venue</th>
@@ -285,7 +285,7 @@ const MentorMeetings = () => {
                 {meetings.map((item, index) => (
                     <tr key={index} className={index % 2 === 0 ? 'rounded-lg' : 'bg-[#f9afb0] rounded-lg'}>
                         <td><p className="p-4 lg:break-all">{index + 1}</p></td>
-                        <td><p className="p-4 lg:break-all">{item.menteeName}</p></td>
+                        {/* <td><p className="p-4 lg:break-all">{item.menteeName}</p></td> */}
                         <td><p className="p-4 lg:break-all">{item.semester}</p></td>
                         {/* <td><p className="p-4 lg:break-all">{item.date}</p></td> */}
                         <td><p className="px-4 py-2 lg:max-w-md lg:break-all">{reverseDateString(item.date)}</p></td>
