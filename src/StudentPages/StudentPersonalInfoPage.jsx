@@ -738,7 +738,10 @@ setIsLoading(true);
     navigate("/studentlogin");
     return;
   }
-    try{const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
+    try{
+      setIsLoading(true);
+      
+      const response = await axios.post(serverPath1 + "/StudentMenuPage/getLeftSideBarData", data, { headers: { Authorization: `Bearer ${token}` }})
     console.warn(response.data)
     setStudentData((prev)=>response.data.StudentData)
     localStorage.setItem("regNo",response.data.StudentData.regNo)}
@@ -751,10 +754,14 @@ setIsLoading(true);
         console.error("An error occurred:", error);
       }
     }
+    finally{
+      setIsLoading(false);
+    }
   }
 
   const fetchPermissions = async () => {
     try {
+      setIsLoading(true)
       const res = await axios.post(serverPath1 + "/studentDashboard/studentPersonalInfoPage/getPermissionData", {
         regNo: studentId // Ensure studentId is defined and correct
       });
@@ -762,6 +769,9 @@ setIsLoading(true);
       console.warn(res.data.permissions);
     } catch (error) {
       console.error('Failed to fetch permissions:', error);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
